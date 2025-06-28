@@ -64,12 +64,12 @@ class _BottomNavbarState extends State<BottomNavbar> {
         }
       },
       navBarHeight: 60,
-      navBarDecoration: const NavBarDecoration(
+      navBarDecoration: NavBarDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
-        colorBehindNavBar: Colors.blueGrey,
+        colorBehindNavBar: Theme.of(context).primaryColor,
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
@@ -81,23 +81,23 @@ class _BottomNavbarState extends State<BottomNavbar> {
       items: [
         PersistentBottomNavBarItem(
           icon: Icon(Icons.home),
-          activeColorPrimary: Colors.red,
+          activeColorPrimary: Theme.of(context).colorScheme.inversePrimary,
         ),
         PersistentBottomNavBarItem(
           icon: Icon(Icons.fastfood),
-          activeColorPrimary: Colors.red,
+          activeColorPrimary: Theme.of(context).colorScheme.inversePrimary,
         ),
         PersistentBottomNavBarItem(
           icon: Icon(Icons.add),
-          activeColorPrimary: Colors.red,
+          activeColorPrimary: Theme.of(context).colorScheme.inversePrimary,
         ),
         PersistentBottomNavBarItem(
           icon: Icon(Icons.list),
-          activeColorPrimary: Colors.red,
+          activeColorPrimary: Theme.of(context).colorScheme.inversePrimary,
         ),
         PersistentBottomNavBarItem(
           icon: Icon(Icons.settings),
-          activeColorPrimary: Colors.red,
+          activeColorPrimary: Theme.of(context).colorScheme.inversePrimary,
         ),
         // Navigator.pushNamed(context, '/page$index');
       ],
@@ -206,7 +206,7 @@ class _BottomNavStyle16 extends StatelessWidget {
               height: height - 5.0,
               margin: const EdgeInsets.only(top: 2, left: 6, right: 6),
               decoration: BoxDecoration(
-                color: Colors.blueGrey.shade400,
+                color: Theme.of(context).colorScheme.tertiary,
                 border: Border.all(color: Colors.transparent, width: 5),
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: navBarDecoration!.boxShadow,
