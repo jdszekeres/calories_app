@@ -380,7 +380,7 @@ NutrutionGoals calculateGoals(
   double fiberGrams = (calorieGoal / 1000 * 14)
       .roundToDouble(); // 14g per 1000 calories
 
-  double sugarCalories = (calorieGoal * 10).roundToDouble();
+  double sugarCalories = ((calorieGoal / 40 * 4)).roundToDouble();
 
   double sugarGrams = (sugarCalories / 4)
       .roundToDouble(); // 1g sugar = 4 calories
