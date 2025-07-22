@@ -63,8 +63,14 @@ class UserDatabase {
     return null;
   }
 
-  Future<void> updateNutritionGoals(String uid, NutrutionGoals goals) async {
-    final ref = database.child('users/$uid/nutrition_goals');
-    await ref.update(goals.toJson());
+  Future<void> updateNutritionGoal(String uid, String key, double value) async {
+    NutrutionGoals? goals = await getNutritionGoals(uid);
+    if (goals != null) {
+      String category = NutrutionGoals.getKey(key);
+      Map<String, dynamic> json = goals.toJson();
+      json[category][key] = value;
+      goals = NutrutionGoals.fromJson(json);
+      await saveNutritionGoals(uid, goals);
+    }
   }
 }

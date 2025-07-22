@@ -14,19 +14,19 @@ import '../tools/user_database.dart' show UserDatabase;
 import '../widgets/bottom_navbar.dart';
 
 class GoalAmount extends AbstractSettingsTile {
-  final Widget name;
+  final String name;
   final Widget? leading;
 
   final double goal;
   final double achieved;
   final String? unit;
 
-  final dynamic onGoalChanged;
+  final Function(double) onGoalChanged;
 
   const GoalAmount({
     required this.name,
 
-    this.onGoalChanged,
+    required this.onGoalChanged,
     this.goal = 0.0,
     this.achieved = 0.0,
     this.unit,
@@ -40,13 +40,39 @@ class GoalAmount extends AbstractSettingsTile {
     return IOSSettingsTile(
       tileType: SettingsTileType.simpleTile,
       leading: leading,
-      title: name,
+      title: Text(name),
       description: null,
-      onPressed: onGoalChanged != null
-          ? (BuildContext context) {
-              onGoalChanged();
-            }
-          : null,
+      onPressed: (BuildContext context) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Set Goal for ${name.toString()}'),
+              content: TextField(
+                keyboardType: TextInputType.number,
+
+                decoration: InputDecoration(
+                  labelText: 'Goal',
+                  hintText: 'Enter your goal',
+                  suffixText: unit,
+                ),
+                onSubmitted: (value) {
+                  double? newGoal = double.tryParse(value);
+                  if (newGoal != null) {
+                    Navigator.of(context).pop();
+                    onGoalChanged(newGoal);
+                    // Removed navigation to allow immediate UI update
+                  } else {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text('Invalid input')));
+                  }
+                },
+              ),
+            );
+          },
+        );
+      },
       trailing: Row(
         children: [
           Text(achieved.toString()),
@@ -116,6 +142,7 @@ class _GoalsPageState extends State<GoalsPage> {
       bottomNavigationBar: BottomNavbar(),
       body: (widget.goals != null)
           ? SettingsList(
+              key: ValueKey(widget.goals),
               sections: jsonGoals.keys.toList().map((key) {
                 return SettingsSection(
                   title: Text(camelToNormal(key)),
@@ -123,7 +150,7 @@ class _GoalsPageState extends State<GoalsPage> {
                       .toList()
                       .map((goalName) {
                         return GoalAmount(
-                          name: Text(camelToNormal(goalName)),
+                          name: camelToNormal(goalName),
                           // leading: Icon(Icons.check_circle_outline),
                           goal: jsonGoals[key][goalName] as double,
                           achieved: widget.meals.fold(0.0, (sum, meal) {
@@ -131,7 +158,25 @@ class _GoalsPageState extends State<GoalsPage> {
                                 (meal.nutrutionInfo.toJson()[key][goalName] ??
                                     0.0);
                           }),
-                          unit: NutrutionGoals.getUnit(goalName),
+                          onGoalChanged: (newGoal) {
+                            UserDatabase().updateNutritionGoal(
+                              Auth().currentUser!.uid,
+                              goalName,
+                              newGoal,
+                            );
+                            setState(() {
+                              // Update local goals by reconstructing the NutrutionGoals object
+                              final currentGoals = widget.goals!;
+                              final goalsJson = currentGoals.toJson();
+                              // Mutate the JSON map for this goal
+                              goalsJson[key][goalName] = newGoal;
+                              // Replace widget.goals with new object
+                              widget.goals = NutrutionGoals.fromJson(goalsJson);
+                            });
+                          },
+                          unit: NutrutionGoals.getUnit(
+                            goalName,
+                          ).replaceAll("kcal", "cal"),
                         );
                       })
                       .toList()

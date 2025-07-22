@@ -38,7 +38,9 @@ class CalorieCircle extends StatelessWidget {
             child: Text(
               '${(calories / maxCalories * 100).toStringAsFixed(0)}%',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSecondary,
+                color: calories / maxCalories < 0.5
+                    ? Theme.of(context).colorScheme.onSecondary
+                    : Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
             ),

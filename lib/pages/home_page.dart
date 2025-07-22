@@ -25,7 +25,7 @@ class TypeIndicator extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 140,
+            width: 150,
             child: Text(
               type,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -38,9 +38,14 @@ class TypeIndicator extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: LinearProgressIndicator(
                 borderRadius: BorderRadius.all(Radius.circular(2)),
+                minHeight: 8,
                 value: goal.isNaN ? 0 : goal,
                 backgroundColor: Theme.of(context).colorScheme.surfaceDim,
-                color: Theme.of(context).colorScheme.secondary,
+                color: Color.lerp(
+                  Colors.white,
+                  Theme.of(context).colorScheme.primary,
+                  (0.4 + goal).clamp(0, 1),
+                ),
               ),
             ),
           ),
@@ -111,56 +116,60 @@ class _HomePageState extends State<HomePage> {
       // appBar: AppBar(title: const Text('Home Page')),
       bottomNavigationBar: BottomNavbar(),
 
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CalorieCircle(
-            calories: meals.fold(
-              0,
-              (sum, meal) => sum + meal.nutrutionInfo.calorieGoal,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CalorieCircle(
+              calories: meals.fold(
+                0,
+                (sum, meal) => sum + meal.nutrutionInfo.calorieGoal,
+              ),
+              maxCalories: goals?.calorieGoal ?? 2000,
             ),
-            maxCalories: goals?.calorieGoal ?? 2000,
-          ),
-          const SizedBox(height: 20),
-          Card.filled(
-            color: Theme.of(context).colorScheme.inverseSurface,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              // height: MediaQuery.of(context).size.height / 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: selectedWidgets
-                    .map(
-                      (nutrient) => TypeIndicator(
-                        type: camelToNormal(nutrient),
-                        goal: (goals == null)
-                            ? 1.0
-                            : (() {
-                                final key = NutrutionGoals.getKey(nutrient);
-                                // Safely extract target or default to 0.0
-                                final target =
-                                    (goals!.toJson()[key][nutrient]
-                                        as double?) ??
-                                    0.0;
-                                // Sum consumed amount for this nutrient
-                                final consumed = meals.fold(
-                                  0.0,
-                                  (sum, meal) =>
-                                      sum +
-                                      (meal.nutrutionInfo
-                                              .toJson()[key][nutrient] ??
-                                          0.0),
-                                );
-                                // If target is zero, avoid division by zero
-                                return target > 0 ? consumed / target : 0.0;
-                              })(),
-                      ),
-                    )
-                    .toList(),
+            const SizedBox(height: 20),
+            Card.filled(
+              color: Theme.of(context).colorScheme.inverseSurface,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                // height: MediaQuery.of(context).size.height / 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: selectedWidgets
+                      .map(
+                        (nutrient) => TypeIndicator(
+                          type: camelToNormal(nutrient),
+                          goal: (goals == null)
+                              ? 1.0
+                              : (() {
+                                  final key = NutrutionGoals.getKey(nutrient);
+                                  // Safely extract target or default to 0.0
+                                  final target =
+                                      (goals!.toJson()[key][nutrient]
+                                          as double?) ??
+                                      0.0;
+                                  // Sum consumed amount for this nutrient
+                                  final consumed = meals.fold(
+                                    0.0,
+                                    (sum, meal) =>
+                                        sum +
+                                        (meal.nutrutionInfo
+                                                .toJson()[key][nutrient] ??
+                                            0.0),
+                                  );
+                                  // If target is zero, avoid division by zero
+                                  return target > 0
+                                      ? consumed / target
+                                      : consumed / 0.000001;
+                                })(),
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
