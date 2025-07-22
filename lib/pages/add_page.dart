@@ -1,6 +1,7 @@
 import 'package:calories_app/pages/mobile_scanner.dart';
 import 'package:flutter/material.dart';
 import '../widgets/bottom_navbar.dart';
+import 'search_food.dart';
 
 class Button extends StatelessWidget {
   final String text;
@@ -67,7 +68,10 @@ class AddPage extends StatelessWidget {
             Button(
               text: 'Search For Product',
               onPressed: () {
-                // Add your search for product logic here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchFood()),
+                );
               },
             ),
 

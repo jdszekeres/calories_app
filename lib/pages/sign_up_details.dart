@@ -28,6 +28,7 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
   String selectedSex = 'male';
   ActivityLevel selectedActivityLevel = ActivityLevel.sedentary;
   bool _isLoading = false;
+  bool useImperial = false; // added toggle for units
 
   @override
   Widget build(BuildContext context) {
@@ -73,12 +74,19 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                   const SizedBox(height: 16),
+                  SwitchListTile(
+                    title: const Text('Use Imperial Units'),
+                    value: useImperial,
+                    onChanged: (value) => setState(() => useImperial = value),
+                  ),
+                  const SizedBox(height: 16),
                   TextField(
                     controller: weightController,
-                    decoration: const InputDecoration(
-                      labelText: 'Weight (kg)',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.fitness_center),
+                    decoration: InputDecoration(
+                      labelText: useImperial ? 'Weight (lb)' : 'Weight (kg)',
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.fitness_center),
+                      suffixText: useImperial ? 'lb' : 'kg',
                     ),
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
@@ -92,10 +100,11 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                   const SizedBox(height: 16),
                   TextField(
                     controller: heightController,
-                    decoration: const InputDecoration(
-                      labelText: 'Height (cm)',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.height),
+                    decoration: InputDecoration(
+                      labelText: useImperial ? 'Height (in)' : 'Height (cm)',
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.height),
+                      suffixText: useImperial ? 'in' : 'cm',
                     ),
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
@@ -182,6 +191,12 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                             style: TextStyle(color: Colors.white),
                           ),
                   ),
+                  const SizedBox(height: 8),
+                  TextButton.icon(
+                    onPressed: _isLoading ? null : () => context.pop(),
+                    icon: const Icon(Icons.arrow_back),
+                    label: const Text('Back'),
+                  ),
                 ],
               ),
             ),
@@ -203,14 +218,20 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
     }
 
     final age = int.tryParse(ageController.text);
-    final weight = double.tryParse(weightController.text);
-    final height = double.tryParse(heightController.text);
+    double? weight = double.tryParse(weightController.text);
+    double? height = double.tryParse(heightController.text);
 
     if (age == null || age <= 0 || age > 150) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Please enter a valid age')));
       return;
+    }
+
+    // Convert imperial to metric if needed
+    if (useImperial) {
+      if (weight != null) weight = weight * 0.453592;
+      if (height != null) height = height * 2.54;
     }
 
     if (weight == null || weight <= 0 || weight > 500) {

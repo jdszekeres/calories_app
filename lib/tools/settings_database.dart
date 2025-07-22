@@ -12,31 +12,35 @@ class SettingsDatabase {
     await ref.set(settings);
   }
 
-  Future<Map<String, dynamic>?> getSettings(String userId) async {
+  Future<Map<String, dynamic>> getSettings(String userId) async {
     // Retrieve user settings from the database
     final ref = database.child('users/$userId/settings');
     final val = await ref.once();
     final snapshot = val.snapshot;
     if (snapshot.exists) {
       final settingsData = _convertToMap(snapshot.value);
+      for (var key in defaults.keys) {
+        if (!settingsData.containsKey(key)) {
+          settingsData[key] = defaults[key];
+        }
+      }
       return settingsData;
     }
-    return null;
+    return {};
   }
 
   Future<void> updateSetting(String userId, String key, dynamic value) async {
     // Update a specific setting for the user
     final settings = await getSettings(userId);
-    if (settings != null) {
-      settings[key] = value;
-      await saveSettings(userId, settings);
-    }
+
+    settings[key] = value;
+    await saveSettings(userId, settings);
   }
 
-  Future<dynamic> getSetting(String userId, String key) async {
+  Future<Object> getSetting(String userId, String key) async {
     // Retrieve a specific setting for the user
     final settings = await getSettings(userId);
-    return settings?[key];
+    return settings[key] ?? defaults[key] ?? {};
   }
 
   Map<String, dynamic> _convertToMap(dynamic data) {
@@ -59,3 +63,7 @@ class SettingsDatabase {
     return value;
   }
 }
+
+const defaults = {
+  'homePageWidgets': ['calories', 'protein', 'carbohydrates', 'fat'],
+};

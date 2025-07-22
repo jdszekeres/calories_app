@@ -266,3 +266,45 @@ Future<FoodFacts?> fetchFoodFacts(String barcode) async {
     throw Exception('Failed to load food facts');
   }
 }
+
+class Product {
+  final String name;
+  final String barcode;
+  final String imageUrl;
+
+  Product({required this.name, required this.barcode, required this.imageUrl});
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      name: json['product_name'] as String,
+      barcode: json['code'] as String,
+      imageUrl: json['image_small_url'] as String? ?? '',
+    );
+  }
+}
+
+Future<List<Product>> searchProducts(String query) async {
+  final int pageSize = 20; // Limit results to 20 products
+  final Uri url = Uri.parse(
+    'https://world.openfoodfacts.org/cgi/search.pl?search_terms=$query&json=1&search_simple=1&page_size=$pageSize',
+  );
+  final Response response = await get(url);
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> data =
+        jsonDecode(response.body) as Map<String, dynamic>;
+    if (data.containsKey('products')) {
+      final List<dynamic> productsJson = data['products'] as List<dynamic>;
+      return productsJson
+          .map((json) => Product.fromJson(json))
+          .where(
+            (element) => element.name.isNotEmpty && element.barcode.isNotEmpty,
+          )
+          .toList();
+    } else {
+      throw Exception('No products found');
+    }
+  } else {
+    throw Exception('Failed to search products');
+  }
+}

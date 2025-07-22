@@ -27,7 +27,7 @@ class TypeIndicator extends StatelessWidget {
           SizedBox(
             width: 140,
             child: Text(
-              type + ":" + goal.toStringAsFixed(10),
+              type,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onInverseSurface,
               ),
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
   NutrutionGoals? goals;
   List<FoodFacts> meals = [];
   List<String> selectedWidgets = [];
-  Map<String, dynamic>? settings;
+  Map<String, dynamic> settings = {};
 
   @override
   void initState() {
@@ -97,12 +97,11 @@ class _HomePageState extends State<HomePage> {
     ) {
       setState(() {
         settings = fetchedSettings;
+        // Initialize selectedWidgets from settings or use default list
+        selectedWidgets =
+            settings['homePageWidgets']?.cast<String>() ??
+            ['calories', 'protein', 'carbohydrates', 'fat'];
       });
-    });
-    setState(() {
-      selectedWidgets =
-          settings?['homePageWidgets']?.cast<String>() ??
-          ['calories', 'protein', 'carbohydrates', 'fat'];
     });
   }
 
@@ -136,19 +135,25 @@ class _HomePageState extends State<HomePage> {
                         type: camelToNormal(nutrient),
                         goal: (goals == null)
                             ? 1.0
-                            : meals.fold(
-                                    0.0,
-                                    (sum, meal) =>
-                                        sum +
-                                        (meal.nutrutionInfo
-                                                .toJson()[NutrutionGoals.getKey(
-                                              nutrient,
-                                            )][nutrient] ??
-                                            0.0),
-                                  ) /
-                                  goals?.toJson()[NutrutionGoals.getKey(
-                                    nutrient,
-                                  )][nutrient],
+                            : (() {
+                                final key = NutrutionGoals.getKey(nutrient);
+                                // Safely extract target or default to 0.0
+                                final target =
+                                    (goals!.toJson()[key][nutrient]
+                                        as double?) ??
+                                    0.0;
+                                // Sum consumed amount for this nutrient
+                                final consumed = meals.fold(
+                                  0.0,
+                                  (sum, meal) =>
+                                      sum +
+                                      (meal.nutrutionInfo
+                                              .toJson()[key][nutrient] ??
+                                          0.0),
+                                );
+                                // If target is zero, avoid division by zero
+                                return target > 0 ? consumed / target : 0.0;
+                              })(),
                       ),
                     )
                     .toList(),
