@@ -1,3 +1,4 @@
+import 'package:calories_app/pages/mobile_scanner.dart';
 import 'package:flutter/material.dart';
 import '../widgets/bottom_navbar.dart';
 
@@ -53,7 +54,12 @@ class AddPage extends StatelessWidget {
             Button(
               text: 'Scan Barcode',
               onPressed: () {
-                // Add your scan barcode logic here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MobileScannerWidget(),
+                  ),
+                );
               },
             ),
 

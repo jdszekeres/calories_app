@@ -57,7 +57,7 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return const HomePage();
+        return HomePage();
       },
       redirect: (context, state) {
         if (!Auth().isLoggedIn) {
@@ -69,7 +69,7 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/goals',
       builder: (context, state) {
-        return const GoalsPage();
+        return GoalsPage();
       },
       redirect: (context, state) {
         if (!Auth().isLoggedIn) {
@@ -105,7 +105,7 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/settings',
       builder: (context, state) {
-        return const SettingsPage();
+        return SettingsPage();
       },
       redirect: (context, state) {
         if (!Auth().isLoggedIn) {

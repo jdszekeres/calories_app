@@ -1,7 +1,15 @@
 import 'package:calories_app/widgets/calorie_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 
+import '../auth.dart';
+import '../tools/calculate_goals.dart';
+import '../tools/camel_to_normal.dart';
+import '../tools/food_facts.dart';
+import '../tools/meal_database.dart';
+import '../tools/settings_database.dart';
+import '../tools/user_database.dart';
 import '../widgets/bottom_navbar.dart';
 
 class TypeIndicator extends StatelessWidget {
@@ -17,9 +25,9 @@ class TypeIndicator extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 80,
+            width: 140,
             child: Text(
-              type,
+              type + ":" + goal.toStringAsFixed(10),
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onInverseSurface,
               ),
@@ -30,7 +38,7 @@ class TypeIndicator extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: LinearProgressIndicator(
                 borderRadius: BorderRadius.all(Radius.circular(2)),
-                value: goal,
+                value: goal.isNaN ? 0 : goal,
                 backgroundColor: Theme.of(context).colorScheme.surfaceDim,
                 color: Theme.of(context).colorScheme.secondary,
               ),
@@ -43,23 +51,77 @@ class TypeIndicator extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
+
+  SettingsDatabase settingsDatabase = SettingsDatabase();
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  NutrutionGoals? goals;
+  List<FoodFacts> meals = [];
+  List<String> selectedWidgets = [];
+  Map<String, dynamic>? settings;
+
+  @override
+  void initState() {
+    super.initState();
+    UserDatabase().getNutritionGoals(Auth().currentUser!.uid).then((
+      fetchedGoals,
+    ) {
+      if (fetchedGoals != null) {
+        setState(() {
+          goals = fetchedGoals;
+        });
+      } else {
+        // If no goals are found, redirect to the home page
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('No goals found. Please set your goals.')),
+          );
+          context.go('/settings');
+        }
+      }
+    });
+    MealDatabase().getMealsByDate(Auth().currentUser!.uid, DateTime.now()).then(
+      (fetchedMeals) {
+        setState(() {
+          meals = fetchedMeals;
+        });
+      },
+    );
+    widget.settingsDatabase.getSettings(Auth().currentUserId!).then((
+      fetchedSettings,
+    ) {
+      setState(() {
+        settings = fetchedSettings;
+      });
+    });
+    setState(() {
+      selectedWidgets =
+          settings?['homePageWidgets']?.cast<String>() ??
+          ['calories', 'protein', 'carbohydrates', 'fat'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home Page')),
+      // appBar: AppBar(title: const Text('Home Page')),
       bottomNavigationBar: BottomNavbar(),
 
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CalorieCircle(calories: 850, maxCalories: 2000),
+          CalorieCircle(
+            calories: meals.fold(
+              0,
+              (sum, meal) => sum + meal.nutrutionInfo.calorieGoal,
+            ),
+            maxCalories: goals?.calorieGoal ?? 2000,
+          ),
           const SizedBox(height: 20),
           Card.filled(
             color: Theme.of(context).colorScheme.inverseSurface,
@@ -68,12 +130,28 @@ class _HomePageState extends State<HomePage> {
               // height: MediaQuery.of(context).size.height / 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TypeIndicator(type: 'Calories', goal: 0.425),
-                  TypeIndicator(type: 'Protein', goal: 0.3),
-                  TypeIndicator(type: 'Carbs', goal: 0.5),
-                  TypeIndicator(type: 'Fats', goal: 0.2),
-                ],
+                children: selectedWidgets
+                    .map(
+                      (nutrient) => TypeIndicator(
+                        type: camelToNormal(nutrient),
+                        goal: (goals == null)
+                            ? 1.0
+                            : meals.fold(
+                                    0.0,
+                                    (sum, meal) =>
+                                        sum +
+                                        (meal.nutrutionInfo
+                                                .toJson()[NutrutionGoals.getKey(
+                                              nutrient,
+                                            )][nutrient] ??
+                                            0.0),
+                                  ) /
+                                  goals?.toJson()[NutrutionGoals.getKey(
+                                    nutrient,
+                                  )][nutrient],
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ),

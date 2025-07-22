@@ -48,6 +48,7 @@ class DefaultFirebaseOptions {
     authDomain: 'calories-app-e995f.firebaseapp.com',
     storageBucket: 'calories-app-e995f.firebasestorage.app',
     measurementId: 'G-690VV4LJNK',
+    databaseURL: "https://calories-app-e995f-default-rtdb.firebaseio.com",
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -56,6 +57,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '203592669551',
     projectId: 'calories-app-e995f',
     storageBucket: 'calories-app-e995f.firebasestorage.app',
+    databaseURL: "https://calories-app-e995f-default-rtdb.firebaseio.com",
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -65,6 +67,7 @@ class DefaultFirebaseOptions {
     projectId: 'calories-app-e995f',
     storageBucket: 'calories-app-e995f.firebasestorage.app',
     iosBundleId: 'com.example.caloriesApp',
+    databaseURL: "https://calories-app-e995f-default-rtdb.firebaseio.com",
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -74,6 +77,7 @@ class DefaultFirebaseOptions {
     projectId: 'calories-app-e995f',
     storageBucket: 'calories-app-e995f.firebasestorage.app',
     iosBundleId: 'com.example.caloriesApp',
+    databaseURL: "https://calories-app-e995f-default-rtdb.firebaseio.com",
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
@@ -84,5 +88,6 @@ class DefaultFirebaseOptions {
     authDomain: 'calories-app-e995f.firebaseapp.com',
     storageBucket: 'calories-app-e995f.firebasestorage.app',
     measurementId: 'G-91ELV8L22Z',
+    databaseURL: "https://calories-app-e995f-default-rtdb.firebaseio.com",
   );
 }

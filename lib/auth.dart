@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'tools/calculate_goals.dart';
+import 'tools/user_profile.dart';
+import 'tools/user_database.dart';
 
 class Auth {
   static final Auth _instance = Auth._internal();
@@ -25,16 +28,39 @@ class Auth {
     String email,
     String username,
     String password,
+    int age,
+    double weight,
+    double height,
+    ActivityLevel activityLevel,
+    String sex,
   ) async {
     if (!isInitialized) {
       throw Exception('Firebase is not initialized');
     }
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    await FirebaseAuth.instance.currentUser?.updateDisplayName(username);
-    await FirebaseAuth.instance.currentUser?.reload();
+    UserCredential credential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+
+    await credential.user?.updateDisplayName(username);
+    await credential.user?.reload();
+
+    // Save additional user profile information
+    if (credential.user != null) {
+      final userProfile = UserProfile(
+        uid: credential.user!.uid,
+        email: email,
+        username: username,
+        age: age,
+        weight: weight,
+        height: height,
+        activityLevel: activityLevel,
+        sex: sex,
+      );
+      await UserDatabase().saveUserProfile(userProfile);
+      await UserDatabase().saveNutritionGoals(
+        credential.user!.uid,
+        calculateGoals(age, weight, height, activityLevel, sex == 'male'),
+      );
+    }
   }
 
   Future<void> signOut() async {
@@ -67,4 +93,13 @@ class Auth {
 
   Stream<User?> get authStateChanges =>
       FirebaseAuth.instance.authStateChanges();
+
+  // Get user profile information
+  Future<UserProfile?> getCurrentUserProfile() async {
+    final user = currentUser;
+    if (user != null) {
+      return await UserDatabase().getUserProfile(user.uid);
+    }
+    return null;
+  }
 }
