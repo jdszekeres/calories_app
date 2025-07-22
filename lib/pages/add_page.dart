@@ -1,3 +1,4 @@
+import 'package:calories_app/pages/ai_page.dart';
 import 'package:calories_app/pages/mobile_scanner.dart';
 import 'package:flutter/material.dart';
 import '../widgets/bottom_navbar.dart';
@@ -25,7 +26,18 @@ class Button extends StatelessWidget {
       ),
       onPressed: onPressed,
       child: icon != null
-          ? Icon(icon)
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon),
+                Text(
+                  text,
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                ),
+              ],
+            )
           : Text(
               text,
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(
@@ -77,9 +89,13 @@ class AddPage extends StatelessWidget {
 
             const SizedBox(height: 20),
             Button(
-              text: 'Log Meal',
+              icon: Icons.auto_awesome,
+              text: 'Log Meal using AI',
               onPressed: () {
-                // Add your log meal logic here
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AiPage()),
+                );
               },
             ),
             const SizedBox(height: 20 * 4),

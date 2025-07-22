@@ -49,6 +49,18 @@ class FoodFacts {
     );
   }
 
+  static FoodFacts fromAIJson(Map<String, dynamic> json) {
+    return FoodFacts(
+      name: json['info']['name'] as String,
+      servingSize: json['info']['servingSize'] as String,
+      numServings: json['info']['servingCount'] as double,
+      uploaded: DateTime.now(), // Set current time as uploaded time
+      image: "",
+      ingredients: List<String>.from(json['ingredients'] as List),
+      nutrutionInfo: NutrutionGoals.fromJson(json),
+    );
+  }
+
   FoodFacts copyWith({
     double? numServings,
     String? name,
