@@ -185,9 +185,9 @@ class _SignInAnonState extends State<SignInAnon> {
                   ),
                   const SizedBox(height: 8),
                   TextButton.icon(
-                    onPressed: _isLoading ? null : () => context.pop(),
-                    icon: const Icon(Icons.arrow_back),
-                    label: const Text('Back'),
+                    onPressed: _isLoading ? null : () => context.go("/signin"),
+                    icon: const Icon(Icons.login),
+                    label: const Text('Already have an account? Sign In'),
                   ),
                 ],
               ),
@@ -258,9 +258,9 @@ class _SignInAnonState extends State<SignInAnon> {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign up failed: ${e.toString()}')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(Auth.prettyPrintError(e))));
       }
     } finally {
       if (mounted) {

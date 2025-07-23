@@ -35,7 +35,7 @@ class _ConvertAnonState extends State<ConvertAnon> {
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ).showSnackBar(SnackBar(content: Text(Auth.prettyPrintError(e))));
       return;
     }
     if (context.mounted) {

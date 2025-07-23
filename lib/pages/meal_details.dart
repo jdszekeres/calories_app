@@ -25,7 +25,10 @@ class _MealDetailsState extends State<MealDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Meal Details')),
+      appBar: AppBar(
+        title: const Text('Meal Details'),
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       body: SingleChildScrollView(
         child: Column(

@@ -62,9 +62,7 @@ class SignInPage extends StatelessWidget {
                       } catch (e) {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Sign in failed: ${e.toString()}'),
-                            ),
+                            SnackBar(content: Text(Auth.prettyPrintError(e))),
                           );
                         }
                       }

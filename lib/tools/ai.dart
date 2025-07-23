@@ -116,7 +116,7 @@ class AiService {
         numServings: numServings,
         uploaded: DateTime.now(),
         image:
-            "https://placehold.co/600x400?text=Scanned%20With%20AI", // Placeholder for image URL
+            "https://placehold.co/600x400.png?text=Scanned%20With%20AI", // Placeholder for image URL
         ingredients: ingredients,
         nutrutionInfo: nutrInfo,
       );

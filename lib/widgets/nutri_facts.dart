@@ -266,6 +266,12 @@ class _NutriFactsState extends State<NutriFacts> {
             'g',
             (value) => _updateMacroNutrient('protein', value),
           ),
+          _buildEditableIndentedNutrientRow(
+            'Water',
+            _editableFoodFacts.nutrutionInfo.macroNutrientGoals.water,
+            'L',
+            (value) => _updateMacroNutrient('water', value),
+          ),
 
           const Divider(color: Colors.black, thickness: 2),
 
@@ -614,6 +620,16 @@ class _NutriFactsState extends State<NutriFacts> {
             fat: macro.fat,
             sugar: macro.sugar,
             water: macro.water,
+          );
+          break;
+        case 'water':
+          updatedMacro = MacroNutrientGoals(
+            carbohydrates: macro.carbohydrates,
+            fiber: macro.fiber,
+            protein: macro.protein,
+            fat: macro.fat,
+            sugar: macro.sugar,
+            water: value,
           );
           break;
         default:

@@ -12,6 +12,42 @@ class Auth {
 
   bool get isInitialized => Firebase.apps.isNotEmpty;
 
+  static String prettyPrintError(Object error) {
+    if (error is FirebaseException) {
+      switch (error.code) {
+        case 'network-request-failed':
+          return 'Network error occurred. Please check your connection.';
+        case 'user-not-found':
+          return 'No user found for the provided email.';
+        case 'wrong-password':
+          return 'Incorrect password. Please try again.';
+        case 'email-already-in-use':
+          return 'The email address is already in use by another account.';
+        case 'invalid-email':
+          return 'The email address is not valid.';
+        case 'weak-password':
+          return 'The password is too weak. Please choose a stronger password.';
+        case 'operation-not-allowed':
+          return 'This operation is not allowed. Please contact support.';
+        case 'too-many-requests':
+          return 'Too many requests. Please try again later.';
+        case 'user-disabled':
+          return 'The user account has been disabled. Please contact support.';
+        case 'invalid-credential':
+          return 'The provided credential is invalid. Please check your input.';
+        case 'requires-recent-login':
+          return 'This operation requires recent authentication. Please log in again.';
+        case 'unknown':
+          return 'An unknown error occurred. Please try again later.';
+        case 'invalid-verification-code':
+          return 'The verification code is invalid. Please check and try again.';
+        default:
+          return error.message ?? 'An unknown error occurred.';
+      }
+    }
+    return error.toString();
+  }
+
   Future<User?> signInWithEmailAndPassword(
     String email,
     String password,

@@ -35,7 +35,11 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Scan Barcode')),
+      appBar: AppBar(
+        title: const Text('Scan Barcode'),
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      ),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       body: (scannedBarcode == null)
           ? Column(
               children: [

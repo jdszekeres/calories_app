@@ -269,9 +269,9 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign up failed: ${e.toString()}')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(Auth.prettyPrintError(e))));
       }
     } finally {
       if (mounted) {

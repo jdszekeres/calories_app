@@ -53,7 +53,11 @@ class _SearchFoodState extends State<SearchFood> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Search Food')),
+      appBar: AppBar(
+        title: const Text('Search Food'),
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      ),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: (scannedBarcode == null)
@@ -61,6 +65,10 @@ class _SearchFoodState extends State<SearchFood> {
                 children: [
                   TextField(
                     controller: _searchController,
+                    textInputAction: TextInputAction.search,
+                    onSubmitted: (value) {
+                      _searchProducts();
+                    },
                     decoration: InputDecoration(
                       labelText: 'Search for products',
                       suffixIcon: IconButton(
