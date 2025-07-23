@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../auth.dart';
 import '../tools/food_facts.dart';
 import '../widgets/bottom_navbar.dart';
+import 'meal_details.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({Key? key}) : super(key: key);
@@ -34,7 +35,11 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My Meals')),
+      appBar: AppBar(
+        title: const Text('My Meals'),
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      ),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       bottomNavigationBar: BottomNavbar(),
       body: ListView.builder(
         itemCount: items.length,
@@ -74,6 +79,14 @@ class _ListPageState extends State<ListPage> {
                 mealName: item.name,
                 mealTime: dateFormat.format(item.uploaded!),
                 calories: item.nutrutionInfo.calorieGoal as int,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MealDetails(foodFacts: item),
+                    ),
+                  );
+                },
               ),
             ],
           );

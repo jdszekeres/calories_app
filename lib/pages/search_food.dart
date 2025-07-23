@@ -22,6 +22,7 @@ class _SearchFoodState extends State<SearchFood> {
 
   String? scannedBarcode;
   double? servings;
+  FoodFacts? _foodFacts;
 
   @override
   void dispose() {
@@ -88,6 +89,8 @@ class _SearchFoodState extends State<SearchFood> {
                             onTap: () {
                               setState(() {
                                 scannedBarcode = product.barcode;
+                                _foodFacts =
+                                    null; // Reset food facts when new product is selected
                               });
                             },
                           );
@@ -130,19 +133,41 @@ class _SearchFoodState extends State<SearchFood> {
                       print(snapshot.stackTrace);
                       return Text('Error: ${snapshot.error}');
                     } else {
+                      // Initialize _foodFacts if not already set
+                      if (_foodFacts == null) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          setState(() {
+                            _foodFacts = snapshot.data!;
+                          });
+                        });
+                        // Show loading while state updates
+                        return CircularProgressIndicator();
+                      }
+
                       return SingleChildScrollView(
                         child: Column(
                           children: [
                             NutriFacts(
-                              foodFacts: snapshot.data!,
+                              foodFacts: _foodFacts!,
                               servings: servings!,
+                              onEdit: (editedFoodFacts) {
+                                setState(() {
+                                  _foodFacts = editedFoodFacts;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Nutrition facts updated!'),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              },
                             ),
                             ElevatedButton(
                               onPressed: () async {
                                 if (servings != null) {
                                   await MealDatabase().addMeal(
                                     auth.currentUser!.uid,
-                                    snapshot.data!.copyWith(
+                                    _foodFacts!.copyWith(
                                       numServings: servings,
                                       uploaded: DateTime.now(),
                                     ),

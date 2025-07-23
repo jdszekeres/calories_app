@@ -28,13 +28,14 @@ class MobileScannerWidget extends StatefulWidget {
 class _MobileScannerWidgetState extends State<MobileScannerWidget> {
   String? scannedBarcode;
   double? servings;
+  FoodFacts? _foodFacts;
 
   final auth = Auth();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Scan QR Code')),
+      appBar: AppBar(title: const Text('Scan Barcode')),
       body: (scannedBarcode == null)
           ? Column(
               children: [
@@ -49,6 +50,8 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
                           print('Scanned barcode: ${barcode.rawValue}');
                           setState(() {
                             scannedBarcode = barcode.rawValue;
+                            _foodFacts =
+                                null; // Reset food facts when new barcode is scanned
                           });
                         }
                       }
@@ -91,19 +94,41 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
                     print(snapshot.stackTrace);
                     return Text('Error: ${snapshot.error}');
                   } else {
+                    // Initialize _foodFacts if not already set
+                    if (_foodFacts == null) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        setState(() {
+                          _foodFacts = snapshot.data!;
+                        });
+                      });
+                      // Show loading while state updates
+                      return CircularProgressIndicator();
+                    }
+
                     return SingleChildScrollView(
                       child: Column(
                         children: [
                           NutriFacts(
-                            foodFacts: snapshot.data!,
+                            foodFacts: _foodFacts!,
                             servings: servings!,
+                            onEdit: (editedFoodFacts) {
+                              setState(() {
+                                _foodFacts = editedFoodFacts;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Nutrition facts updated!'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
                           ),
                           ElevatedButton(
                             onPressed: () async {
                               if (servings != null) {
                                 await MealDatabase().addMeal(
                                   auth.currentUser!.uid,
-                                  snapshot.data!.copyWith(
+                                  _foodFacts!.copyWith(
                                     numServings: servings,
                                     uploaded: DateTime.now(),
                                   ),

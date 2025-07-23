@@ -43,6 +43,11 @@ class GoalAmount extends AbstractSettingsTile {
       title: Text(name),
       description: null,
       onPressed: (BuildContext context) {
+        TextEditingController controller = TextEditingController(
+          text: goal.roundToDouble() == goal
+              ? goal.toString()
+              : goal.toStringAsFixed(1),
+        );
         showDialog(
           context: context,
           builder: (context) {
@@ -50,7 +55,8 @@ class GoalAmount extends AbstractSettingsTile {
               title: Text('Set Goal for ${name.toString()}'),
               content: TextField(
                 keyboardType: TextInputType.number,
-
+                controller: controller,
+                autofocus: true,
                 decoration: InputDecoration(
                   labelText: 'Goal',
                   hintText: 'Enter your goal',
@@ -138,10 +144,20 @@ class _GoalsPageState extends State<GoalsPage> {
     Map<String, dynamic> jsonGoals = widget.goals?.toJson() ?? {};
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Daily Goals')),
+      appBar: AppBar(
+        title: const Text('Daily Goals'),
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      ),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       bottomNavigationBar: BottomNavbar(),
       body: (widget.goals != null)
           ? SettingsList(
+              lightTheme: SettingsThemeData(
+                settingsListBackground: Colors.transparent,
+              ),
+              darkTheme: SettingsThemeData(
+                settingsListBackground: Colors.transparent,
+              ),
               key: ValueKey(widget.goals),
               sections: jsonGoals.keys.toList().map((key) {
                 return SettingsSection(

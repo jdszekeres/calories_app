@@ -79,4 +79,27 @@ class MealDatabase {
     }
     return [];
   }
+
+  Future<void> updateMeal(
+    String uid,
+    DateTime time,
+    FoodFacts updatedMeal,
+  ) async {
+    final ref = database.child('users/$uid/meals');
+    final val = await ref.once();
+    final snapshot = val.snapshot;
+    if (snapshot.exists) {
+      final mealsData = _convertToMap(snapshot.value);
+      for (var key in mealsData.keys) {
+        final mealData = _convertToMap(mealsData[key]);
+        if (mealData['uploaded'] != null) {
+          final mealDateTime = DateTime.parse(mealData['uploaded']);
+          if (mealDateTime.isAtSameMomentAs(time)) {
+            await ref.child(key).set(updatedMeal.toJson());
+            break;
+          }
+        }
+      }
+    }
+  }
 }

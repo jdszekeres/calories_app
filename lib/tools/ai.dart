@@ -88,7 +88,7 @@ class AiService {
         'You are a nutrition expert. Analyze the meal in the image and provide the nutrition facts in JSON format.',
       );
       final textHint = TextPart(
-        "Return each nutrient with its correct unit. $units",
+        "Return each nutrient with its correct unit. $units. Include unit in serving size i.e. '1 burger' or '100g'.",
       );
       final response = await model.generateContent([
         Content.multi([prompt, textHint, imagePart]),
@@ -97,12 +97,11 @@ class AiService {
         return null;
       }
       final jsonResponse = response.text;
-      print('AI Response: $jsonResponse');
       final data = jsonDecode(jsonResponse!) as Map<String, dynamic>;
       // Map AI JSON into our data models
       final info = data['info'] as Map<String, dynamic>? ?? {};
       final name = info['name'] as String? ?? 'Unknown';
-      final numServings = (info['servingSize'] as num?)?.toDouble() ?? 1.0;
+      final numServings = info['servingSize'];
       final servingCount =
           info['servingCount'] as String? ?? numServings.toString();
       final ingredients =
@@ -116,7 +115,8 @@ class AiService {
         servingSize: servingCount,
         numServings: numServings,
         uploaded: DateTime.now(),
-        image: "",
+        image:
+            "https://placehold.co/600x400?text=Scanned%20With%20AI", // Placeholder for image URL
         ingredients: ingredients,
         nutrutionInfo: nutrInfo,
       );

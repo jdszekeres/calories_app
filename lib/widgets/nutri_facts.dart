@@ -1,15 +1,48 @@
 import 'package:calories_app/tools/food_facts.dart';
+import 'package:calories_app/tools/calculate_goals.dart';
 import 'package:flutter/material.dart';
 
-class NutriFacts extends StatelessWidget {
+class NutriFacts extends StatefulWidget {
   final FoodFacts foodFacts;
   final double servings;
+  final Function(FoodFacts)? onEdit;
 
   const NutriFacts({
     super.key,
     required this.foodFacts,
     required this.servings,
+    this.onEdit,
   });
+
+  @override
+  State<NutriFacts> createState() => _NutriFactsState();
+}
+
+class _NutriFactsState extends State<NutriFacts> {
+  bool _isEditing = false;
+  late FoodFacts _editableFoodFacts;
+
+  @override
+  void initState() {
+    super.initState();
+    _editableFoodFacts = widget.foodFacts;
+  }
+
+  void _saveChanges() {
+    if (widget.onEdit != null) {
+      widget.onEdit!(_editableFoodFacts);
+    }
+    setState(() {
+      _isEditing = false;
+    });
+  }
+
+  void _cancelEdit() {
+    setState(() {
+      _editableFoodFacts = widget.foodFacts;
+      _isEditing = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +58,60 @@ class NutriFacts extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Edit button row
+          if (widget.onEdit != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (_isEditing) ...[
+                  TextButton(
+                    onPressed: _cancelEdit,
+                    child: const Text('Cancel'),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: _saveChanges,
+                    child: const Text('Save'),
+                  ),
+                ] else
+                  IconButton(
+                    onPressed: () => setState(() => _isEditing = true),
+                    icon: const Icon(Icons.edit),
+                    tooltip: 'Edit nutrition facts',
+                  ),
+              ],
+            ),
+
           // Product name
           Center(
-            child: Text(
-              foodFacts.name,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.center,
-            ),
+            child: _isEditing
+                ? TextFormField(
+                    initialValue: _editableFoodFacts.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      isDense: true,
+                    ),
+                    onChanged: (value) {
+                      _editableFoodFacts = _editableFoodFacts.copyWith(
+                        name: value,
+                      );
+                    },
+                  )
+                : Text(
+                    _editableFoodFacts.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
           ),
           const SizedBox(height: 8),
 
@@ -51,15 +127,34 @@ class NutriFacts extends StatelessWidget {
           const Divider(color: Colors.black, thickness: 2),
 
           // Serving size
-          Text(
-            'Serving size ${foodFacts.servingSize}',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.black,
-            ),
-          ),
-          Text('You ate ${servings.toStringAsFixed(1)} servings'),
+          _isEditing
+              ? TextFormField(
+                  initialValue: _editableFoodFacts.servingSize,
+                  decoration: const InputDecoration(
+                    labelText: 'Serving size',
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                  onChanged: (value) {
+                    _editableFoodFacts = _editableFoodFacts.copyWith(
+                      servingSize: value,
+                    );
+                  },
+                )
+              : Text(
+                  'Serving size ${_editableFoodFacts.servingSize}',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+          Text('You ate ${widget.servings.toStringAsFixed(1)} servings'),
           const Divider(color: Colors.black, thickness: 4),
 
           // Calories
@@ -74,15 +169,54 @@ class NutriFacts extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              Text(
-                (foodFacts.nutrutionInfo.calorieGoal * servings)
-                    .toStringAsFixed(0),
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
+              _isEditing
+                  ? SizedBox(
+                      width: 80,
+                      child: TextFormField(
+                        initialValue: _editableFoodFacts
+                            .nutrutionInfo
+                            .calorieGoal
+                            .toStringAsFixed(0),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          isDense: true,
+                          contentPadding: EdgeInsets.all(8),
+                        ),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          final calories = double.tryParse(value) ?? 0.0;
+                          _editableFoodFacts = _editableFoodFacts.copyWith(
+                            nutrutionInfo: NutrutionGoals(
+                              calorieGoal: calories,
+                              macroNutrientGoals: _editableFoodFacts
+                                  .nutrutionInfo
+                                  .macroNutrientGoals,
+                              vitaminGoals:
+                                  _editableFoodFacts.nutrutionInfo.vitaminGoals,
+                              microNutrientGoals: _editableFoodFacts
+                                  .nutrutionInfo
+                                  .microNutrientGoals,
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : Text(
+                      (_editableFoodFacts.nutrutionInfo.calorieGoal *
+                              widget.servings)
+                          .toStringAsFixed(0),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
             ],
           ),
           const Divider(color: Colors.black, thickness: 2),
@@ -102,205 +236,216 @@ class NutriFacts extends StatelessWidget {
           const Divider(color: Colors.black, thickness: 1),
 
           // Macronutrients
-          _buildNutrientRow(
+          _buildEditableNutrientRow(
             'Total Fat',
-            '${(foodFacts.nutrutionInfo.macroNutrientGoals.fat * servings).toStringAsFixed(1)}g',
-            '',
+            _editableFoodFacts.nutrutionInfo.macroNutrientGoals.fat,
+            'g',
+            (value) => _updateMacroNutrient('fat', value),
           ),
-          _buildNutrientRow(
+          _buildEditableNutrientRow(
             'Total Carbohydrate',
-            '${(foodFacts.nutrutionInfo.macroNutrientGoals.carbohydrates * servings).toStringAsFixed(1)}g',
-            '',
+            _editableFoodFacts.nutrutionInfo.macroNutrientGoals.carbohydrates,
+            'g',
+            (value) => _updateMacroNutrient('carbohydrates', value),
           ),
-          _buildIndentedNutrientRow(
+          _buildEditableIndentedNutrientRow(
             'Dietary Fiber',
-            '${(foodFacts.nutrutionInfo.macroNutrientGoals.fiber * servings).toStringAsFixed(1)}g',
-            '',
+            _editableFoodFacts.nutrutionInfo.macroNutrientGoals.fiber,
+            'g',
+            (value) => _updateMacroNutrient('fiber', value),
           ),
-          _buildIndentedNutrientRow(
+          _buildEditableIndentedNutrientRow(
             'Total Sugars',
-            '${(foodFacts.nutrutionInfo.macroNutrientGoals.sugar * servings).toStringAsFixed(1)}g',
-            '',
+            _editableFoodFacts.nutrutionInfo.macroNutrientGoals.sugar,
+            'g',
+            (value) => _updateMacroNutrient('sugar', value),
           ),
-          _buildNutrientRow(
+          _buildEditableNutrientRow(
             'Protein',
-            '${(foodFacts.nutrutionInfo.macroNutrientGoals.protein * servings).toStringAsFixed(1)}g',
-            '',
+            _editableFoodFacts.nutrutionInfo.macroNutrientGoals.protein,
+            'g',
+            (value) => _updateMacroNutrient('protein', value),
           ),
 
           const Divider(color: Colors.black, thickness: 2),
 
           // Vitamins and minerals (only show if values > 0)
           // Vitamins
-          if (foodFacts.nutrutionInfo.vitaminGoals.vitaminA > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminA > 0)
             _buildNutrientRow(
               'Vitamin A',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.vitaminA * servings) / 1000000).toStringAsFixed(1)}µg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminA * widget.servings) / 1000000).toStringAsFixed(1)}µg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.vitaminC > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminC > 0)
             _buildNutrientRow(
               'Vitamin C',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.vitaminC * servings) / 1000).toStringAsFixed(1)}mg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminC * widget.servings) / 1000).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.vitaminD > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminD > 0)
             _buildNutrientRow(
               'Vitamin D',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.vitaminD * servings) / 1000).toStringAsFixed(1)}mg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminD * widget.servings) / 1000).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.vitaminE > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminE > 0)
             _buildNutrientRow(
               'Vitamin E',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.vitaminE * servings) / 1000).toStringAsFixed(1)}mg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminE * widget.servings) / 1000).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.vitaminK > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminK > 0)
             _buildNutrientRow(
               'Vitamin K',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.vitaminK * servings) / 1000000).toStringAsFixed(1)}µg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminK * widget.servings) / 1000000).toStringAsFixed(1)}µg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.thiamin > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.thiamin > 0)
             _buildNutrientRow(
               'Thiamin (B1)',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.thiamin * servings) / 1000).toStringAsFixed(1)}mg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.thiamin * widget.servings) / 1000).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.riboflavin > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.riboflavin > 0)
             _buildNutrientRow(
               'Riboflavin (B2)',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.riboflavin * servings) / 1000).toStringAsFixed(1)}mg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.riboflavin * widget.servings) / 1000).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.niacin > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.niacin > 0)
             _buildNutrientRow(
               'Niacin (B3)',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.niacin * servings) / 1000).toStringAsFixed(1)}mg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.niacin * widget.servings) / 1000).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.pantothenicAcid > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.pantothenicAcid > 0)
             _buildNutrientRow(
               'Pantothenic Acid (B5)',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.pantothenicAcid * servings) / 1000).toStringAsFixed(1)}mg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.pantothenicAcid * widget.servings) / 1000).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.vitaminB6 > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB6 > 0)
             _buildNutrientRow(
               'Vitamin B6',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.vitaminB6 * servings) / 1000).toStringAsFixed(1)}mg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB6 * widget.servings) / 1000).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.folate > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.folate > 0)
             _buildNutrientRow(
               'Folate',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.folate * servings) / 1000000).toStringAsFixed(1)}µg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.folate * widget.servings) / 1000000).toStringAsFixed(1)}µg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.vitaminB12 > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB12 > 0)
             _buildNutrientRow(
               'Vitamin B12',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.vitaminB12 * servings) / 1000000).toStringAsFixed(1)}µg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB12 * widget.servings) / 1000000).toStringAsFixed(1)}µg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.vitaminGoals.choline > 0)
+          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.choline > 0)
             _buildNutrientRow(
               'Choline',
-              '${((foodFacts.nutrutionInfo.vitaminGoals.choline * servings) / 1000).toStringAsFixed(1)}mg',
+              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.choline * widget.servings) / 1000).toStringAsFixed(1)}mg',
               '',
             ),
 
           // Minerals
-          if (foodFacts.nutrutionInfo.microNutrientGoals.calcium > 0)
-            _buildNutrientRow(
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.calcium > 0)
+            _buildEditableNutrientRow(
               'Calcium',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.calcium * servings).toStringAsFixed(0)}mg',
-              '',
+              _editableFoodFacts.nutrutionInfo.microNutrientGoals.calcium,
+              'mg',
+              (value) => _updateMicroNutrient('calcium', value),
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.iron > 0)
-            _buildNutrientRow(
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.iron > 0)
+            _buildEditableNutrientRow(
               'Iron',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.iron * servings).toStringAsFixed(1)}mg',
-              '',
+              _editableFoodFacts.nutrutionInfo.microNutrientGoals.iron,
+              'mg',
+              (value) => _updateMicroNutrient('iron', value),
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.magnesium > 0)
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.magnesium > 0)
             _buildNutrientRow(
               'Magnesium',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.magnesium * servings).toStringAsFixed(0)}mg',
+              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.magnesium * widget.servings).toStringAsFixed(0)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.phosphorus > 0)
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.phosphorus >
+              0)
             _buildNutrientRow(
               'Phosphorus',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.phosphorus * servings).toStringAsFixed(0)}mg',
+              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.phosphorus * widget.servings).toStringAsFixed(0)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.potassium > 0)
-            _buildNutrientRow(
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.potassium > 0)
+            _buildEditableNutrientRow(
               'Potassium',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.potassium * servings).toStringAsFixed(0)}mg',
-              '',
+              _editableFoodFacts.nutrutionInfo.microNutrientGoals.potassium,
+              'mg',
+              (value) => _updateMicroNutrient('potassium', value),
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.sodium > 0)
-            _buildNutrientRow(
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.sodium > 0)
+            _buildEditableNutrientRow(
               'Sodium',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.sodium * servings).toStringAsFixed(0)}mg',
-              '',
+              _editableFoodFacts.nutrutionInfo.microNutrientGoals.sodium,
+              'mg',
+              (value) => _updateMicroNutrient('sodium', value),
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.zinc > 0)
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.zinc > 0)
             _buildNutrientRow(
               'Zinc',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.zinc * servings).toStringAsFixed(1)}mg',
+              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.zinc * widget.servings).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.copper > 0)
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.copper > 0)
             _buildNutrientRow(
               'Copper',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.copper * servings).toStringAsFixed(1)}mg',
+              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.copper * widget.servings).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.manganese > 0)
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.manganese > 0)
             _buildNutrientRow(
               'Manganese',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.manganese * servings).toStringAsFixed(1)}mg',
+              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.manganese * widget.servings).toStringAsFixed(1)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.selenium > 0)
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.selenium > 0)
             _buildNutrientRow(
               'Selenium',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.selenium * servings).toStringAsFixed(1)}µg',
+              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.selenium * widget.servings).toStringAsFixed(1)}µg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.iodine > 0)
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.iodine > 0)
             _buildNutrientRow(
               'Iodine',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.iodine * servings).toStringAsFixed(1)}µg',
+              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.iodine * widget.servings).toStringAsFixed(1)}µg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.molybdenum > 0)
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.molybdenum >
+              0)
             _buildNutrientRow(
               'Molybdenum',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.molybdenum * servings).toStringAsFixed(1)}µg',
+              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.molybdenum * widget.servings).toStringAsFixed(1)}µg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.chlorine > 0)
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.chlorine > 0)
             _buildNutrientRow(
               'Chloride',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.chlorine * servings).toStringAsFixed(0)}mg',
+              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.chlorine * widget.servings).toStringAsFixed(0)}mg',
               '',
             ),
-          if (foodFacts.nutrutionInfo.microNutrientGoals.flouride > 0)
+          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.flouride > 0)
             _buildNutrientRow(
               'Fluoride',
-              '${(foodFacts.nutrutionInfo.microNutrientGoals.flouride * servings).toStringAsFixed(1)}mg',
+              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.flouride * widget.servings).toStringAsFixed(1)}mg',
               '',
             ),
 
           const Divider(color: Colors.black, thickness: 2),
 
           // Ingredients section
-          if (foodFacts.ingredients.isNotEmpty) ...[
+          if (_editableFoodFacts.ingredients.isNotEmpty) ...[
             const SizedBox(height: 12),
             const Text(
               'INGREDIENTS:',
@@ -312,12 +457,293 @@ class NutriFacts extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              foodFacts.ingredients.join(', ').toUpperCase(),
+              _editableFoodFacts.ingredients.join(', ').toUpperCase(),
               style: const TextStyle(fontSize: 11, color: Colors.black),
             ),
           ],
         ],
       ),
+    );
+  }
+
+  void _updateMicroNutrient(String nutrientName, double value) {
+    setState(() {
+      final micro = _editableFoodFacts.nutrutionInfo.microNutrientGoals;
+      MicroNutrientGoals updatedMicro;
+
+      switch (nutrientName) {
+        case 'calcium':
+          updatedMicro = MicroNutrientGoals(
+            calcium: value,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'iron':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: value,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'sodium':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: value,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'potassium':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: value,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        default:
+          return;
+      }
+
+      _editableFoodFacts = _editableFoodFacts.copyWith(
+        nutrutionInfo: NutrutionGoals(
+          calorieGoal: _editableFoodFacts.nutrutionInfo.calorieGoal,
+          macroNutrientGoals:
+              _editableFoodFacts.nutrutionInfo.macroNutrientGoals,
+          vitaminGoals: _editableFoodFacts.nutrutionInfo.vitaminGoals,
+          microNutrientGoals: updatedMicro,
+        ),
+      );
+    });
+  }
+
+  void _updateMacroNutrient(String nutrientName, double value) {
+    setState(() {
+      final macro = _editableFoodFacts.nutrutionInfo.macroNutrientGoals;
+      MacroNutrientGoals updatedMacro;
+
+      switch (nutrientName) {
+        case 'fat':
+          updatedMacro = MacroNutrientGoals(
+            carbohydrates: macro.carbohydrates,
+            fiber: macro.fiber,
+            protein: macro.protein,
+            fat: value,
+            sugar: macro.sugar,
+            water: macro.water,
+          );
+          break;
+        case 'carbohydrates':
+          updatedMacro = MacroNutrientGoals(
+            carbohydrates: value,
+            fiber: macro.fiber,
+            protein: macro.protein,
+            fat: macro.fat,
+            sugar: macro.sugar,
+            water: macro.water,
+          );
+          break;
+        case 'fiber':
+          updatedMacro = MacroNutrientGoals(
+            carbohydrates: macro.carbohydrates,
+            fiber: value,
+            protein: macro.protein,
+            fat: macro.fat,
+            sugar: macro.sugar,
+            water: macro.water,
+          );
+          break;
+        case 'sugar':
+          updatedMacro = MacroNutrientGoals(
+            carbohydrates: macro.carbohydrates,
+            fiber: macro.fiber,
+            protein: macro.protein,
+            fat: macro.fat,
+            sugar: value,
+            water: macro.water,
+          );
+          break;
+        case 'protein':
+          updatedMacro = MacroNutrientGoals(
+            carbohydrates: macro.carbohydrates,
+            fiber: macro.fiber,
+            protein: value,
+            fat: macro.fat,
+            sugar: macro.sugar,
+            water: macro.water,
+          );
+          break;
+        default:
+          return;
+      }
+
+      _editableFoodFacts = _editableFoodFacts.copyWith(
+        nutrutionInfo: NutrutionGoals(
+          calorieGoal: _editableFoodFacts.nutrutionInfo.calorieGoal,
+          macroNutrientGoals: updatedMacro,
+          vitaminGoals: _editableFoodFacts.nutrutionInfo.vitaminGoals,
+          microNutrientGoals:
+              _editableFoodFacts.nutrutionInfo.microNutrientGoals,
+        ),
+      );
+    });
+  }
+
+  Widget _buildEditableNutrientRow(
+    String nutrient,
+    double currentValue,
+    String unit,
+    Function(double) onChanged,
+  ) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                nutrient,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            _isEditing
+                ? SizedBox(
+                    width: 80,
+                    child: TextFormField(
+                      initialValue: (currentValue * widget.servings)
+                          .toStringAsFixed(1),
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        isDense: true,
+                        contentPadding: const EdgeInsets.all(4),
+                        suffix: Text(unit),
+                      ),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        final totalValue = double.tryParse(value) ?? 0.0;
+                        final perServingValue = totalValue / widget.servings;
+                        onChanged(perServingValue);
+                      },
+                    ),
+                  )
+                : Text(
+                    '${(currentValue * widget.servings).toStringAsFixed(1)}$unit',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
+                    ),
+                  ),
+          ],
+        ),
+        const Divider(color: Colors.black, thickness: 1),
+      ],
+    );
+  }
+
+  Widget _buildEditableIndentedNutrientRow(
+    String nutrient,
+    double currentValue,
+    String unit,
+    Function(double) onChanged,
+  ) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Text(
+                  nutrient,
+                  style: const TextStyle(fontSize: 14, color: Colors.black),
+                ),
+              ),
+            ),
+            _isEditing
+                ? SizedBox(
+                    width: 80,
+                    child: TextFormField(
+                      initialValue: (currentValue * widget.servings)
+                          .toStringAsFixed(1),
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        isDense: true,
+                        contentPadding: const EdgeInsets.all(4),
+                        suffix: Text(unit),
+                      ),
+                      style: const TextStyle(fontSize: 14, color: Colors.black),
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        final totalValue = double.tryParse(value) ?? 0.0;
+                        final perServingValue = totalValue / widget.servings;
+                        onChanged(perServingValue);
+                      },
+                    ),
+                  )
+                : Text(
+                    '${(currentValue * widget.servings).toStringAsFixed(1)}$unit',
+                    style: const TextStyle(fontSize: 14, color: Colors.black),
+                  ),
+          ],
+        ),
+        const Divider(color: Colors.black, thickness: 1),
+      ],
     );
   }
 
@@ -355,45 +781,6 @@ class NutriFacts extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
-                  textAlign: TextAlign.right,
-                ),
-              ),
-          ],
-        ),
-        const Divider(color: Colors.black, thickness: 1),
-      ],
-    );
-  }
-
-  Widget _buildIndentedNutrientRow(
-    String nutrient,
-    String amount,
-    String dailyValue,
-  ) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: Text(
-                  nutrient,
-                  style: const TextStyle(fontSize: 14, color: Colors.black),
-                ),
-              ),
-            ),
-            Text(
-              amount,
-              style: const TextStyle(fontSize: 14, color: Colors.black),
-            ),
-            if (dailyValue.isNotEmpty)
-              SizedBox(
-                width: 40,
-                child: Text(
-                  dailyValue,
-                  style: const TextStyle(fontSize: 14, color: Colors.black),
                   textAlign: TextAlign.right,
                 ),
               ),

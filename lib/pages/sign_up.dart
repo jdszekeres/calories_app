@@ -19,7 +19,8 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      // appBar: AppBar(title: const Text('Sign Up')),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),

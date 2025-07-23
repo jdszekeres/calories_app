@@ -29,7 +29,8 @@ class Button extends StatelessWidget {
           ? Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon),
+                Icon(icon, size: 30),
+                const SizedBox(width: 10),
                 Text(
                   text,
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
@@ -54,8 +55,9 @@ class AddPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Page')),
+      // appBar: AppBar(title: const Text('Add Page')),
       bottomNavigationBar: BottomNavbar(),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       body: Container(
         alignment: Alignment.center,
         width: MediaQuery.of(context).size.width,

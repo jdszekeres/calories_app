@@ -33,13 +33,13 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Personal Details'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
-        ),
-      ),
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      // // appBar: AppBar(
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.arrow_back),
+      //     onPressed: () => context.pop(),
+      //   ),
+      // ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),

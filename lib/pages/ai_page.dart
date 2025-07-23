@@ -19,6 +19,7 @@ class AiPage extends StatefulWidget {
 class _AiPageState extends State<AiPage> {
   final Auth auth = Auth();
   Uint8List? _imageData;
+  FoodFacts? _foodFacts;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,8 @@ class _AiPageState extends State<AiPage> {
                     if (imageData != null) {
                       setState(() {
                         _imageData = imageData;
+                        _foodFacts =
+                            null; // Reset food facts when new image is selected
                       });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -53,19 +56,41 @@ class _AiPageState extends State<AiPage> {
                     print(snapshot.stackTrace);
                     return Text('Error: ${snapshot.error}');
                   } else {
+                    // Initialize _foodFacts if not already set
+                    if (_foodFacts == null) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        setState(() {
+                          _foodFacts = snapshot.data!;
+                        });
+                      });
+                      // Show loading while state updates
+                      return CircularProgressIndicator();
+                    }
+
                     return SingleChildScrollView(
                       child: Column(
                         children: [
                           NutriFacts(
-                            foodFacts: snapshot.data!,
-                            servings: snapshot.data!.numServings ?? 1,
+                            foodFacts: _foodFacts!,
+                            servings: _foodFacts!.numServings ?? 1,
+                            onEdit: (editedFoodFacts) {
+                              setState(() {
+                                _foodFacts = editedFoodFacts;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Nutrition facts updated!'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              if (snapshot.data!.numServings != null) {
+                              if (_foodFacts!.numServings != null) {
                                 await MealDatabase().addMeal(
                                   auth.currentUser!.uid,
-                                  snapshot.data!,
+                                  _foodFacts!,
                                 );
                               }
                               if (!mounted) return;
