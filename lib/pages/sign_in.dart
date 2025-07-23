@@ -85,6 +85,12 @@ class SignInPage extends StatelessWidget {
                     },
                     child: const Text('Don\'t have an account? Sign Up'),
                   ),
+                  TextButton(
+                    onPressed: () {
+                      context.go('/sign_in_anonymous');
+                    },
+                    child: const Text('Try without an account'),
+                  ),
                 ],
               ),
             ),

@@ -473,6 +473,17 @@ class _SettingsPageState extends State<SettingsPage> {
                 SettingsSection(
                   title: Text('Account'),
                   tiles: [
+                    if (auth.currentUser!.isAnonymous)
+                      SettingsTile(
+                        title: Text('Create Account'),
+                        description: Text(
+                          'Want to keep using our app? Create an account to save your data.',
+                        ),
+                        leading: Icon(Icons.email),
+                        onPressed: (context) {
+                          context.go('/convert_anonymous_to_email');
+                        },
+                      ),
                     SettingsTile(
                       title: Text('Sign Out'),
                       leading: Icon(Icons.logout),

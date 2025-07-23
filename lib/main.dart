@@ -14,6 +14,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './firebase_options.dart';
+import 'pages/convert_anon.dart';
+import 'pages/sign_in_anon.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,6 +55,20 @@ final GoRouter _router = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return SignInPage();
       },
+    ),
+    GoRoute(
+      path: '/sign_in_anonymous',
+      builder: (BuildContext context, GoRouterState state) {
+        return SignInAnon();
+      },
+    ),
+    GoRoute(
+      path: '/convert_anonymous_to_email',
+      builder: (BuildContext context, GoRouterState state) {
+        return ConvertAnon();
+      },
+      redirect: (context, state) =>
+          !Auth().isLoggedIn ? '/sign_in_anonymous' : null,
     ),
     GoRoute(
       path: '/',
@@ -102,6 +118,7 @@ final GoRouter _router = GoRouter(
         return null;
       },
     ),
+
     GoRoute(
       path: '/settings',
       builder: (context, state) {

@@ -1,26 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'sign_up_details.dart';
 
-class SignUpPage extends StatefulWidget {
-  SignUpPage({super.key});
+import '../auth.dart';
+
+class ConvertAnon extends StatefulWidget {
+  const ConvertAnon({Key? key}) : super(key: key);
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  _ConvertAnonState createState() => _ConvertAnonState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _ConvertAnonState extends State<ConvertAnon> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  void _handleCreateAccount() async {
+    String email = emailController.text.trim();
+    String username = usernameController.text.trim();
+    String password = passwordController.text.trim();
+    String confirmPassword = confirmPasswordController.text.trim();
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Passwords do not match')));
+      return;
+    }
+
+    try {
+      await Auth().convertAnonymousToEmail(username, email, password);
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      return;
+    }
+    if (context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Account created successfully')));
+      context.go("/"); // Navigate back to the previous screen
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      // appBar: AppBar(title: const Text('Sign Up')),
+      appBar: AppBar(title: const Text('Create Account')),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -39,7 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Step 1 of 2',
+                    'Save your data and sync across devices',
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.center,
                   ),
@@ -84,86 +113,20 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: _handleNext,
+                    onPressed: _handleCreateAccount,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     child: const Text(
-                      'Next',
+                      'Create Account!',
                       style: TextStyle(color: Colors.white),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextButton(
-                    onPressed: () {
-                      context.go('/signin');
-                    },
-                    child: const Text('Already have an account? Sign In'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context.go('/sign_in_anonymous');
-                    },
-                    child: const Text('Try without an account'),
                   ),
                 ],
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  void _handleNext() {
-    // Validate form
-    if (emailController.text.isEmpty ||
-        usernameController.text.isEmpty ||
-        passwordController.text.isEmpty ||
-        confirmPasswordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
-      );
-      return;
-    }
-
-    // Validate email format
-    if (!RegExp(
-      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-    ).hasMatch(emailController.text)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid email address')),
-      );
-      return;
-    }
-
-    // Validate password length
-    if (passwordController.text.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password must be at least 6 characters long'),
-        ),
-      );
-      return;
-    }
-
-    // Validate password match
-    if (passwordController.text != confirmPasswordController.text) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
-      return;
-    }
-
-    // Navigate to details page
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SignUpDetailsPage(
-          email: emailController.text,
-          username: usernameController.text,
-          password: passwordController.text,
         ),
       ),
     );

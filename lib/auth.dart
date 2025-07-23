@@ -63,6 +63,56 @@ class Auth {
     }
   }
 
+  Future<void> signInAnonymously(
+    int age,
+    double weight,
+    double height,
+    ActivityLevel activityLevel,
+    String sex,
+  ) async {
+    if (!isInitialized) {
+      throw Exception('Firebase is not initialized');
+    }
+    UserCredential credential = await FirebaseAuth.instance.signInAnonymously();
+    // Save anonymous user profile information
+    final userProfile = UserProfile(
+      uid: credential.user!.uid,
+      email: '',
+      username: '',
+      age: age,
+      weight: weight,
+      height: height,
+      activityLevel: activityLevel,
+      sex: sex,
+    );
+    await UserDatabase().saveUserProfile(userProfile);
+    await UserDatabase().saveNutritionGoals(
+      credential.user!.uid,
+      calculateGoals(age, weight, height, activityLevel, sex == 'male'),
+    );
+  }
+
+  Future<void> convertAnonymousToEmail(
+    String username,
+    String email,
+    String password,
+  ) async {
+    if (!isInitialized) {
+      throw Exception('Firebase is not initialized');
+    }
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || !user.isAnonymous) {
+      throw Exception('No anonymous user to convert');
+    }
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: email,
+      password: password,
+    );
+    await user.linkWithCredential(credential);
+    await user.updateDisplayName(username);
+    await user.reload();
+  }
+
   Future<void> signOut() async {
     if (!isInitialized) {
       throw Exception('Firebase is not initialized');
