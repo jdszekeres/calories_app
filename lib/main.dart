@@ -141,6 +141,7 @@ class CaloriesTrackerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      title: 'Calorie Tracker',
       routerConfig: _router,
       theme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
