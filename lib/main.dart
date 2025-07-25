@@ -67,8 +67,8 @@ final GoRouter _router = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return ConvertAnon();
       },
-      redirect: (context, state) =>
-          !Auth().isLoggedIn ? '/sign_in_anonymous' : null,
+      redirect:
+          (context, state) => !Auth().isLoggedIn ? '/sign_in_anonymous' : null,
     ),
     GoRoute(
       path: '/',
