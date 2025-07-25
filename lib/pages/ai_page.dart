@@ -8,9 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../auth.dart';
 import '../tools/meal_database.dart';
 
-import '../tools/stub.dart'
-    if (dart.library.html) 'package:image_picker_web/image_picker_web.dart'
-    if (dart.library.io) 'package:image_picker/image_picker.dart';
+import '../tools/select_image.dart';
 
 class AiPage extends StatefulWidget {
   const AiPage({Key? key}) : super(key: key);
@@ -96,20 +94,6 @@ class _AiPageState extends State<AiPage> {
                 ),
               ),
     );
-  }
-
-  Future<Uint8List?> _selectImageMobile() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 80,
-    );
-    return pickedFile?.readAsBytes();
-  }
-
-  Future<Uint8List?> _selectImageWeb() async {
-    final imageData = await ImagePickerWeb.getImageAsBytes();
-    return imageData;
   }
 
   Widget _buildWelcomeScreen(BuildContext context) {
@@ -215,12 +199,7 @@ class _AiPageState extends State<AiPage> {
             height: 56,
             child: ElevatedButton.icon(
               onPressed: () {
-                if (kIsWeb) {
-                  selector = _selectImageWeb();
-                } else {
-                  selector = _selectImageMobile();
-                }
-                selector.then((imageData) {
+                selectImage().then((imageData) {
                   if (imageData != null) {
                     setState(() {
                       _imageData = imageData;
