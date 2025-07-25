@@ -4,10 +4,13 @@ import 'package:calories_app/widgets/nutri_facts.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 
 import '../auth.dart';
 import '../tools/meal_database.dart';
+
+import '../tools/stub.dart'
+    if (dart.library.html) 'package:image_picker_web/image_picker_web.dart'
+    if (dart.library.io) 'package:image_picker/image_picker.dart';
 
 class AiPage extends StatefulWidget {
   const AiPage({Key? key}) : super(key: key);
@@ -94,6 +97,20 @@ class _AiPageState extends State<AiPage> {
     );
   }
 
+  Future<Uint8List?> _selectImageMobile() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+    return pickedFile?.readAsBytes();
+  }
+
+  Future<Uint8List?> _selectImageWeb() async {
+    final imageData = await ImagePickerWeb.getImageAsBytes();
+    return imageData;
+  }
+
   Widget _buildWelcomeScreen(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24.0),
@@ -135,7 +152,7 @@ class _AiPageState extends State<AiPage> {
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Theme.of(
                 context,
-              ).colorScheme.onBackground.withOpacity(0.7),
+              ).colorScheme.onSurface.withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
           ),
@@ -197,7 +214,12 @@ class _AiPageState extends State<AiPage> {
             height: 56,
             child: ElevatedButton.icon(
               onPressed: () {
-                ImagePickerWeb.getImageAsBytes().then((imageData) {
+                if (kIsWeb) {
+                  selector = _selectImageWeb();
+                } else {
+                  selector = _selectImageMobile();
+                }
+                selector.then((imageData) {
                   if (imageData != null) {
                     setState(() {
                       _imageData = imageData;
