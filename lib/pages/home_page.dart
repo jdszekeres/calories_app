@@ -146,16 +146,18 @@ class _HomePageState extends State<HomePage> {
                                   final key = NutrutionGoals.getKey(nutrient);
                                   // Safely extract target or default to 0.0
                                   final target =
-                                      (goals!.toJson()[key][nutrient]
-                                          as double?) ??
+                                      (goals!.toJson()[key][nutrient] as num?)
+                                          ?.toDouble() ??
                                       0.0;
                                   // Sum consumed amount for this nutrient
                                   final consumed = meals.fold(
                                     0.0,
                                     (sum, meal) =>
                                         sum +
-                                        (meal.nutrutionInfo
-                                                .toJson()[key][nutrient] ??
+                                        ((meal.nutrutionInfo
+                                                        .toJson()[key][nutrient]
+                                                    as num?)
+                                                ?.toDouble() ??
                                             0.0),
                                   );
                                   // If target is zero, avoid division by zero

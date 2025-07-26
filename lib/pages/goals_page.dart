@@ -1,4 +1,3 @@
-import 'package:calories_app/pages/home_page.dart';
 import 'package:calories_app/tools/calculate_goals.dart';
 import 'package:calories_app/tools/meal_database.dart';
 import 'package:flutter/material.dart';
@@ -220,10 +219,12 @@ class _GoalsPageState extends State<GoalsPage> {
                         return GoalAmount(
                           name: camelToNormal(goalName),
                           // leading: Icon(Icons.check_circle_outline),
-                          goal: jsonGoals[key][goalName] as double,
+                          goal: (jsonGoals[key][goalName] as num).toDouble(),
                           achieved: meals.fold(0.0, (sum, meal) {
                             return sum +
-                                (meal.nutrutionInfo.toJson()[key][goalName] ??
+                                ((meal.nutrutionInfo.toJson()[key][goalName]
+                                            as num?)
+                                        ?.toDouble() ??
                                     0.0);
                           }),
                           onGoalChanged: (newGoal) {
