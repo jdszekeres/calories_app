@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:calories_app/tools/calculate_goals.dart';
 import 'package:calories_app/tools/food_facts.dart';
@@ -98,10 +97,11 @@ class AiService {
       }
       final jsonResponse = response.text;
       final data = jsonDecode(jsonResponse!) as Map<String, dynamic>;
+      print(data);
       // Map AI JSON into our data models
       final info = data['info'] as Map<String, dynamic>? ?? {};
       final name = info['name'] as String? ?? 'Unknown';
-      final numServings = info['servingSize'];
+      final numServings = (info['servingSize'] as num?)?.toDouble() ?? 1.0;
       final servingCount =
           info['servingCount'] as String? ?? numServings.toString();
       final ingredients =

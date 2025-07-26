@@ -55,23 +55,24 @@ class _SettingsPageState extends State<SettingsPage> {
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: availableWidgets.map((widget) {
-                    return CheckboxListTile(
-                      title: Text(widget),
-                      value: selectedWidgets.contains(widget),
-                      onChanged: (bool? value) {
-                        setDialogState(() {
-                          if (value == true) {
-                            if (!selectedWidgets.contains(widget)) {
-                              selectedWidgets.add(widget);
-                            }
-                          } else {
-                            selectedWidgets.remove(widget);
-                          }
-                        });
-                      },
-                    );
-                  }).toList(),
+                  children:
+                      availableWidgets.map((widget) {
+                        return CheckboxListTile(
+                          title: Text(widget),
+                          value: selectedWidgets.contains(widget),
+                          onChanged: (bool? value) {
+                            setDialogState(() {
+                              if (value == true) {
+                                if (!selectedWidgets.contains(widget)) {
+                                  selectedWidgets.add(widget);
+                                }
+                              } else {
+                                selectedWidgets.remove(widget);
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
                 ),
               ),
               actions: [
@@ -173,27 +174,29 @@ class _SettingsPageState extends State<SettingsPage> {
                             title: Text('Metric'),
                             value: true,
                             groupValue: isMetric,
-                            onChanged: isSaving
-                                ? null
-                                : (value) {
-                                    setDialogState(() {
-                                      if (!isMetric && value == true) {
-                                        // Convert from imperial to metric
-                                        double currentWeight =
-                                            double.tryParse(
-                                              weightController.text,
-                                            ) ??
-                                            0;
-                                        if (currentWeight > 0) {
-                                          weightController.text = convertWeight(
-                                            currentWeight,
-                                            true,
-                                          ).toStringAsFixed(1);
+                            onChanged:
+                                isSaving
+                                    ? null
+                                    : (value) {
+                                      setDialogState(() {
+                                        if (!isMetric && value == true) {
+                                          // Convert from imperial to metric
+                                          double currentWeight =
+                                              double.tryParse(
+                                                weightController.text,
+                                              ) ??
+                                              0;
+                                          if (currentWeight > 0) {
+                                            weightController
+                                                .text = convertWeight(
+                                              currentWeight,
+                                              true,
+                                            ).toStringAsFixed(1);
+                                          }
                                         }
-                                      }
-                                      isMetric = value!;
-                                    });
-                                  },
+                                        isMetric = value!;
+                                      });
+                                    },
                           ),
                         ),
                         Expanded(
@@ -201,27 +204,29 @@ class _SettingsPageState extends State<SettingsPage> {
                             title: Text('Imperial'),
                             value: false,
                             groupValue: isMetric,
-                            onChanged: isSaving
-                                ? null
-                                : (value) {
-                                    setDialogState(() {
-                                      if (isMetric && value == false) {
-                                        // Convert from metric to imperial
-                                        double currentWeight =
-                                            double.tryParse(
-                                              weightController.text,
-                                            ) ??
-                                            0;
-                                        if (currentWeight > 0) {
-                                          weightController.text = convertWeight(
-                                            currentWeight,
-                                            false,
-                                          ).toStringAsFixed(1);
+                            onChanged:
+                                isSaving
+                                    ? null
+                                    : (value) {
+                                      setDialogState(() {
+                                        if (isMetric && value == false) {
+                                          // Convert from metric to imperial
+                                          double currentWeight =
+                                              double.tryParse(
+                                                weightController.text,
+                                              ) ??
+                                              0;
+                                          if (currentWeight > 0) {
+                                            weightController
+                                                .text = convertWeight(
+                                              currentWeight,
+                                              false,
+                                            ).toStringAsFixed(1);
+                                          }
                                         }
-                                      }
-                                      isMetric = value!;
-                                    });
-                                  },
+                                        isMetric = value!;
+                                      });
+                                    },
                           ),
                         ),
                       ],
@@ -289,21 +294,23 @@ class _SettingsPageState extends State<SettingsPage> {
                     DropdownButtonFormField<ActivityLevel>(
                       value: activityLevel,
                       decoration: InputDecoration(labelText: 'Activity Level'),
-                      items: ActivityLevel.values.map((level) {
-                        return DropdownMenuItem(
-                          value: level,
-                          child: Text(
-                            camelToNormal(level.toString().split('.').last),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: isSaving
-                          ? null
-                          : (value) {
-                              setDialogState(() {
-                                activityLevel = value!;
-                              });
-                            },
+                      items:
+                          ActivityLevel.values.map((level) {
+                            return DropdownMenuItem(
+                              value: level,
+                              child: Text(
+                                camelToNormal(level.toString().split('.').last),
+                              ),
+                            );
+                          }).toList(),
+                      onChanged:
+                          isSaving
+                              ? null
+                              : (value) {
+                                setDialogState(() {
+                                  activityLevel = value!;
+                                });
+                              },
                     ),
                     if (isSaving) ...[
                       SizedBox(height: 16),
@@ -316,146 +323,157 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               actions: [
                 TextButton(
-                  onPressed: isSaving
-                      ? null
-                      : () {
-                          Navigator.of(context).pop();
-                        },
+                  onPressed:
+                      isSaving
+                          ? null
+                          : () {
+                            Navigator.of(context).pop();
+                          },
                   child: Text('Cancel'),
                 ),
                 TextButton(
-                  onPressed: isSaving
-                      ? null
-                      : () async {
-                          // Validate inputs
-                          final age = int.tryParse(ageController.text);
-                          final weight = double.tryParse(weightController.text);
-
-                          if (age == null || age <= 0) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Please enter a valid age'),
-                              ),
+                  onPressed:
+                      isSaving
+                          ? null
+                          : () async {
+                            // Validate inputs
+                            final age = int.tryParse(ageController.text);
+                            final weight = double.tryParse(
+                              weightController.text,
                             );
-                            return;
-                          }
 
-                          if (weight == null || weight <= 0) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Please enter a valid weight'),
-                              ),
-                            );
-                            return;
-                          }
-
-                          double? heightInCm;
-                          if (isMetric) {
-                            heightInCm = double.tryParse(heightController.text);
-                            if (heightInCm == null || heightInCm <= 0) {
+                            if (age == null || age <= 0) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Please enter a valid height'),
-                                ),
-                              );
-                              return;
-                            }
-                          } else {
-                            final feet = int.tryParse(feetController.text);
-                            final inches = int.tryParse(inchesController.text);
-
-                            if (feet == null ||
-                                feet < 0 ||
-                                inches == null ||
-                                inches < 0 ||
-                                inches >= 12) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Please enter valid height values',
-                                  ),
+                                  content: Text('Please enter a valid age'),
                                 ),
                               );
                               return;
                             }
 
-                            double totalInches =
-                                (feet * 12).toDouble() + inches.toDouble();
-                            heightInCm = totalInches * 2.54;
-                          }
-
-                          setDialogState(() {
-                            isSaving = true;
-                          });
-
-                          try {
-                            UserProfile? profile = await UserDatabase()
-                                .getUserProfile(auth.currentUser!.uid);
-
-                            if (profile != null) {
-                              // Convert weight to metric for storage
-                              double weightInKg = weight;
-                              if (!isMetric) {
-                                weightInKg = weight / 2.20462; // lbs to kg
-                              }
-
-                              // Create updated profile
-                              UserProfile updatedProfile = UserProfile(
-                                uid: profile.uid,
-                                email: profile.email,
-                                username: profile.username,
-                                age: age,
-                                weight: weightInKg,
-                                height: heightInCm,
-                                activityLevel: activityLevel,
-                                sex: profile.sex,
+                            if (weight == null || weight <= 0) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Please enter a valid weight'),
+                                ),
                               );
+                              return;
+                            }
 
-                              // Save the profile
-                              await UserDatabase().saveUserProfile(
-                                updatedProfile,
+                            double? heightInCm;
+                            if (isMetric) {
+                              heightInCm = double.tryParse(
+                                heightController.text,
                               );
-
-                              if (context.mounted) {
-                                Navigator.of(context).pop();
+                              if (heightInCm == null || heightInCm <= 0) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      'Health information updated successfully!',
-                                      style: TextStyle(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.onPrimaryContainer,
-                                      ),
+                                      'Please enter a valid height',
                                     ),
-                                    backgroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.primaryContainer,
-                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                                return;
+                              }
+                            } else {
+                              final feet = int.tryParse(feetController.text);
+                              final inches = int.tryParse(
+                                inchesController.text,
+                              );
+
+                              if (feet == null ||
+                                  feet < 0 ||
+                                  inches == null ||
+                                  inches < 0 ||
+                                  inches >= 12) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Please enter valid height values',
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              double totalInches =
+                                  (feet * 12).toDouble() + inches.toDouble();
+                              heightInCm = totalInches * 2.54;
+                            }
+
+                            setDialogState(() {
+                              isSaving = true;
+                            });
+
+                            try {
+                              UserProfile? profile = await UserDatabase()
+                                  .getUserProfile(auth.currentUser!.uid);
+
+                              if (profile != null) {
+                                // Convert weight to metric for storage
+                                double weightInKg = weight;
+                                if (!isMetric) {
+                                  weightInKg = weight / 2.20462; // lbs to kg
+                                }
+
+                                // Create updated profile
+                                UserProfile updatedProfile = UserProfile(
+                                  uid: profile.uid,
+                                  email: profile.email,
+                                  username: profile.username,
+                                  age: age,
+                                  weight: weightInKg,
+                                  height: heightInCm,
+                                  activityLevel: activityLevel,
+                                  sex: profile.sex,
+                                );
+
+                                // Save the profile
+                                await UserDatabase().saveUserProfile(
+                                  updatedProfile,
+                                );
+
+                                if (context.mounted) {
+                                  Navigator.of(context).pop();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Health information updated successfully!',
+                                        style: TextStyle(
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimaryContainer,
+                                        ),
+                                      ),
+                                      backgroundColor:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.primaryContainer,
+                                      duration: Duration(seconds: 3),
+                                    ),
+                                  );
+                                }
+                              } else {
+                                throw Exception('Could not load user profile');
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                setDialogState(() {
+                                  isSaving = false;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Error saving health information: $e',
+                                    ),
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.error,
                                   ),
                                 );
                               }
-                            } else {
-                              throw Exception('Could not load user profile');
                             }
-                          } catch (e) {
-                            if (context.mounted) {
-                              setDialogState(() {
-                                isSaving = false;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Error saving health information: $e',
-                                  ),
-                                  backgroundColor: Theme.of(
-                                    context,
-                                  ).colorScheme.error,
-                                ),
-                              );
-                            }
-                          }
-                        },
+                          },
                   child: Text('Save'),
                 ),
               ],
@@ -469,107 +487,111 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+        title: const Text('Settings'),
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       bottomNavigationBar: BottomNavbar(),
-      body: Column(
-        children: [
-          Text("Settings", style: Theme.of(context).textTheme.headlineLarge),
-          Expanded(
-            child: SettingsList(
-              lightTheme: SettingsThemeData(
-                settingsListBackground: Colors.transparent,
-              ),
-              darkTheme: SettingsThemeData(
-                settingsListBackground: Colors.transparent,
-              ),
-              sections: [
-                SettingsSection(
-                  title: Text('General'),
-                  tiles: [
-                    SettingsTile(
-                      title: Text('Home Page Widgets'),
-                      description: Text(
-                        "Select what goals should appear on the homescreen",
-                      ),
-                      leading: Icon(Icons.widgets),
-                      onPressed: (context) => {
-                        _showWidgetSelectionDialog(context),
-                      },
-                    ),
-                  ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SettingsList(
+                lightTheme: SettingsThemeData(
+                  settingsListBackground: Colors.transparent,
                 ),
-                SettingsSection(
-                  title: Text('Nutrition Goals'),
-                  tiles: [
-                    SettingsTile(
-                      title: Text('Update health information'),
-                      leading: Icon(Icons.edit),
-                      onPressed: (context) =>
-                          _showUpdateHealthInformationDialog(context),
-                    ),
-                    SettingsTile(
-                      title: Text('Reset Nutrition Goals'),
-                      leading: Icon(Icons.refresh),
-                      onPressed: (context) async {
-                        final profile = await UserDatabase().getUserProfile(
-                          auth.currentUser!.uid,
-                        );
-                        UserDatabase().saveNutritionGoals(
-                          auth.currentUser!.uid,
-                          calculateGoals(
-                            profile?.age ?? 0,
-                            profile?.weight ?? 0,
-                            profile?.height ?? 0,
-                            profile?.activityLevel ??
-                                ActivityLevel.moderatelyActive,
-                            profile?.sex == 'male',
-                          ),
-                        );
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Nutrition goals reset successfully',
-                              ),
+                darkTheme: SettingsThemeData(
+                  settingsListBackground: Colors.transparent,
+                ),
+                sections: [
+                  SettingsSection(
+                    title: Text('General'),
+                    tiles: [
+                      SettingsTile(
+                        title: Text('Home Page Widgets'),
+                        description: Text(
+                          "Select what goals should appear on the homescreen",
+                        ),
+                        leading: Icon(Icons.widgets),
+                        onPressed:
+                            (context) => {_showWidgetSelectionDialog(context)},
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    title: Text('Nutrition Goals'),
+                    tiles: [
+                      SettingsTile(
+                        title: Text('Update health information'),
+                        leading: Icon(Icons.edit),
+                        onPressed:
+                            (context) =>
+                                _showUpdateHealthInformationDialog(context),
+                      ),
+                      SettingsTile(
+                        title: Text('Reset Nutrition Goals'),
+                        leading: Icon(Icons.refresh),
+                        onPressed: (context) async {
+                          final profile = await UserDatabase().getUserProfile(
+                            auth.currentUser!.uid,
+                          );
+                          UserDatabase().saveNutritionGoals(
+                            auth.currentUser!.uid,
+                            calculateGoals(
+                              profile?.age ?? 0,
+                              profile?.weight ?? 0,
+                              profile?.height ?? 0,
+                              profile?.activityLevel ??
+                                  ActivityLevel.moderatelyActive,
+                              profile?.sex == 'male',
                             ),
                           );
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                SettingsSection(
-                  title: Text('Account'),
-                  tiles: [
-                    if (auth.currentUser!.isAnonymous)
-                      SettingsTile(
-                        title: Text('Create Account'),
-                        description: Text(
-                          'Want to keep using our app? Create an account to save your data.',
-                        ),
-                        leading: Icon(Icons.email),
-                        onPressed: (context) {
-                          context.go('/convert_anonymous_to_email');
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Nutrition goals reset successfully',
+                                ),
+                              ),
+                            );
+                          }
                         },
                       ),
-                    SettingsTile(
-                      title: Text('Sign Out'),
-                      leading: Icon(Icons.logout),
-                      onPressed: (context) {
-                        auth.signOut().then((value) {
-                          if (context.mounted) {
-                            context.go('/signin');
-                          }
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  SettingsSection(
+                    title: Text('Account'),
+                    tiles: [
+                      if (auth.currentUser!.isAnonymous)
+                        SettingsTile(
+                          title: Text('Create Account'),
+                          description: Text(
+                            'Want to keep using our app? Create an account to save your data.',
+                          ),
+                          leading: Icon(Icons.email),
+                          onPressed: (context) {
+                            context.go('/convert_anonymous_to_email');
+                          },
+                        ),
+                      SettingsTile(
+                        title: Text('Sign Out'),
+                        leading: Icon(Icons.logout),
+                        onPressed: (context) {
+                          auth.signOut().then((value) {
+                            if (context.mounted) {
+                              context.go('/signin');
+                            }
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

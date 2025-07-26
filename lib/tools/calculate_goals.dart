@@ -212,50 +212,64 @@ class NutrutionGoals {
   }
 
   static NutrutionGoals fromJson(Map<String, dynamic> json) {
+    // Helper function to safely get numeric values
+    double getNumValue(
+      Map<String, dynamic>? map,
+      String key, [
+      double defaultValue = 0.0,
+    ]) {
+      if (map == null || map[key] == null) return defaultValue;
+      final value = map[key];
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? defaultValue;
+      return defaultValue;
+    }
+
+    final calorieGoals = json['calorieGoals'] as Map<String, dynamic>?;
+    final macroGoals = json['macroNutrientGoals'] as Map<String, dynamic>?;
+    final vitaminGoals = json['vitaminGoals'] as Map<String, dynamic>?;
+    final microGoals = json['microNutrientGoals'] as Map<String, dynamic>?;
+
     return NutrutionGoals(
-      calorieGoal: (json['calorieGoals']['calories'] as num).toDouble(),
+      calorieGoal: getNumValue(calorieGoals, 'calories'),
       macroNutrientGoals: MacroNutrientGoals(
-        carbohydrates: (json['macroNutrientGoals']['carbohydrates'] as num)
-            .toDouble(),
-        fiber: (json['macroNutrientGoals']['fiber'] as num).toDouble(),
-        protein: (json['macroNutrientGoals']['protein'] as num).toDouble(),
-        fat: (json['macroNutrientGoals']['fat'] as num).toDouble(),
-        sugar: (json['macroNutrientGoals']['sugar'] as num).toDouble(),
-        water: (json['macroNutrientGoals']['water'] as num).toDouble(),
+        carbohydrates: getNumValue(macroGoals, 'carbohydrates'),
+        fiber: getNumValue(macroGoals, 'fiber'),
+        protein: getNumValue(macroGoals, 'protein'),
+        fat: getNumValue(macroGoals, 'fat'),
+        sugar: getNumValue(macroGoals, 'sugar'),
+        water: getNumValue(macroGoals, 'water'),
       ),
       vitaminGoals: VitaminGoals(
-        vitaminA: (json['vitaminGoals']['vitaminA'] as num).toDouble(),
-        vitaminD: (json['vitaminGoals']['vitaminD'] as num).toDouble(),
-        vitaminE: (json['vitaminGoals']['vitaminE'] as num).toDouble(),
-        vitaminK: (json['vitaminGoals']['vitaminK'] as num).toDouble(),
-        vitaminC: (json['vitaminGoals']['vitaminC'] as num).toDouble(),
-        thiamin: (json['vitaminGoals']['thiamin'] as num).toDouble(),
-        riboflavin: (json['vitaminGoals']['riboflavin'] as num).toDouble(),
-        niacin: (json['vitaminGoals']['niacin'] as num).toDouble(),
-        pantothenicAcid: (json['vitaminGoals']['pantothenicAcid'] as num)
-            .toDouble(),
-        vitaminB6: (json['vitaminGoals']['vitaminB6'] as num).toDouble(),
-        folate: (json['vitaminGoals']['folate'] as num).toDouble(),
-        vitaminB12: (json['vitaminGoals']['vitaminB12'] as num).toDouble(),
-        choline: (json['vitaminGoals']['choline'] as num).toDouble(),
+        vitaminA: getNumValue(vitaminGoals, 'vitaminA'),
+        vitaminD: getNumValue(vitaminGoals, 'vitaminD'),
+        vitaminE: getNumValue(vitaminGoals, 'vitaminE'),
+        vitaminK: getNumValue(vitaminGoals, 'vitaminK'),
+        vitaminC: getNumValue(vitaminGoals, 'vitaminC'),
+        thiamin: getNumValue(vitaminGoals, 'thiamin'),
+        riboflavin: getNumValue(vitaminGoals, 'riboflavin'),
+        niacin: getNumValue(vitaminGoals, 'niacin'),
+        pantothenicAcid: getNumValue(vitaminGoals, 'pantothenicAcid'),
+        vitaminB6: getNumValue(vitaminGoals, 'vitaminB6'),
+        folate: getNumValue(vitaminGoals, 'folate'),
+        vitaminB12: getNumValue(vitaminGoals, 'vitaminB12'),
+        choline: getNumValue(vitaminGoals, 'choline'),
       ),
       microNutrientGoals: MicroNutrientGoals(
-        calcium: (json['microNutrientGoals']['calcium'] as num).toDouble(),
-        chlorine: (json['microNutrientGoals']['chlorine'] as num).toDouble(),
-        copper: (json['microNutrientGoals']['copper'] as num).toDouble(),
-        flouride: (json['microNutrientGoals']['flouride'] as num).toDouble(),
-        iodine: (json['microNutrientGoals']['iodine'] as num).toDouble(),
-        iron: (json['microNutrientGoals']['iron'] as num).toDouble(),
-        magnesium: (json['microNutrientGoals']['magnesium'] as num).toDouble(),
-        manganese: (json['microNutrientGoals']['manganese'] as num).toDouble(),
-        molybdenum: (json['microNutrientGoals']['molybdenum'] as num)
-            .toDouble(),
-        phosphorus: (json['microNutrientGoals']['phosphorus'] as num)
-            .toDouble(),
-        potassium: (json['microNutrientGoals']['potassium'] as num).toDouble(),
-        selenium: (json['microNutrientGoals']['selenium'] as num).toDouble(),
-        sodium: (json['microNutrientGoals']['sodium'] as num).toDouble(),
-        zinc: (json['microNutrientGoals']['zinc'] as num).toDouble(),
+        calcium: getNumValue(microGoals, 'calcium'),
+        chlorine: getNumValue(microGoals, 'chlorine'),
+        copper: getNumValue(microGoals, 'copper'),
+        flouride: getNumValue(microGoals, 'flouride'),
+        iodine: getNumValue(microGoals, 'iodine'),
+        iron: getNumValue(microGoals, 'iron'),
+        magnesium: getNumValue(microGoals, 'magnesium'),
+        manganese: getNumValue(microGoals, 'manganese'),
+        molybdenum: getNumValue(microGoals, 'molybdenum'),
+        phosphorus: getNumValue(microGoals, 'phosphorus'),
+        potassium: getNumValue(microGoals, 'potassium'),
+        selenium: getNumValue(microGoals, 'selenium'),
+        sodium: getNumValue(microGoals, 'sodium'),
+        zinc: getNumValue(microGoals, 'zinc'),
       ),
     );
   }
@@ -371,8 +385,8 @@ NutrutionGoals calculateGoals(
   }
 
   double proteinCalories = (calorieGoal * (age < 3 ? 0.125 : 0.20));
-  double proteinGrams = (proteinCalories / 4)
-      .roundToDouble(); // 1g protein = 4 calories
+  double proteinGrams =
+      (proteinCalories / 4).roundToDouble(); // 1g protein = 4 calories
   double fatCalories =
       (calorieGoal * age < 3
               ? 0.35
@@ -385,13 +399,13 @@ NutrutionGoals calculateGoals(
   double carbCalories = calorieGoal - (proteinCalories + fatCalories);
   double carbGrams = (carbCalories / 4).roundToDouble(); // 1g carb = 4 calories
 
-  double fiberGrams = (calorieGoal / 1000 * 14)
-      .roundToDouble(); // 14g per 1000 calories
+  double fiberGrams =
+      (calorieGoal / 1000 * 14).roundToDouble(); // 14g per 1000 calories
 
   double sugarCalories = ((calorieGoal / 40 * 4)).roundToDouble();
 
-  double sugarGrams = (sugarCalories / 4)
-      .roundToDouble(); // 1g sugar = 4 calories
+  double sugarGrams =
+      (sugarCalories / 4).roundToDouble(); // 1g sugar = 4 calories
 
   double waterIntake = calorieGoal / 1000; // 30ml per kg of body weight
 

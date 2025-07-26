@@ -117,61 +117,68 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavbar(),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
 
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CalorieCircle(
-              calories: meals.fold(
-                0,
-                (sum, meal) => sum + meal.nutrutionInfo.calorieGoal,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CalorieCircle(
+                calories: meals.fold(
+                  0,
+                  (sum, meal) => sum + meal.nutrutionInfo.calorieGoal,
+                ),
+                maxCalories: goals?.calorieGoal ?? 2000,
               ),
-              maxCalories: goals?.calorieGoal ?? 2000,
-            ),
-            const SizedBox(height: 20),
-            Card.filled(
-              color: Theme.of(context).colorScheme.inverseSurface,
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                // height: MediaQuery.of(context).size.height / 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: selectedWidgets
-                      .map(
-                        (nutrient) => TypeIndicator(
-                          type: camelToNormal(nutrient),
-                          goal: (goals == null)
-                              ? 1.0
-                              : (() {
-                                  final key = NutrutionGoals.getKey(nutrient);
-                                  // Safely extract target or default to 0.0
-                                  final target =
-                                      (goals!.toJson()[key][nutrient] as num?)
-                                          ?.toDouble() ??
-                                      0.0;
-                                  // Sum consumed amount for this nutrient
-                                  final consumed = meals.fold(
-                                    0.0,
-                                    (sum, meal) =>
-                                        sum +
-                                        ((meal.nutrutionInfo
-                                                        .toJson()[key][nutrient]
-                                                    as num?)
-                                                ?.toDouble() ??
-                                            0.0),
-                                  );
-                                  // If target is zero, avoid division by zero
-                                  return target > 0
-                                      ? consumed / target
-                                      : consumed / 0.000001;
-                                })(),
-                        ),
-                      )
-                      .toList(),
+              const SizedBox(height: 20),
+              Card.filled(
+                color: Theme.of(context).colorScheme.inverseSurface,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  // height: MediaQuery.of(context).size.height / 3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:
+                        selectedWidgets
+                            .map(
+                              (nutrient) => TypeIndicator(
+                                type: camelToNormal(nutrient),
+                                goal:
+                                    (goals == null)
+                                        ? 1.0
+                                        : (() {
+                                          final key = NutrutionGoals.getKey(
+                                            nutrient,
+                                          );
+                                          // Safely extract target or default to 0.0
+                                          final target =
+                                              (goals!.toJson()[key][nutrient]
+                                                      as num?)
+                                                  ?.toDouble() ??
+                                              0.0;
+                                          // Sum consumed amount for this nutrient
+                                          final consumed = meals.fold(
+                                            0.0,
+                                            (sum, meal) =>
+                                                sum +
+                                                ((meal.nutrutionInfo
+                                                                .toJson()[key][nutrient]
+                                                            as num?)
+                                                        ?.toDouble() ??
+                                                    0.0),
+                                          );
+                                          // If target is zero, avoid division by zero
+                                          return target > 0
+                                              ? consumed / target
+                                              : consumed / 0.000001;
+                                        })(),
+                              ),
+                            )
+                            .toList(),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MealComponent extends StatelessWidget {
   final String mealName;
   final String mealTime;
-  final int calories;
+  final num calories;
   final VoidCallback? onTap;
 
   const MealComponent({
