@@ -100,7 +100,7 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 flutter_launcher_icons:
-  android: true
+  android: false
   ios: true
   web:
     generate: true
