@@ -4,7 +4,6 @@ import 'package:calories_app/tools/settings_database.dart';
 import 'package:calories_app/tools/user_database.dart';
 import 'package:calories_app/tools/user_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -113,6 +112,360 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  void _showUpdateHealthInformationDialog(BuildContext context) async {
+    UserProfile? oldProfile = await UserDatabase().getUserProfile(
+      auth.currentUser!.uid,
+    );
+
+    if (!context.mounted) return;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent accidental dismissal
+      builder: (context) {
+        bool isMetric = true;
+        bool isSaving = false;
+        TextEditingController ageController = TextEditingController(
+          text: oldProfile?.age.toString(),
+        );
+        TextEditingController weightController = TextEditingController(
+          text: oldProfile?.weight.toString(),
+        );
+        TextEditingController heightController = TextEditingController(
+          text: oldProfile?.height.toString(),
+        );
+        TextEditingController feetController = TextEditingController();
+        TextEditingController inchesController = TextEditingController();
+        ActivityLevel activityLevel =
+            oldProfile?.activityLevel ?? ActivityLevel.moderatelyActive;
+
+        // Convert height from cm to feet and inches for imperial display
+        if (oldProfile?.height != null) {
+          double heightInInches = oldProfile!.height / 2.54;
+          int feet = heightInInches ~/ 12;
+          int inches = (heightInInches % 12).round();
+          feetController.text = feet.toString();
+          inchesController.text = inches.toString();
+        }
+
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            // Helper function to convert weight
+            double convertWeight(double weight, bool toMetric) {
+              if (toMetric) {
+                return weight / 2.20462; // lbs to kg
+              } else {
+                return weight * 2.20462; // kg to lbs
+              }
+            }
+
+            return AlertDialog(
+              title: Text('Update Health Information'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Unit system selector
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile<bool>(
+                            title: Text('Metric'),
+                            value: true,
+                            groupValue: isMetric,
+                            onChanged: isSaving
+                                ? null
+                                : (value) {
+                                    setDialogState(() {
+                                      if (!isMetric && value == true) {
+                                        // Convert from imperial to metric
+                                        double currentWeight =
+                                            double.tryParse(
+                                              weightController.text,
+                                            ) ??
+                                            0;
+                                        if (currentWeight > 0) {
+                                          weightController.text = convertWeight(
+                                            currentWeight,
+                                            true,
+                                          ).toStringAsFixed(1);
+                                        }
+                                      }
+                                      isMetric = value!;
+                                    });
+                                  },
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile<bool>(
+                            title: Text('Imperial'),
+                            value: false,
+                            groupValue: isMetric,
+                            onChanged: isSaving
+                                ? null
+                                : (value) {
+                                    setDialogState(() {
+                                      if (isMetric && value == false) {
+                                        // Convert from metric to imperial
+                                        double currentWeight =
+                                            double.tryParse(
+                                              weightController.text,
+                                            ) ??
+                                            0;
+                                        if (currentWeight > 0) {
+                                          weightController.text = convertWeight(
+                                            currentWeight,
+                                            false,
+                                          ).toStringAsFixed(1);
+                                        }
+                                      }
+                                      isMetric = value!;
+                                    });
+                                  },
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    TextField(
+                      controller: ageController,
+                      enabled: !isSaving,
+                      decoration: InputDecoration(
+                        labelText: 'Age',
+                        suffixText: 'years',
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    SizedBox(height: 8),
+                    TextField(
+                      controller: weightController,
+                      enabled: !isSaving,
+                      decoration: InputDecoration(
+                        labelText: 'Weight',
+                        suffixText: isMetric ? 'kg' : 'lbs',
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    SizedBox(height: 8),
+                    if (isMetric)
+                      TextField(
+                        controller: heightController,
+                        enabled: !isSaving,
+                        decoration: InputDecoration(
+                          labelText: 'Height',
+                          suffixText: 'cm',
+                        ),
+                        keyboardType: TextInputType.number,
+                      )
+                    else
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: feetController,
+                              enabled: !isSaving,
+                              decoration: InputDecoration(
+                                labelText: 'Height',
+                                suffixText: 'ft',
+                              ),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: TextField(
+                              controller: inchesController,
+                              enabled: !isSaving,
+                              decoration: InputDecoration(
+                                labelText: '',
+                                suffixText: 'in',
+                              ),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                        ],
+                      ),
+                    SizedBox(height: 8),
+                    DropdownButtonFormField<ActivityLevel>(
+                      value: activityLevel,
+                      decoration: InputDecoration(labelText: 'Activity Level'),
+                      items: ActivityLevel.values.map((level) {
+                        return DropdownMenuItem(
+                          value: level,
+                          child: Text(
+                            camelToNormal(level.toString().split('.').last),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: isSaving
+                          ? null
+                          : (value) {
+                              setDialogState(() {
+                                activityLevel = value!;
+                              });
+                            },
+                    ),
+                    if (isSaving) ...[
+                      SizedBox(height: 16),
+                      CircularProgressIndicator(),
+                      SizedBox(height: 8),
+                      Text('Saving...'),
+                    ],
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: isSaving
+                      ? null
+                      : () {
+                          Navigator.of(context).pop();
+                        },
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: isSaving
+                      ? null
+                      : () async {
+                          // Validate inputs
+                          final age = int.tryParse(ageController.text);
+                          final weight = double.tryParse(weightController.text);
+
+                          if (age == null || age <= 0) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Please enter a valid age'),
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (weight == null || weight <= 0) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Please enter a valid weight'),
+                              ),
+                            );
+                            return;
+                          }
+
+                          double? heightInCm;
+                          if (isMetric) {
+                            heightInCm = double.tryParse(heightController.text);
+                            if (heightInCm == null || heightInCm <= 0) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Please enter a valid height'),
+                                ),
+                              );
+                              return;
+                            }
+                          } else {
+                            final feet = int.tryParse(feetController.text);
+                            final inches = int.tryParse(inchesController.text);
+
+                            if (feet == null ||
+                                feet < 0 ||
+                                inches == null ||
+                                inches < 0 ||
+                                inches >= 12) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Please enter valid height values',
+                                  ),
+                                ),
+                              );
+                              return;
+                            }
+
+                            double totalInches =
+                                (feet * 12).toDouble() + inches.toDouble();
+                            heightInCm = totalInches * 2.54;
+                          }
+
+                          setDialogState(() {
+                            isSaving = true;
+                          });
+
+                          try {
+                            UserProfile? profile = await UserDatabase()
+                                .getUserProfile(auth.currentUser!.uid);
+
+                            if (profile != null) {
+                              // Convert weight to metric for storage
+                              double weightInKg = weight;
+                              if (!isMetric) {
+                                weightInKg = weight / 2.20462; // lbs to kg
+                              }
+
+                              // Create updated profile
+                              UserProfile updatedProfile = UserProfile(
+                                uid: profile.uid,
+                                email: profile.email,
+                                username: profile.username,
+                                age: age,
+                                weight: weightInKg,
+                                height: heightInCm,
+                                activityLevel: activityLevel,
+                                sex: profile.sex,
+                              );
+
+                              // Save the profile
+                              await UserDatabase().saveUserProfile(
+                                updatedProfile,
+                              );
+
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Health information updated successfully!',
+                                      style: TextStyle(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onPrimaryContainer,
+                                      ),
+                                    ),
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.primaryContainer,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                              }
+                            } else {
+                              throw Exception('Could not load user profile');
+                            }
+                          } catch (e) {
+                            if (context.mounted) {
+                              setDialogState(() {
+                                isSaving = false;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Error saving health information: $e',
+                                  ),
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.error,
+                                ),
+                              );
+                            }
+                          }
+                        },
+                  child: Text('Save'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,296 +505,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     SettingsTile(
                       title: Text('Update health information'),
                       leading: Icon(Icons.edit),
-                      onPressed: (context) async {
-                        UserProfile? oldProfile = await UserDatabase()
-                            .getUserProfile(auth.currentUser!.uid);
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            bool isMetric = true;
-                            TextEditingController ageController =
-                                TextEditingController(
-                                  text: oldProfile?.age.toString(),
-                                );
-                            TextEditingController weightController =
-                                TextEditingController(
-                                  text: oldProfile?.weight.toString(),
-                                );
-                            TextEditingController heightController =
-                                TextEditingController(
-                                  text: oldProfile?.height.toString(),
-                                );
-                            TextEditingController feetController =
-                                TextEditingController();
-                            TextEditingController inchesController =
-                                TextEditingController();
-                            ActivityLevel activityLevel =
-                                ActivityLevel.moderatelyActive;
-
-                            // Convert height from cm to feet and inches for imperial display
-                            if (oldProfile?.height != null) {
-                              double heightInInches = oldProfile!.height / 2.54;
-                              int feet = heightInInches ~/ 12;
-                              int inches = (heightInInches % 12).round();
-                              feetController.text = feet.toString();
-                              inchesController.text = inches.toString();
-                            }
-
-                            return StatefulBuilder(
-                              builder: (context, setDialogState) {
-                                // Helper function to convert weight
-                                double convertWeight(
-                                  double weight,
-                                  bool toMetric,
-                                ) {
-                                  if (toMetric) {
-                                    return weight / 2.20462; // lbs to kg
-                                  } else {
-                                    return weight * 2.20462; // kg to lbs
-                                  }
-                                }
-
-                                return AlertDialog(
-                                  title: Text('Update Health Information'),
-                                  content: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        // Unit system selector
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: RadioListTile<bool>(
-                                                title: Text('Metric'),
-                                                value: true,
-                                                groupValue: isMetric,
-                                                onChanged: (value) {
-                                                  setDialogState(() {
-                                                    if (!isMetric &&
-                                                        value == true) {
-                                                      // Convert from imperial to metric
-                                                      double currentWeight =
-                                                          double.tryParse(
-                                                            weightController
-                                                                .text,
-                                                          ) ??
-                                                          0;
-                                                      if (currentWeight > 0) {
-                                                        weightController.text =
-                                                            convertWeight(
-                                                              currentWeight,
-                                                              true,
-                                                            ).toStringAsFixed(
-                                                              1,
-                                                            );
-                                                      }
-                                                    }
-                                                    isMetric = value!;
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: RadioListTile<bool>(
-                                                title: Text('Imperial'),
-                                                value: false,
-                                                groupValue: isMetric,
-                                                onChanged: (value) {
-                                                  setDialogState(() {
-                                                    if (isMetric &&
-                                                        value == false) {
-                                                      // Convert from metric to imperial
-                                                      double currentWeight =
-                                                          double.tryParse(
-                                                            weightController
-                                                                .text,
-                                                          ) ??
-                                                          0;
-                                                      if (currentWeight > 0) {
-                                                        weightController.text =
-                                                            convertWeight(
-                                                              currentWeight,
-                                                              false,
-                                                            ).toStringAsFixed(
-                                                              1,
-                                                            );
-                                                      }
-                                                    }
-                                                    isMetric = value!;
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 16),
-                                        TextField(
-                                          controller: ageController,
-                                          decoration: InputDecoration(
-                                            labelText: 'Age',
-                                            suffixText: 'years',
-                                          ),
-                                          keyboardType: TextInputType.number,
-                                        ),
-                                        TextField(
-                                          controller: weightController,
-                                          decoration: InputDecoration(
-                                            labelText: 'Weight',
-                                            suffixText: isMetric ? 'kg' : 'lbs',
-                                          ),
-                                          keyboardType: TextInputType.number,
-                                        ),
-                                        if (isMetric)
-                                          TextField(
-                                            controller: heightController,
-                                            decoration: InputDecoration(
-                                              labelText: 'Height',
-                                              suffixText: 'cm',
-                                            ),
-                                            keyboardType: TextInputType.number,
-                                          )
-                                        else
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: TextField(
-                                                  controller: feetController,
-                                                  decoration: InputDecoration(
-                                                    labelText: 'Height',
-                                                    suffixText: 'ft',
-                                                  ),
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                ),
-                                              ),
-                                              SizedBox(width: 16),
-                                              Expanded(
-                                                child: TextField(
-                                                  controller: inchesController,
-                                                  decoration: InputDecoration(
-                                                    labelText: '',
-                                                    suffixText: 'in',
-                                                  ),
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        DropdownButtonFormField(
-                                          value: activityLevel,
-                                          decoration: InputDecoration(
-                                            labelText: 'Activity Level',
-                                          ),
-                                          items: ActivityLevel.values.map((
-                                            level,
-                                          ) {
-                                            return DropdownMenuItem(
-                                              value: level,
-                                              child: Text(
-                                                camelToNormal(
-                                                  level
-                                                      .toString()
-                                                      .split('.')
-                                                      .last,
-                                                ),
-                                              ),
-                                            );
-                                          }).toList(),
-                                          onChanged: (value) {
-                                            activityLevel = value!;
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        UserProfile? profile =
-                                            await UserDatabase().getUserProfile(
-                                              auth.currentUser!.uid,
-                                            );
-                                        if (profile != null) {
-                                          // Convert values to metric for storage
-                                          double weightInKg =
-                                              double.tryParse(
-                                                weightController.text,
-                                              ) ??
-                                              0.0;
-                                          if (!isMetric && weightInKg > 0) {
-                                            weightInKg =
-                                                weightInKg /
-                                                2.20462; // lbs to kg
-                                          }
-
-                                          double heightInCm;
-                                          if (isMetric) {
-                                            heightInCm =
-                                                double.tryParse(
-                                                  heightController.text,
-                                                ) ??
-                                                0.0;
-                                          } else {
-                                            // Convert feet and inches to cm
-                                            int feet =
-                                                int.tryParse(
-                                                  feetController.text,
-                                                ) ??
-                                                0;
-                                            int inches =
-                                                int.tryParse(
-                                                  inchesController.text,
-                                                ) ??
-                                                0;
-                                            double totalInches =
-                                                (feet * 12).toDouble() +
-                                                inches.toDouble();
-                                            heightInCm = totalInches * 2.54;
-                                          }
-
-                                          UserDatabase().saveUserProfile(
-                                            UserProfile(
-                                              uid: profile.uid,
-                                              email: profile.email,
-                                              username: profile.username,
-                                              age:
-                                                  int.tryParse(
-                                                    ageController.text,
-                                                  ) ??
-                                                  0,
-                                              weight: weightInKg,
-                                              height: heightInCm,
-                                              activityLevel: activityLevel,
-                                              sex: profile.sex,
-                                            ),
-                                          );
-                                        }
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Press \'Reset Nutrition Goals\' to update your goals',
-                                            ),
-                                          ),
-                                        );
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('Save'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        );
-                      },
+                      onPressed: (context) =>
+                          _showUpdateHealthInformationDialog(context),
                     ),
                     SettingsTile(
                       title: Text('Reset Nutrition Goals'),
@@ -461,11 +526,15 @@ class _SettingsPageState extends State<SettingsPage> {
                             profile?.sex == 'male',
                           ),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Nutrition goals reset successfully'),
-                          ),
-                        );
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Nutrition goals reset successfully',
+                              ),
+                            ),
+                          );
+                        }
                       },
                     ),
                   ],

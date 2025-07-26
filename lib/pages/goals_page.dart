@@ -1,8 +1,11 @@
+import 'package:calories_app/pages/home_page.dart';
 import 'package:calories_app/tools/calculate_goals.dart';
 import 'package:calories_app/tools/meal_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:settings_ui/src/tiles/platforms/ios_settings_tile.dart';
 
 import '../auth.dart';
 import '../tools/camel_to_normal.dart';
@@ -34,20 +37,11 @@ class GoalAmount extends AbstractSettingsTile {
 
   @override
   Widget build(BuildContext context) {
-    return SettingsTile(
+    return IOSSettingsTile(
+      tileType: SettingsTileType.simpleTile,
+      leading: leading,
       title: Text(name),
-      trailing: Row(
-        children: [
-          Text(achieved.toString()),
-          Text("/"),
-          Text(
-            (goal.roundToDouble() == goal
-                    ? goal.toString()
-                    : goal.toStringAsFixed(1)) +
-                (unit != null ? " $unit" : "").toString(),
-          ),
-        ],
-      ),
+      description: null,
       onPressed: (BuildContext context) {
         TextEditingController controller = TextEditingController(
           text: goal.roundToDouble() == goal
@@ -85,6 +79,23 @@ class GoalAmount extends AbstractSettingsTile {
           },
         );
       },
+      trailing: Row(
+        children: [
+          Text(achieved.toString()),
+          Text("/"),
+          Text(
+            (goal.roundToDouble() == goal
+                    ? goal.toString()
+                    : goal.toStringAsFixed(1)) +
+                (unit != null ? " $unit" : "").toString(),
+          ),
+        ],
+      ),
+      onToggle: (bool value) {},
+      value: null,
+      initialValue: null,
+      activeSwitchColor: null,
+      enabled: true,
     );
   }
 }

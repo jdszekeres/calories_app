@@ -462,6 +462,13 @@ NutrutionGoals calculateGoals(
     zinc: zinc, // Recommended daily intake in mg
   );
 
+  print(
+    "age: $age, weight: $weight, height: $height, activityLevel: $activityLevel, isMale: $isMale",
+  );
+  print(
+    "calorieGoal: $calorieGoal, macroNutrientGoals: $macroNutrientGoals, vitaminGoals: $vitaminGoals, microNutrientGoals: $microNutrientGoals",
+  );
+
   return NutrutionGoals(
     calorieGoal: calorieGoal,
     macroNutrientGoals: macroNutrientGoals,
