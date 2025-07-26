@@ -362,6 +362,10 @@ NutrutionGoals calculateGoals(
 
   calorieGoal = calorieGoal.roundToDouble(); // Round to nearest whole number
 
+  if (calorieGoal < 0) {
+    calorieGoal = 0; // Ensure calorie goal is not negative
+  }
+
   double proteinCalories = (calorieGoal * (age < 3 ? 0.125 : 0.20));
   double proteinGrams = (proteinCalories / 4)
       .roundToDouble(); // 1g protein = 4 calories

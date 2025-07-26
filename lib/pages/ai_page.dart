@@ -31,68 +31,67 @@ class _AiPageState extends State<AiPage> {
         elevation: 0,
       ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      body:
-          (_imageData == null)
-              ? _buildWelcomeScreen(context)
-              : Center(
-                child: FutureBuilder(
-                  future: AiService().getMealNutrition(_imageData!),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      print(snapshot.stackTrace);
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      // Initialize _foodFacts if not already set
-                      if (_foodFacts == null) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          setState(() {
-                            _foodFacts = snapshot.data!;
-                          });
+      body: (_imageData == null)
+          ? _buildWelcomeScreen(context)
+          : Center(
+              child: FutureBuilder(
+                future: AiService().getMealNutrition(_imageData!),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    print(snapshot.stackTrace);
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    // Initialize _foodFacts if not already set
+                    if (_foodFacts == null) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        setState(() {
+                          _foodFacts = snapshot.data!;
                         });
-                        // Show loading while state updates
-                        return CircularProgressIndicator();
-                      }
-
-                      return SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            NutriFacts(
-                              foodFacts: _foodFacts!,
-                              servings: _foodFacts!.numServings ?? 1,
-                              onEdit: (editedFoodFacts) {
-                                setState(() {
-                                  _foodFacts = editedFoodFacts;
-                                });
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Nutrition facts updated!'),
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                              },
-                            ),
-                            ElevatedButton(
-                              onPressed: () async {
-                                if (_foodFacts!.numServings != null) {
-                                  await MealDatabase().addMeal(
-                                    auth.currentUser!.uid,
-                                    _foodFacts!,
-                                  );
-                                }
-                                if (!mounted) return;
-                                context.go('/');
-                              },
-                              child: const Text('Save'),
-                            ),
-                          ],
-                        ),
-                      );
+                      });
+                      // Show loading while state updates
+                      return CircularProgressIndicator();
                     }
-                  },
-                ),
+
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          NutriFacts(
+                            foodFacts: _foodFacts!,
+                            servings: _foodFacts!.numServings ?? 1,
+                            onEdit: (editedFoodFacts) {
+                              setState(() {
+                                _foodFacts = editedFoodFacts;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Nutrition facts updated!'),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              if (_foodFacts!.numServings != null) {
+                                await MealDatabase().addMeal(
+                                  auth.currentUser!.uid,
+                                  _foodFacts!,
+                                );
+                              }
+                              if (!mounted) return;
+                              context.go('/');
+                            },
+                            child: const Text('Save'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
               ),
+            ),
     );
   }
 
@@ -447,13 +446,12 @@ class _AiPageState extends State<AiPage> {
                         ),
                         Text(
                           'Review and edit the nutrition facts below',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onBackground.withOpacity(0.7),
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onBackground.withOpacity(0.7),
+                              ),
                         ),
                       ],
                     ),

@@ -1,11 +1,8 @@
-import 'package:calories_app/pages/home_page.dart';
 import 'package:calories_app/tools/calculate_goals.dart';
 import 'package:calories_app/tools/meal_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:settings_ui/src/tiles/platforms/ios_settings_tile.dart';
 
 import '../auth.dart';
 import '../tools/camel_to_normal.dart';
@@ -37,11 +34,20 @@ class GoalAmount extends AbstractSettingsTile {
 
   @override
   Widget build(BuildContext context) {
-    return IOSSettingsTile(
-      tileType: SettingsTileType.simpleTile,
-      leading: leading,
+    return SettingsTile(
       title: Text(name),
-      description: null,
+      trailing: Row(
+        children: [
+          Text(achieved.toString()),
+          Text("/"),
+          Text(
+            (goal.roundToDouble() == goal
+                    ? goal.toString()
+                    : goal.toStringAsFixed(1)) +
+                (unit != null ? " $unit" : "").toString(),
+          ),
+        ],
+      ),
       onPressed: (BuildContext context) {
         TextEditingController controller = TextEditingController(
           text: goal.roundToDouble() == goal
@@ -79,69 +85,76 @@ class GoalAmount extends AbstractSettingsTile {
           },
         );
       },
-      trailing: Row(
-        children: [
-          Text(achieved.toString()),
-          Text("/"),
-          Text(
-            (goal.roundToDouble() == goal
-                    ? goal.toString()
-                    : goal.toStringAsFixed(1)) +
-                (unit != null ? " $unit" : "").toString(),
-          ),
-        ],
-      ),
-      onToggle: (bool value) {},
-      value: null,
-      initialValue: null,
-      activeSwitchColor: null,
-      enabled: true,
     );
   }
 }
 
 class GoalsPage extends StatefulWidget {
-  GoalsPage({super.key});
-
-  NutrutionGoals? goals;
-  List<FoodFacts> meals = [];
+  const GoalsPage({super.key});
 
   @override
   State<GoalsPage> createState() => _GoalsPageState();
 }
 
 class _GoalsPageState extends State<GoalsPage> {
+  bool _isLoading = true;
+  String? _errorMessage;
+  NutrutionGoals? goals;
+  List<FoodFacts> meals = [];
+
   @override
   void initState() {
     super.initState();
-    // Fetch the user's nutrition goals from the database
-    UserDatabase().getNutritionGoals(Auth().currentUser!.uid).then((goals) {
-      if (goals != null) {
-        setState(() {
-          widget.goals = goals;
-        });
-      } else {
-        // If no goals are found, redirect to the home page
-        if (context.mounted) {
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      // Fetch both goals and meals in parallel
+      final futures = await Future.wait([
+        UserDatabase().getNutritionGoals(Auth().currentUser!.uid),
+        MealDatabase().getMealsByDate(Auth().currentUser!.uid, DateTime.now()),
+      ]);
+
+      final fetchedGoals = futures[0] as NutrutionGoals?;
+      final fetchedMeals = futures[1] as List<FoodFacts>;
+
+      if (!mounted) return;
+
+      setState(() {
+        goals = fetchedGoals;
+        meals = fetchedMeals;
+        _isLoading = false;
+      });
+
+      // Handle case where no goals are found
+      if (fetchedGoals == null) {
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('No goals found. Please set your goals.')),
+            const SnackBar(
+              content: Text('No goals found. Please set your goals.'),
+            ),
           );
           context.go('/settings');
         }
       }
-    });
-    MealDatabase().getMealsByDate(Auth().currentUser!.uid, DateTime.now()).then(
-      (meals) {
-        setState(() {
-          widget.meals = meals;
-        });
-      },
-    );
+    } catch (error) {
+      if (!mounted) return;
+
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Error loading data: ${error.toString()}';
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error loading goals: ${error.toString()}')),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> jsonGoals = widget.goals?.toJson() ?? {};
+    Map<String, dynamic> jsonGoals = goals?.toJson() ?? {};
 
     return Scaffold(
       appBar: AppBar(
@@ -150,7 +163,35 @@ class _GoalsPageState extends State<GoalsPage> {
       ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       bottomNavigationBar: BottomNavbar(),
-      body: (widget.goals != null)
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _errorMessage != null
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    _errorMessage!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _isLoading = true;
+                        _errorMessage = null;
+                      });
+                      _loadData();
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            )
+          : goals != null
           ? SettingsList(
               lightTheme: SettingsThemeData(
                 settingsListBackground: Colors.transparent,
@@ -158,7 +199,7 @@ class _GoalsPageState extends State<GoalsPage> {
               darkTheme: SettingsThemeData(
                 settingsListBackground: Colors.transparent,
               ),
-              key: ValueKey(widget.goals),
+              key: ValueKey(goals),
               sections: jsonGoals.keys.toList().map((key) {
                 return SettingsSection(
                   title: Text(camelToNormal(key)),
@@ -169,7 +210,7 @@ class _GoalsPageState extends State<GoalsPage> {
                           name: camelToNormal(goalName),
                           // leading: Icon(Icons.check_circle_outline),
                           goal: jsonGoals[key][goalName] as double,
-                          achieved: widget.meals.fold(0.0, (sum, meal) {
+                          achieved: meals.fold(0.0, (sum, meal) {
                             return sum +
                                 (meal.nutrutionInfo.toJson()[key][goalName] ??
                                     0.0);
@@ -182,12 +223,12 @@ class _GoalsPageState extends State<GoalsPage> {
                             );
                             setState(() {
                               // Update local goals by reconstructing the NutrutionGoals object
-                              final currentGoals = widget.goals!;
+                              final currentGoals = goals!;
                               final goalsJson = currentGoals.toJson();
                               // Mutate the JSON map for this goal
                               goalsJson[key][goalName] = newGoal;
-                              // Replace widget.goals with new object
-                              widget.goals = NutrutionGoals.fromJson(goalsJson);
+                              // Replace goals with new object
+                              goals = NutrutionGoals.fromJson(goalsJson);
                             });
                           },
                           unit: NutrutionGoals.getUnit(
@@ -200,7 +241,12 @@ class _GoalsPageState extends State<GoalsPage> {
                 );
               }).toList(),
             )
-          : Center(child: CircularProgressIndicator()),
+          : const Center(
+              child: Text(
+                'No goals found. Please set your goals in settings.',
+                textAlign: TextAlign.center,
+              ),
+            ),
     );
   }
 }
