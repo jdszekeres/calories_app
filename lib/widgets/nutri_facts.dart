@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 class NutriFacts extends StatefulWidget {
   final FoodFacts foodFacts;
   final double servings;
-  final Function(FoodFacts)? onEdit;
+  final Function(FoodFacts) onEdit;
 
   const NutriFacts({
     super.key,
     required this.foodFacts,
     required this.servings,
-    this.onEdit,
+    required this.onEdit,
   });
 
   @override
@@ -29,9 +29,8 @@ class _NutriFactsState extends State<NutriFacts> {
   }
 
   void _saveChanges() {
-    if (widget.onEdit != null) {
-      widget.onEdit!(_editableFoodFacts);
-    }
+    widget.onEdit(_editableFoodFacts);
+
     setState(() {
       _isEditing = false;
     });
@@ -59,28 +58,24 @@ class _NutriFactsState extends State<NutriFacts> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Edit button row
-          if (widget.onEdit != null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (_isEditing) ...[
-                  TextButton(
-                    onPressed: _cancelEdit,
-                    child: const Text('Cancel'),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: _saveChanges,
-                    child: const Text('Save'),
-                  ),
-                ] else
-                  IconButton(
-                    onPressed: () => setState(() => _isEditing = true),
-                    icon: const Icon(Icons.edit),
-                    tooltip: 'Edit nutrition facts',
-                  ),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (_isEditing) ...[
+                TextButton(onPressed: _cancelEdit, child: const Text('Cancel')),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: _saveChanges,
+                  child: const Text('Save'),
+                ),
+              ] else
+                IconButton(
+                  onPressed: () => setState(() => _isEditing = true),
+                  icon: const Icon(Icons.edit),
+                  tooltip: 'Edit nutrition facts',
+                ),
+            ],
+          ),
 
           // Product name
           Center(
@@ -275,178 +270,8 @@ class _NutriFactsState extends State<NutriFacts> {
 
           const Divider(color: Colors.black, thickness: 2),
 
-          // Vitamins and minerals (only show if values > 0)
-          // Vitamins
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminA > 0)
-            _buildNutrientRow(
-              'Vitamin A',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminA * widget.servings) / 1000000).toStringAsFixed(1)}µg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminC > 0)
-            _buildNutrientRow(
-              'Vitamin C',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminC * widget.servings) / 1000).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminD > 0)
-            _buildNutrientRow(
-              'Vitamin D',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminD * widget.servings) / 1000).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminE > 0)
-            _buildNutrientRow(
-              'Vitamin E',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminE * widget.servings) / 1000).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminK > 0)
-            _buildNutrientRow(
-              'Vitamin K',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminK * widget.servings) / 1000000).toStringAsFixed(1)}µg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.thiamin > 0)
-            _buildNutrientRow(
-              'Thiamin (B1)',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.thiamin * widget.servings) / 1000).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.riboflavin > 0)
-            _buildNutrientRow(
-              'Riboflavin (B2)',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.riboflavin * widget.servings) / 1000).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.niacin > 0)
-            _buildNutrientRow(
-              'Niacin (B3)',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.niacin * widget.servings) / 1000).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.pantothenicAcid > 0)
-            _buildNutrientRow(
-              'Pantothenic Acid (B5)',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.pantothenicAcid * widget.servings) / 1000).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB6 > 0)
-            _buildNutrientRow(
-              'Vitamin B6',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB6 * widget.servings) / 1000).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.folate > 0)
-            _buildNutrientRow(
-              'Folate',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.folate * widget.servings) / 1000000).toStringAsFixed(1)}µg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB12 > 0)
-            _buildNutrientRow(
-              'Vitamin B12',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB12 * widget.servings) / 1000000).toStringAsFixed(1)}µg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.vitaminGoals.choline > 0)
-            _buildNutrientRow(
-              'Choline',
-              '${((_editableFoodFacts.nutrutionInfo.vitaminGoals.choline * widget.servings) / 1000).toStringAsFixed(1)}mg',
-              '',
-            ),
-
-          // Minerals
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.calcium > 0)
-            _buildEditableNutrientRow(
-              'Calcium',
-              _editableFoodFacts.nutrutionInfo.microNutrientGoals.calcium,
-              'mg',
-              (value) => _updateMicroNutrient('calcium', value),
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.iron > 0)
-            _buildEditableNutrientRow(
-              'Iron',
-              _editableFoodFacts.nutrutionInfo.microNutrientGoals.iron,
-              'mg',
-              (value) => _updateMicroNutrient('iron', value),
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.magnesium > 0)
-            _buildNutrientRow(
-              'Magnesium',
-              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.magnesium * widget.servings).toStringAsFixed(0)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.phosphorus >
-              0)
-            _buildNutrientRow(
-              'Phosphorus',
-              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.phosphorus * widget.servings).toStringAsFixed(0)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.potassium > 0)
-            _buildEditableNutrientRow(
-              'Potassium',
-              _editableFoodFacts.nutrutionInfo.microNutrientGoals.potassium,
-              'mg',
-              (value) => _updateMicroNutrient('potassium', value),
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.sodium > 0)
-            _buildEditableNutrientRow(
-              'Sodium',
-              _editableFoodFacts.nutrutionInfo.microNutrientGoals.sodium,
-              'mg',
-              (value) => _updateMicroNutrient('sodium', value),
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.zinc > 0)
-            _buildNutrientRow(
-              'Zinc',
-              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.zinc * widget.servings).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.copper > 0)
-            _buildNutrientRow(
-              'Copper',
-              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.copper * widget.servings).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.manganese > 0)
-            _buildNutrientRow(
-              'Manganese',
-              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.manganese * widget.servings).toStringAsFixed(1)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.selenium > 0)
-            _buildNutrientRow(
-              'Selenium',
-              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.selenium * widget.servings).toStringAsFixed(1)}µg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.iodine > 0)
-            _buildNutrientRow(
-              'Iodine',
-              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.iodine * widget.servings).toStringAsFixed(1)}µg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.molybdenum >
-              0)
-            _buildNutrientRow(
-              'Molybdenum',
-              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.molybdenum * widget.servings).toStringAsFixed(1)}µg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.chlorine > 0)
-            _buildNutrientRow(
-              'Chloride',
-              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.chlorine * widget.servings).toStringAsFixed(0)}mg',
-              '',
-            ),
-          if (_editableFoodFacts.nutrutionInfo.microNutrientGoals.flouride > 0)
-            _buildNutrientRow(
-              'Fluoride',
-              '${(_editableFoodFacts.nutrutionInfo.microNutrientGoals.flouride * widget.servings).toStringAsFixed(1)}mg',
-              '',
-            ),
+          // Vitamins and minerals (all now editable)
+          ..._buildNutrientRows(),
 
           const Divider(color: Colors.black, thickness: 2),
 
@@ -550,6 +375,186 @@ class _NutriFactsState extends State<NutriFacts> {
             zinc: micro.zinc,
           );
           break;
+        case 'magnesium':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: value,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'phosphorus':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: value,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'zinc':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: value,
+          );
+          break;
+        case 'copper':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: value,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'manganese':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: value,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'selenium':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: value,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'iodine':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: value,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'molybdenum':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: value,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'chlorine':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: value,
+            copper: micro.copper,
+            flouride: micro.flouride,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
+        case 'flouride':
+          updatedMicro = MicroNutrientGoals(
+            calcium: micro.calcium,
+            chlorine: micro.chlorine,
+            copper: micro.copper,
+            flouride: value,
+            iodine: micro.iodine,
+            iron: micro.iron,
+            magnesium: micro.magnesium,
+            manganese: micro.manganese,
+            molybdenum: micro.molybdenum,
+            phosphorus: micro.phosphorus,
+            potassium: micro.potassium,
+            selenium: micro.selenium,
+            sodium: micro.sodium,
+            zinc: micro.zinc,
+          );
+          break;
         default:
           return;
       }
@@ -561,6 +566,250 @@ class _NutriFactsState extends State<NutriFacts> {
               _editableFoodFacts.nutrutionInfo.macroNutrientGoals,
           vitaminGoals: _editableFoodFacts.nutrutionInfo.vitaminGoals,
           microNutrientGoals: updatedMicro,
+        ),
+      );
+    });
+  }
+
+  void _updateVitamin(String vitaminName, double value) {
+    setState(() {
+      final vitamins = _editableFoodFacts.nutrutionInfo.vitaminGoals;
+      VitaminGoals updatedVitamins;
+
+      switch (vitaminName) {
+        case 'vitaminA':
+          updatedVitamins = VitaminGoals(
+            vitaminA: value,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'vitaminC':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: value,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'vitaminD':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: value,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'vitaminE':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: value,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'vitaminK':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: value,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'thiamin':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: value,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'riboflavin':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: value,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'niacin':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: value,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'pantothenicAcid':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: value,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'vitaminB6':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: value,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'folate':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: value,
+            vitaminB12: vitamins.vitaminB12,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'vitaminB12':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: value,
+            choline: vitamins.choline,
+          );
+          break;
+        case 'choline':
+          updatedVitamins = VitaminGoals(
+            vitaminA: vitamins.vitaminA,
+            vitaminC: vitamins.vitaminC,
+            vitaminD: vitamins.vitaminD,
+            vitaminE: vitamins.vitaminE,
+            vitaminK: vitamins.vitaminK,
+            thiamin: vitamins.thiamin,
+            riboflavin: vitamins.riboflavin,
+            niacin: vitamins.niacin,
+            pantothenicAcid: vitamins.pantothenicAcid,
+            vitaminB6: vitamins.vitaminB6,
+            folate: vitamins.folate,
+            vitaminB12: vitamins.vitaminB12,
+            choline: value,
+          );
+          break;
+        default:
+          return;
+      }
+
+      _editableFoodFacts = _editableFoodFacts.copyWith(
+        nutrutionInfo: NutrutionGoals(
+          calorieGoal: _editableFoodFacts.nutrutionInfo.calorieGoal,
+          macroNutrientGoals:
+              _editableFoodFacts.nutrutionInfo.macroNutrientGoals,
+          vitaminGoals: updatedVitamins,
+          microNutrientGoals:
+              _editableFoodFacts.nutrutionInfo.microNutrientGoals,
         ),
       );
     });
@@ -763,47 +1012,306 @@ class _NutriFactsState extends State<NutriFacts> {
     );
   }
 
-  Widget _buildNutrientRow(String nutrient, String amount, String dailyValue) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                nutrient,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            Text(
-              amount,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              ),
-            ),
-            if (dailyValue.isNotEmpty)
-              SizedBox(
-                width: 40,
-                child: Text(
-                  dailyValue,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.right,
-                ),
-              ),
-          ],
-        ),
-        const Divider(color: Colors.black, thickness: 1),
-      ],
+  List<Widget> _buildNutrientRows() {
+    final List<Widget> rows = [];
+
+    // Vitamins (convert to micrograms or milligrams and use appropriate units)
+    rows.add(
+      _buildEditableNutrientRow(
+        'Vitamin A',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminA /
+            1000000, // Convert to µg
+        'µg',
+        (value) => _updateVitamin(
+          'vitaminA',
+          value * 1000000,
+        ), // Convert back to original units
+      ),
     );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Vitamin C',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminC /
+            1000, // Convert to mg
+        'mg',
+        (value) => _updateVitamin(
+          'vitaminC',
+          value * 1000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Vitamin D',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminD /
+            1000, // Convert to mg
+        'mg',
+        (value) => _updateVitamin(
+          'vitaminD',
+          value * 1000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Vitamin E',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminE /
+            1000, // Convert to mg
+        'mg',
+        (value) => _updateVitamin(
+          'vitaminE',
+          value * 1000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Vitamin K',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminK /
+            1000000, // Convert to µg
+        'µg',
+        (value) => _updateVitamin(
+          'vitaminK',
+          value * 1000000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Thiamin (B1)',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.thiamin /
+            1000, // Convert to mg
+        'mg',
+        (value) => _updateVitamin(
+          'thiamin',
+          value * 1000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Riboflavin (B2)',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.riboflavin /
+            1000, // Convert to mg
+        'mg',
+        (value) => _updateVitamin(
+          'riboflavin',
+          value * 1000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Niacin (B3)',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.niacin /
+            1000, // Convert to mg
+        'mg',
+        (value) => _updateVitamin(
+          'niacin',
+          value * 1000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Pantothenic Acid (B5)',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.pantothenicAcid /
+            1000, // Convert to mg
+        'mg',
+        (value) => _updateVitamin(
+          'pantothenicAcid',
+          value * 1000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Vitamin B6',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB6 /
+            1000, // Convert to mg
+        'mg',
+        (value) => _updateVitamin(
+          'vitaminB6',
+          value * 1000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Folate',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.folate /
+            1000000, // Convert to µg
+        'µg',
+        (value) => _updateVitamin(
+          'folate',
+          value * 1000000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Vitamin B12',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB12 /
+            1000000, // Convert to µg
+        'µg',
+        (value) => _updateVitamin(
+          'vitaminB12',
+          value * 1000000,
+        ), // Convert back to original units
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Choline',
+        _editableFoodFacts.nutrutionInfo.vitaminGoals.choline /
+            1000, // Convert to mg
+        'mg',
+        (value) => _updateVitamin(
+          'choline',
+          value * 1000,
+        ), // Convert back to original units
+      ),
+    );
+
+    // Minerals (all editable)
+    rows.add(
+      _buildEditableNutrientRow(
+        'Calcium',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.calcium,
+        'mg',
+        (value) => _updateMicroNutrient('calcium', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Iron',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.iron,
+        'mg',
+        (value) => _updateMicroNutrient('iron', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Magnesium',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.magnesium,
+        'mg',
+        (value) => _updateMicroNutrient('magnesium', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Phosphorus',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.phosphorus,
+        'mg',
+        (value) => _updateMicroNutrient('phosphorus', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Potassium',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.potassium,
+        'mg',
+        (value) => _updateMicroNutrient('potassium', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Sodium',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.sodium,
+        'mg',
+        (value) => _updateMicroNutrient('sodium', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Zinc',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.zinc,
+        'mg',
+        (value) => _updateMicroNutrient('zinc', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Copper',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.copper,
+        'mg',
+        (value) => _updateMicroNutrient('copper', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Manganese',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.manganese,
+        'mg',
+        (value) => _updateMicroNutrient('manganese', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Selenium',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.selenium,
+        'µg',
+        (value) => _updateMicroNutrient('selenium', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Iodine',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.iodine,
+        'µg',
+        (value) => _updateMicroNutrient('iodine', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Molybdenum',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.molybdenum,
+        'µg',
+        (value) => _updateMicroNutrient('molybdenum', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Chloride',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.chlorine,
+        'mg',
+        (value) => _updateMicroNutrient('chlorine', value),
+      ),
+    );
+
+    rows.add(
+      _buildEditableNutrientRow(
+        'Fluoride',
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.flouride,
+        'mg',
+        (value) => _updateMicroNutrient('flouride', value),
+      ),
+    );
+
+    return rows;
   }
 }

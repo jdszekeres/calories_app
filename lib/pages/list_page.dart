@@ -42,76 +42,83 @@ class _ListPageState extends State<ListPage> {
       ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       bottomNavigationBar: BottomNavbar(),
-      body:
-          items.isEmpty
-              ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+      body: items.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('No meals found.'),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go("/add");
+                    },
+                    child: Text('Add Meal'),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                final currentDay = DateTime(
+                  item.uploaded!.year,
+                  item.uploaded!.month,
+                  item.uploaded!.day,
+                );
+                final showHeader =
+                    index == 0 ||
+                    DateTime(
+                          items[index - 1].uploaded!.year,
+                          items[index - 1].uploaded!.month,
+                          items[index - 1].uploaded!.day,
+                        ) !=
+                        currentDay;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('No meals found.'),
-                    SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.go("/add");
-                      },
-                      child: Text('Add Meal'),
-                    ),
-                  ],
-                ),
-              )
-              : ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  final currentDay = DateTime(
-                    item.uploaded!.year,
-                    item.uploaded!.month,
-                    item.uploaded!.day,
-                  );
-                  final showHeader =
-                      index == 0 ||
-                      DateTime(
-                            items[index - 1].uploaded!.year,
-                            items[index - 1].uploaded!.month,
-                            items[index - 1].uploaded!.day,
-                          ) !=
-                          currentDay;
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (showHeader)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 16.0,
-                          ),
-                          child: Text(
-                            headerDateFormat.format(item.uploaded!),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    if (showHeader)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 16.0,
+                        ),
+                        child: Text(
+                          headerDateFormat.format(item.uploaded!),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      MealComponent(
-                        mealName: item.name,
-                        mealTime: dateFormat.format(item.uploaded!),
-                        calories: item.nutrutionInfo.calorieGoal as num,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => MealDetails(foodFacts: item),
-                            ),
-                          );
-                        },
                       ),
-                    ],
-                  );
-                },
-              ),
+                    MealComponent(
+                      mealName: item.name,
+                      mealTime: dateFormat.format(item.uploaded!),
+                      calories:
+                          ((item.nutrutionInfo.calorieGoal as num) *
+                          (item.numServings ?? 1)),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MealDetails(
+                              foodFacts: item,
+                              onEdit: (editedFoodFacts) {
+                                setState(() {
+                                  items[index] = editedFoodFacts;
+                                });
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
     );
   }
 }

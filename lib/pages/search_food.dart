@@ -115,7 +115,7 @@ class _SearchFoodState extends State<SearchFood> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      print(snapshot.stackTrace);
+                      debugPrintStack(stackTrace: snapshot.stackTrace);
                       return Text('Error: ${snapshot.error}');
                     } else {
                       return ServingsSelector(
@@ -138,7 +138,7 @@ class _SearchFoodState extends State<SearchFood> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      print(snapshot.stackTrace);
+                      debugPrintStack(stackTrace: snapshot.stackTrace);
                       return Text('Error: ${snapshot.error}');
                     } else {
                       // Initialize _foodFacts if not already set

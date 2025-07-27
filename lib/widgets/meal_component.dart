@@ -26,7 +26,7 @@ class MealComponent extends StatelessWidget {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         trailing: Text(
-          '$calories kcal',
+          '${calories.toStringAsFixed(1)} kcal',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),

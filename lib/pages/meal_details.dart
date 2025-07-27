@@ -7,7 +7,9 @@ import '../auth.dart';
 
 class MealDetails extends StatefulWidget {
   final FoodFacts foodFacts;
-  const MealDetails({Key? key, required this.foodFacts}) : super(key: key);
+  final Function(FoodFacts)? onEdit;
+  const MealDetails({Key? key, required this.foodFacts, this.onEdit})
+    : super(key: key);
   @override
   _MealDetailsState createState() => _MealDetailsState();
 }
@@ -42,11 +44,15 @@ class _MealDetailsState extends State<MealDetails> {
                 setState(() {
                   foodFacts = newFoodFacts;
                 });
+                // print('Updated food facts: ${foodFacts.toJson()}');
                 MealDatabase().updateMeal(
                   auth.currentUser!.uid,
                   foodFacts.uploaded!,
                   newFoodFacts,
                 );
+                if (widget.onEdit != null) {
+                  widget.onEdit!(newFoodFacts);
+                }
               },
             ),
           ],

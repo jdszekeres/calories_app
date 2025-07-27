@@ -71,7 +71,7 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
                   } else if (snapshot.hasError) {
-                    print(snapshot.stackTrace);
+                    debugPrintStack(stackTrace: snapshot.stackTrace);
                     return Text('Error: ${snapshot.error}');
                   } else {
                     return ServingsSelector(
@@ -94,7 +94,7 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
                   } else if (snapshot.hasError) {
-                    print(snapshot.stackTrace);
+                    debugPrintStack(stackTrace: snapshot.stackTrace);
                     return Text('Error: ${snapshot.error}');
                   } else {
                     // Initialize _foodFacts if not already set

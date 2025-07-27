@@ -102,7 +102,11 @@ class GoalAmount extends AbstractSettingsTile {
       },
       trailing: Row(
         children: [
-          Text(achieved.toString()),
+          Text(
+            achieved.roundToDouble() == achieved
+                ? achieved.toString()
+                : achieved.toStringAsFixed(1),
+          ),
           Text("/"),
           Text(
             (goal.roundToDouble() == goal
@@ -245,9 +249,10 @@ class _GoalsPageState extends State<GoalsPage> {
                           achieved: meals.fold(0.0, (sum, meal) {
                             return sum +
                                 ((meal.nutrutionInfo.toJson()[key][goalName]
-                                            as num?)
-                                        ?.toDouble() ??
-                                    0.0);
+                                                as num?)
+                                            ?.toDouble() ??
+                                        0.0) *
+                                    (meal.numServings ?? 1);
                           }),
                           onGoalChanged: (newGoal) {
                             UserDatabase().updateNutritionGoal(

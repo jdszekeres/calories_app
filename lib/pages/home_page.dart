@@ -125,7 +125,10 @@ class _HomePageState extends State<HomePage> {
               CalorieCircle(
                 calories: meals.fold(
                   0,
-                  (sum, meal) => sum + meal.nutrutionInfo.calorieGoal,
+                  (sum, meal) =>
+                      sum +
+                      (meal.nutrutionInfo.calorieGoal *
+                          (meal.numServings ?? 1)),
                 ),
                 maxCalories: goals?.calorieGoal ?? 2000,
               ),
@@ -137,43 +140,38 @@ class _HomePageState extends State<HomePage> {
                   // height: MediaQuery.of(context).size.height / 3,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children:
-                        selectedWidgets
-                            .map(
-                              (nutrient) => TypeIndicator(
-                                type: camelToNormal(nutrient),
-                                goal:
-                                    (goals == null)
-                                        ? 1.0
-                                        : (() {
-                                          final key = NutrutionGoals.getKey(
-                                            nutrient,
-                                          );
-                                          // Safely extract target or default to 0.0
-                                          final target =
-                                              (goals!.toJson()[key][nutrient]
-                                                      as num?)
-                                                  ?.toDouble() ??
-                                              0.0;
-                                          // Sum consumed amount for this nutrient
-                                          final consumed = meals.fold(
-                                            0.0,
-                                            (sum, meal) =>
-                                                sum +
-                                                ((meal.nutrutionInfo
-                                                                .toJson()[key][nutrient]
-                                                            as num?)
-                                                        ?.toDouble() ??
-                                                    0.0),
-                                          );
-                                          // If target is zero, avoid division by zero
-                                          return target > 0
-                                              ? consumed / target
-                                              : consumed / 0.000001;
-                                        })(),
-                              ),
-                            )
-                            .toList(),
+                    children: selectedWidgets
+                        .map(
+                          (nutrient) => TypeIndicator(
+                            type: camelToNormal(nutrient),
+                            goal: (goals == null)
+                                ? 1.0
+                                : (() {
+                                    final key = NutrutionGoals.getKey(nutrient);
+                                    // Safely extract target or default to 0.0
+                                    final target =
+                                        (goals!.toJson()[key][nutrient] as num?)
+                                            ?.toDouble() ??
+                                        0.0;
+                                    // Sum consumed amount for this nutrient
+                                    final consumed = meals.fold(
+                                      0.0,
+                                      (sum, meal) =>
+                                          sum +
+                                          ((meal.nutrutionInfo.toJson()[key][nutrient]
+                                                          as num?)
+                                                      ?.toDouble() ??
+                                                  0.0) *
+                                              (meal.numServings ?? 1),
+                                    );
+                                    // If target is zero, avoid division by zero
+                                    return target > 0
+                                        ? consumed / target
+                                        : consumed / 0.000001;
+                                  })(),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
               ),
