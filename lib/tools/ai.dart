@@ -97,7 +97,6 @@ class AiService {
       }
       final jsonResponse = response.text;
       final data = jsonDecode(jsonResponse!) as Map<String, dynamic>;
-      print(data);
       // Map AI JSON into our data models
       final info = data['info'] as Map<String, dynamic>? ?? {};
       final name = info['name'] as String? ?? 'Unknown';

@@ -385,8 +385,8 @@ NutrutionGoals calculateGoals(
   }
 
   double proteinCalories = (calorieGoal * (age < 3 ? 0.125 : 0.20));
-  double proteinGrams =
-      (proteinCalories / 4).roundToDouble(); // 1g protein = 4 calories
+  double proteinGrams = (proteinCalories / 4)
+      .roundToDouble(); // 1g protein = 4 calories
   double fatCalories =
       (calorieGoal * age < 3
               ? 0.35
@@ -399,13 +399,13 @@ NutrutionGoals calculateGoals(
   double carbCalories = calorieGoal - (proteinCalories + fatCalories);
   double carbGrams = (carbCalories / 4).roundToDouble(); // 1g carb = 4 calories
 
-  double fiberGrams =
-      (calorieGoal / 1000 * 14).roundToDouble(); // 14g per 1000 calories
+  double fiberGrams = (calorieGoal / 1000 * 14)
+      .roundToDouble(); // 14g per 1000 calories
 
   double sugarCalories = ((calorieGoal / 40 * 4)).roundToDouble();
 
-  double sugarGrams =
-      (sugarCalories / 4).roundToDouble(); // 1g sugar = 4 calories
+  double sugarGrams = (sugarCalories / 4)
+      .roundToDouble(); // 1g sugar = 4 calories
 
   double waterIntake = calorieGoal / 1000; // 30ml per kg of body weight
 
@@ -478,13 +478,6 @@ NutrutionGoals calculateGoals(
     selenium: selenium, // Recommended daily intake in mcg
     sodium: sodium, // Recommended daily intake in mg
     zinc: zinc, // Recommended daily intake in mg
-  );
-
-  print(
-    "age: $age, weight: $weight, height: $height, activityLevel: $activityLevel, isMale: $isMale",
-  );
-  print(
-    "calorieGoal: $calorieGoal, macroNutrientGoals: $macroNutrientGoals, vitaminGoals: $vitaminGoals, microNutrientGoals: $microNutrientGoals",
   );
 
   return NutrutionGoals(

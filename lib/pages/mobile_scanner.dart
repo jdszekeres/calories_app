@@ -51,7 +51,6 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
                       if (result.barcodes.isNotEmpty) {
                         final barcode = result.barcodes.first;
                         if (barcode.rawValue != null) {
-                          print('Scanned barcode: ${barcode.rawValue}');
                           setState(() {
                             scannedBarcode = barcode.rawValue;
                             _foodFacts =
