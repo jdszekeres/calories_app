@@ -74,6 +74,28 @@ class GoalAmount extends AbstractSettingsTile {
                   }
                 },
               ),
+              actions: [
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text('Set Goal'),
+                  onPressed: () {
+                    double? newGoal = double.tryParse(controller.text);
+                    if (newGoal != null) {
+                      Navigator.of(context).pop();
+                      onGoalChanged(newGoal);
+                    } else {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text('Invalid input')));
+                    }
+                  },
+                ),
+              ],
             );
           },
         );

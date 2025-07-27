@@ -42,7 +42,7 @@ class FoodFacts {
           ? DateTime.parse(json['uploaded'] as String)
           : null,
       image: json['image'] as String?,
-      ingredients: List<String>.from(json['ingredients'] as List),
+      ingredients: List<String>.from((json['ingredients'] as List?) ?? []),
       nutrutionInfo: NutrutionGoals.fromJson(
         json['nutrutionInfo'] as Map<String, dynamic>,
       ),
