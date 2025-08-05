@@ -17,21 +17,21 @@ class _BottomNavbarState extends State<BottomNavbar> {
   @override
   void initState() {
     super.initState();
-    currentPage =
-        GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString();
+    currentPage = GoRouter.of(
+      context,
+    ).routerDelegate.currentConfiguration.uri.toString();
     _controller = PersistentTabController(
-      initialIndex:
-          currentPage == '/'
-              ? 0
-              : currentPage == '/goals'
-              ? 1
-              : currentPage == '/add'
-              ? 2
-              : currentPage == '/list'
-              ? 3
-              : currentPage == '/settings'
-              ? 4
-              : 0,
+      initialIndex: currentPage == '/'
+          ? 0
+          : currentPage == '/goals'
+          ? 1
+          : currentPage == '/add'
+          ? 2
+          : currentPage == '/list'
+          ? 3
+          : currentPage == '/settings'
+          ? 4
+          : 0,
     );
   }
 
@@ -144,14 +144,13 @@ class _BottomNavStyle16 extends StatelessWidget {
                 child: IconTheme(
                   data: IconThemeData(
                     size: item.iconSize,
-                    color:
-                        isSelected
-                            ? (item.activeColorSecondary ??
-                                item.activeColorPrimary)
-                            : Colors.white,
+                    color: isSelected
+                        ? (item.activeColorSecondary ?? item.activeColorPrimary)
+                        : Colors.white,
                   ),
-                  child:
-                      isSelected ? item.icon : item.inactiveIcon ?? item.icon,
+                  child: isSelected
+                      ? item.icon
+                      : item.inactiveIcon ?? item.icon,
                 ),
               ),
               if (item.title == null)
@@ -164,24 +163,21 @@ class _BottomNavStyle16 extends StatelessWidget {
                     child: FittedBox(
                       child: Text(
                         "",
-                        style:
-                            item.textStyle != null
-                                ? (item.textStyle!.apply(
-                                  color:
-                                      isSelected
-                                          ? (item.activeColorSecondary ??
-                                              item.activeColorPrimary)
-                                          : item.inactiveColorPrimary,
-                                ))
-                                : TextStyle(
-                                  color:
-                                      isSelected
-                                          ? (item.activeColorSecondary ??
-                                              item.activeColorPrimary)
-                                          : item.inactiveColorPrimary,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                ),
+                        style: item.textStyle != null
+                            ? (item.textStyle!.apply(
+                                color: isSelected
+                                    ? (item.activeColorSecondary ??
+                                          item.activeColorPrimary)
+                                    : item.inactiveColorPrimary,
+                              ))
+                            : TextStyle(
+                                color: isSelected
+                                    ? (item.activeColorSecondary ??
+                                          item.activeColorPrimary)
+                                    : item.inactiveColorPrimary,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                              ),
                       ),
                     ),
                   ),
@@ -230,16 +226,14 @@ class _BottomNavStyle16 extends StatelessWidget {
                           child: IconTheme(
                             data: IconThemeData(
                               size: item.iconSize,
-                              color:
-                                  isSelected
-                                      ? item.activeColorSecondary ??
-                                          item.activeColorPrimary
-                                      : Colors.white,
+                              color: isSelected
+                                  ? item.activeColorSecondary ??
+                                        item.activeColorPrimary
+                                  : Colors.white,
                             ),
-                            child:
-                                isSelected
-                                    ? item.icon
-                                    : item.inactiveIcon ?? item.icon,
+                            child: isSelected
+                                ? item.icon
+                                : item.inactiveIcon ?? item.icon,
                           ),
                         ),
                       ],
@@ -260,23 +254,20 @@ class _BottomNavStyle16 extends StatelessWidget {
               child: FittedBox(
                 child: Text(
                   item.title!,
-                  style:
-                      item.textStyle != null
-                          ? (item.textStyle!.apply(
-                            color:
-                                isSelected
-                                    ? (item.activeColorSecondary ??
-                                        item.activeColorPrimary)
-                                    : item.inactiveColorPrimary,
-                          ))
-                          : TextStyle(
-                            color:
-                                isSelected
-                                    ? (item.activeColorPrimary)
-                                    : item.inactiveColorPrimary,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
-                          ),
+                  style: item.textStyle != null
+                      ? (item.textStyle!.apply(
+                          color: isSelected
+                              ? (item.activeColorSecondary ??
+                                    item.activeColorPrimary)
+                              : item.inactiveColorPrimary,
+                        ))
+                      : TextStyle(
+                          color: isSelected
+                              ? (item.activeColorPrimary)
+                              : item.inactiveColorPrimary,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                        ),
                 ),
               ),
             ),
@@ -301,35 +292,26 @@ class _BottomNavStyle16 extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 0.5, sigmaY: 0.5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children:
-                    items.map((final item) {
-                      final int index = items.indexOf(item);
-                      return Flexible(
-                        child: GestureDetector(
-                          onTap: () {
-                            // if (index != selectedIndex) {
-                            //   items[index].iconAnimationController?.forward();
-
-                            //   items[selectedIndex].iconAnimationController
-                            //       ?.reverse();
-                            // }
-
-                            onItemSelected?.call(index);
-                          },
-                          child:
-                              index == midIndex
-                                  ? Container(
-                                    width: 150,
-                                    color: Colors.transparent,
-                                  )
-                                  : _buildItem(
-                                    item,
-                                    selectedIndex == index,
-                                    navBarHeight,
-                                  ),
-                        ),
-                      );
-                    }).toList(),
+                children: items.map((final item) {
+                  final int index = items.indexOf(item);
+                  if (index == midIndex) {
+                    return Flexible(
+                      child: Container(width: 150, color: Colors.transparent),
+                    );
+                  }
+                  return Flexible(
+                    child: GestureDetector(
+                      onTap: () {
+                        onItemSelected?.call(index);
+                      },
+                      child: _buildItem(
+                        item,
+                        selectedIndex == index,
+                        navBarHeight,
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
           ),
