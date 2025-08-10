@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'sign_up_details.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -106,6 +107,15 @@ class _SignUpPageState extends State<SignUpPage> {
                       context.go('/sign_in_anonymous');
                     },
                     child: const Text('Try without an account'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      launchUrlString(
+                        "https://apps.apple.com/us/app/calorie-tracker-pro-max/id6749119246",
+                        mode: LaunchMode.externalApplication,
+                      );
+                    },
+                    child: const Text("Download App"),
                   ),
                 ],
               ),

@@ -3,9 +3,11 @@ import 'package:calories_app/tools/camel_to_normal.dart';
 import 'package:calories_app/tools/settings_database.dart';
 import 'package:calories_app/tools/user_database.dart';
 import 'package:calories_app/tools/user_profile.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../auth.dart';
 import '../widgets/bottom_navbar.dart';
@@ -612,6 +614,16 @@ class _SettingsPageState extends State<SettingsPage> {
                             context.go('/convert_anonymous_to_email');
                           },
                         ),
+                      if (kIsWeb)
+                        SettingsTile(
+                          title: Text("Download App"),
+                          leading: Icon(Icons.phone_iphone),
+                          onPressed: (context) {
+                            launchUrlString(
+                              'https://apps.apple.com/us/app/calorie-tracker-pro-max/id6749119246',
+                            );
+                          },
+                        ),
                       SettingsTile(
                         title: Text('Sign Out'),
                         leading: Icon(Icons.logout),
@@ -642,5 +654,9 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  void launchUrlString(String s) {
+    launchUrl(Uri.parse(s), mode: LaunchMode.externalApplication);
   }
 }

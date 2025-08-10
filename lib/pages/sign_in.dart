@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:flutter/foundation.dart';
 import '../auth.dart';
+
+// Conditional import for web launcher
+import '../web_launcher_stub.dart'
+    if (dart.library.html) '../web_launcher_web.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
@@ -88,6 +94,22 @@ class SignInPage extends StatelessWidget {
                       context.go('/sign_in_anonymous');
                     },
                     child: const Text('Try without an account'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      const url =
+                          "https://apps.apple.com/us/app/calorie-tracker-pro-max/id6749119246";
+                      if (kIsWeb) {
+                        // ignore: undefined_prefixed_name
+                        launchUrlString(url);
+                      } else {
+                        launchUrlString(
+                          url,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }
+                    },
+                    child: const Text("Download App"),
                   ),
                 ],
               ),
