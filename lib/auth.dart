@@ -163,6 +163,29 @@ class Auth {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
+  Future<void> deleteAccount(String password) async {
+    if (!isInitialized) {
+      throw Exception('Firebase is not initialized');
+    }
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception('No user is currently signed in');
+    }
+    // Re-authenticate the user
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: user.email!,
+      password: password,
+    );
+    try {
+      await user.reauthenticateWithCredential(credential);
+      await UserDatabase().deleteUserProfile(user.uid);
+      await user.delete();
+    } catch (e) {
+      debugPrint('Error deleting account: $e');
+      throw Exception('Failed to delete account');
+    }
+  }
+
   User? get currentUser {
     if (!isInitialized) {
       debugPrint('Firebase is not initialized');

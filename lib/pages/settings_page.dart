@@ -112,6 +112,62 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  void _showDeleteAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController passwordController = TextEditingController();
+        return AlertDialog(
+          title: Text('Delete Account'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Are you sure you want to delete your account? This action cannot be undone.',
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                  hintText: 'Enter your password to confirm',
+                ),
+                obscureText: true,
+                controller: passwordController,
+              ),
+            ],
+          ),
+
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                try {
+                  await auth.deleteAccount(passwordController.text);
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Account deleted successfully')),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(Auth.prettyPrintError(e)),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              child: Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showUpdateHealthInformationDialog(BuildContext context) async {
     UserProfile? oldProfile = await UserDatabase().getUserProfile(
       auth.currentUser!.uid,
@@ -565,6 +621,16 @@ class _SettingsPageState extends State<SettingsPage> {
                               context.go('/signin');
                             }
                           });
+                        },
+                      ),
+                      SettingsTile(
+                        title: Text(
+                          'Delete Account',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        leading: Icon(Icons.delete, color: Colors.red),
+                        onPressed: (context) {
+                          _showDeleteAccountDialog(context);
                         },
                       ),
                     ],

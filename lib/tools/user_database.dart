@@ -73,4 +73,9 @@ class UserDatabase {
       await saveNutritionGoals(uid, goals);
     }
   }
+
+  Future<void> deleteUserProfile(String uid) async {
+    final ref = database.child('users/$uid');
+    await ref.remove();
+  }
 }
