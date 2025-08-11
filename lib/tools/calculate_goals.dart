@@ -388,11 +388,12 @@ NutrutionGoals calculateGoals(
   double proteinGrams = (proteinCalories / 4)
       .roundToDouble(); // 1g protein = 4 calories
   double fatCalories =
-      (calorieGoal * age < 3
-              ? 0.35
-              : age > 18
-              ? 0.275
-              : 0.30)
+      (calorieGoal *
+              (age < 3
+                  ? 0.35
+                  : age > 18
+                  ? 0.275
+                  : 0.30))
           .roundToDouble();
   double fatGrams = (fatCalories / 9).roundToDouble(); // 1g fat = 9 calories
 
