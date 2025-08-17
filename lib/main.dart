@@ -10,15 +10,18 @@ import './pages/add_page.dart';
 import './pages/settings_page.dart';
 import './auth.dart';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './firebase_options.dart';
 import 'pages/convert_anon.dart';
 import 'pages/sign_in_anon.dart';
 
+import './l10n/app_localizations.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   try {
     await Firebase.initializeApp(
@@ -67,8 +70,8 @@ final GoRouter _router = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         return ConvertAnon();
       },
-      redirect:
-          (context, state) => !Auth().isLoggedIn ? '/sign_in_anonymous' : null,
+      redirect: (context, state) =>
+          !Auth().isLoggedIn ? '/sign_in_anonymous' : null,
     ),
     GoRoute(
       path: '/',
@@ -141,11 +144,13 @@ class CaloriesTrackerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Calorie Tracker',
+      title: AppLocalizations.of(context)?.appTitle ?? 'Calorie Tracker',
       routerConfig: _router,
       theme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
       ),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

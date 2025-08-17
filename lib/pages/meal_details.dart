@@ -2,6 +2,7 @@ import 'package:calories_app/tools/food_facts.dart';
 import 'package:calories_app/tools/meal_database.dart';
 import 'package:calories_app/widgets/nutri_facts.dart';
 import 'package:flutter/material.dart';
+import 'package:calories_app/l10n/app_localizations.dart';
 
 import '../auth.dart';
 
@@ -28,7 +29,7 @@ class _MealDetailsState extends State<MealDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meal Details'),
+        title: Text(AppLocalizations.of(context)!.mealDetailsTitle),
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,

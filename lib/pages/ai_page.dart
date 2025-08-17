@@ -3,6 +3,7 @@ import 'package:calories_app/tools/food_facts.dart';
 import 'package:calories_app/widgets/nutri_facts.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../auth.dart';
@@ -26,7 +27,7 @@ class _AiPageState extends State<AiPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI Nutrition Analysis'),
+        title: Text(AppLocalizations.of(context)!.aiNutritionAnalysisTitle),
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         elevation: 0,
       ),
@@ -41,7 +42,11 @@ class _AiPageState extends State<AiPage> {
                     return CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     debugPrintStack(stackTrace: snapshot.stackTrace);
-                    return Text('Error: ${snapshot.error}');
+                    return Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.errorWithMessage(snapshot.error!),
+                    );
                   } else {
                     // Initialize _foodFacts if not already set
                     if (_foodFacts == null && snapshot.data != null) {
@@ -54,7 +59,11 @@ class _AiPageState extends State<AiPage> {
                       return CircularProgressIndicator();
                     } else if (_foodFacts == null) {
                       // If snapshot.data is null, show error
-                      return Text('Failed to analyze image');
+                      return Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.errorWithMessage(AppLocalizations.of(context)!.failedToAnalyzeImage),
+                      );
                     }
 
                     return SingleChildScrollView(
@@ -68,8 +77,12 @@ class _AiPageState extends State<AiPage> {
                                 _foodFacts = editedFoodFacts;
                               });
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Nutrition facts updated!'),
+                                SnackBar(
+                                  content: Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.nutritionFactsUpdated,
+                                  ),
                                   duration: Duration(seconds: 2),
                                 ),
                               );
@@ -86,7 +99,7 @@ class _AiPageState extends State<AiPage> {
                               if (!mounted) return;
                               context.go('/');
                             },
-                            child: const Text('Save'),
+                            child: Text(AppLocalizations.of(context)!.save),
                           ),
                         ],
                       ),
@@ -124,7 +137,7 @@ class _AiPageState extends State<AiPage> {
 
           // Title and description
           Text(
-            'AI-Powered Nutrition Analysis',
+            AppLocalizations.of(context)!.aiPoweredNutritionAnalysis,
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.onBackground,
@@ -135,7 +148,7 @@ class _AiPageState extends State<AiPage> {
           const SizedBox(height: 16),
 
           Text(
-            'Upload a photo of your meal and let our AI analyze its nutritional content instantly',
+            AppLocalizations.of(context)!.aiAnalysisDescription,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: Theme.of(
                 context,
@@ -157,7 +170,7 @@ class _AiPageState extends State<AiPage> {
               child: Column(
                 children: [
                   Text(
-                    'What our AI can identify:',
+                    AppLocalizations.of(context)!.whatAiCanIdentify,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
@@ -166,27 +179,27 @@ class _AiPageState extends State<AiPage> {
                   _buildFeatureItem(
                     context,
                     Icons.restaurant,
-                    'Food identification',
+                    AppLocalizations.of(context)!.foodIdentification,
                   ),
                   _buildFeatureItem(
                     context,
                     Icons.straighten,
-                    'Portion estimation',
+                    AppLocalizations.of(context)!.portionEstimation,
                   ),
                   _buildFeatureItem(
                     context,
                     Icons.local_fire_department,
-                    'Calorie calculation',
+                    AppLocalizations.of(context)!.calorieCalculation,
                   ),
                   _buildFeatureItem(
                     context,
                     Icons.science,
-                    'Macro & micronutrients',
+                    AppLocalizations.of(context)!.macroMicronutrients,
                   ),
                   _buildFeatureItem(
                     context,
                     Icons.list_alt,
-                    'Ingredient breakdown',
+                    AppLocalizations.of(context)!.ingredientBreakdown,
                   ),
                 ],
               ),
@@ -210,7 +223,11 @@ class _AiPageState extends State<AiPage> {
                     });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('No image selected')),
+                      SnackBar(
+                        content: Text(
+                          AppLocalizations.of(context)!.noImageSelected,
+                        ),
+                      ),
                     );
                   }
                 });
@@ -225,7 +242,7 @@ class _AiPageState extends State<AiPage> {
               ),
               icon: const Icon(Icons.upload_file, size: 24),
               label: Text(
-                'Upload Photo',
+                AppLocalizations.of(context)!.uploadPhoto,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onPrimary,
                   fontWeight: FontWeight.w600,
@@ -233,6 +250,48 @@ class _AiPageState extends State<AiPage> {
               ),
             ),
           ),
+          if (!kIsWeb)
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  selectImageFromGallery().then((imageData) {
+                    if (imageData != null) {
+                      setState(() {
+                        _imageData = imageData;
+                        _foodFacts =
+                            null; // Reset food facts when new image is selected
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            AppLocalizations.of(context)!.noImageSelected,
+                          ),
+                        ),
+                      );
+                    }
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 3,
+                ),
+                icon: const Icon(Icons.camera_alt, size: 24),
+                label: Text(
+                  AppLocalizations.of(context)!.takePhoto,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
 
           const SizedBox(height: 16),
 
@@ -259,7 +318,7 @@ class _AiPageState extends State<AiPage> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Tip: For best results, take a clear photo with good lighting and include the entire meal in frame.',
+                    AppLocalizations.of(context)!.aiTipMessage,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),

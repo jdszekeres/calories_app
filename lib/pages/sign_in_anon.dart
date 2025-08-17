@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import '../l10n/app_localizations.dart';
 import '../auth.dart';
 import '../tools/calculate_goals.dart';
-import '../tools/user_profile.dart';
 
 class SignInAnon extends StatefulWidget {
   const SignInAnon({Key? key}) : super(key: key);
@@ -43,31 +43,31 @@ class _SignInAnonState extends State<SignInAnon> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'Creating an Anonymous Account',
+                  Text(
+                    AppLocalizations.of(context)!.creatingAnon,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'We still need some information to set up your profile and calculate your goals.',
+                  Text(
+                    AppLocalizations.of(context)!.creatingAnonExplain,
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
                   TextField(
                     controller: ageController,
-                    decoration: const InputDecoration(
-                      labelText: 'Age',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.cake),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.age,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.cake),
                     ),
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                   const SizedBox(height: 16),
                   SwitchListTile(
-                    title: const Text('Use Imperial Units'),
+                    title: Text(AppLocalizations.of(context)!.useImperial),
                     value: useImperial,
                     onChanged: (value) => setState(() => useImperial = value),
                   ),
@@ -75,7 +75,9 @@ class _SignInAnonState extends State<SignInAnon> {
                   TextField(
                     controller: weightController,
                     decoration: InputDecoration(
-                      labelText: useImperial ? 'Weight (lb)' : 'Weight (kg)',
+                      labelText: useImperial
+                          ? AppLocalizations.of(context)!.weightImperial
+                          : AppLocalizations.of(context)!.weight,
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.fitness_center),
                       suffixText: useImperial ? 'lb' : 'kg',
@@ -93,7 +95,9 @@ class _SignInAnonState extends State<SignInAnon> {
                   TextField(
                     controller: heightController,
                     decoration: InputDecoration(
-                      labelText: useImperial ? 'Height (in)' : 'Height (cm)',
+                      labelText: useImperial
+                          ? AppLocalizations.of(context)!.heightImperial
+                          : AppLocalizations.of(context)!.height,
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.height),
                       suffixText: useImperial ? 'in' : 'cm',
@@ -110,14 +114,20 @@ class _SignInAnonState extends State<SignInAnon> {
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     value: selectedSex,
-                    decoration: const InputDecoration(
-                      labelText: 'Sex',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.person),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.sex,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.person),
                     ),
-                    items: const [
-                      DropdownMenuItem(value: 'male', child: Text('Male')),
-                      DropdownMenuItem(value: 'female', child: Text('Female')),
+                    items: [
+                      DropdownMenuItem(
+                        value: 'male',
+                        child: Text(AppLocalizations.of(context)!.male),
+                      ),
+                      DropdownMenuItem(
+                        value: 'female',
+                        child: Text(AppLocalizations.of(context)!.female),
+                      ),
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -128,39 +138,35 @@ class _SignInAnonState extends State<SignInAnon> {
                   const SizedBox(height: 16),
                   DropdownButtonFormField<ActivityLevel>(
                     value: selectedActivityLevel,
-                    decoration: const InputDecoration(
-                      labelText: 'Activity Level',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.directions_run),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.activityLevel,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.directions_run),
                     ),
-                    items: const [
+                    items: [
                       DropdownMenuItem(
                         value: ActivityLevel.sedentary,
-                        child: Text('Sedentary (little or no exercise)'),
+                        child: Text(AppLocalizations.of(context)!.sedentary),
                       ),
                       DropdownMenuItem(
                         value: ActivityLevel.lightlyActive,
                         child: Text(
-                          'Lightly Active (light exercise 1-3 days/week)',
+                          AppLocalizations.of(context)!.lightlyActive,
                         ),
                       ),
                       DropdownMenuItem(
                         value: ActivityLevel.moderatelyActive,
                         child: Text(
-                          'Moderately Active (moderate exercise 3-5 days/week)',
+                          AppLocalizations.of(context)!.moderatelyActive,
                         ),
                       ),
                       DropdownMenuItem(
                         value: ActivityLevel.veryActive,
-                        child: Text(
-                          'Very Active (hard exercise 6-7 days/week)',
-                        ),
+                        child: Text(AppLocalizations.of(context)!.veryActive),
                       ),
                       DropdownMenuItem(
                         value: ActivityLevel.extraActive,
-                        child: Text(
-                          'Extra Active (very hard exercise & physical job)',
-                        ),
+                        child: Text(AppLocalizations.of(context)!.extraActive),
                       ),
                     ],
                     onChanged: (value) {
@@ -178,8 +184,8 @@ class _SignInAnonState extends State<SignInAnon> {
                     ),
                     child: _isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text(
-                            'Complete Sign Up',
+                        : Text(
+                            AppLocalizations.of(context)!.completeSignUp,
                             style: TextStyle(color: Colors.white),
                           ),
                   ),
@@ -187,7 +193,9 @@ class _SignInAnonState extends State<SignInAnon> {
                   TextButton.icon(
                     onPressed: _isLoading ? null : () => context.go("/signin"),
                     icon: const Icon(Icons.login),
-                    label: const Text('Already have an account? Sign In'),
+                    label: Text(
+                      AppLocalizations.of(context)!.alreadyHaveAccount,
+                    ),
                   ),
                 ],
               ),
@@ -204,7 +212,9 @@ class _SignInAnonState extends State<SignInAnon> {
         weightController.text.isEmpty ||
         heightController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.pleaseFillAllFields),
+        ),
       );
       return;
     }
@@ -214,9 +224,9 @@ class _SignInAnonState extends State<SignInAnon> {
     double? height = double.tryParse(heightController.text);
 
     if (age == null || age <= 0 || age > 150) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please enter a valid age')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.invalidAge)),
+      );
       return;
     }
 
@@ -228,14 +238,14 @@ class _SignInAnonState extends State<SignInAnon> {
 
     if (weight == null || weight <= 0 || weight > 500) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid weight')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.invalidWeight)),
       );
       return;
     }
 
     if (height == null || height <= 0 || height > 300) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid height')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.invalidHeight)),
       );
       return;
     }

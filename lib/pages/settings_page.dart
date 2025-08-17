@@ -1,11 +1,11 @@
 import 'package:calories_app/tools/calculate_goals.dart';
-import 'package:calories_app/tools/camel_to_normal.dart';
 import 'package:calories_app/tools/settings_database.dart';
 import 'package:calories_app/tools/user_database.dart';
 import 'package:calories_app/tools/user_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -53,13 +53,13 @@ class _SettingsPageState extends State<SettingsPage> {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: Text('Select Home Page Widgets'),
+              title: Text(AppLocalizations.of(context)!.selectHomePageWidgets),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: availableWidgets.map((widget) {
                     return CheckboxListTile(
-                      title: Text(widget),
+                      title: Text(NutrutionGoals.getName(context, widget)),
                       value: selectedWidgets.contains(widget),
                       onChanged: (bool? value) {
                         setDialogState(() {
@@ -81,7 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancel'),
+                  child: Text(AppLocalizations.of(context)!.cancel),
                 ),
                 TextButton(
                   onPressed: () {
@@ -99,12 +99,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     // Show confirmation snackbar
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Home page widgets updated successfully'),
+                        content: Text(
+                          AppLocalizations.of(context)!.homePageWidgetsUpdated,
+                        ),
                         duration: Duration(seconds: 2),
                       ),
                     );
                   },
-                  child: Text('Save'),
+                  child: Text(AppLocalizations.of(context)!.save),
                 ),
               ],
             );
@@ -120,17 +122,15 @@ class _SettingsPageState extends State<SettingsPage> {
       builder: (BuildContext context) {
         TextEditingController passwordController = TextEditingController();
         return AlertDialog(
-          title: Text('Delete Account'),
+          title: Text(AppLocalizations.of(context)!.deleteAccountConfirmTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Are you sure you want to delete your account? This action cannot be undone.',
-              ),
+              Text(AppLocalizations.of(context)!.deleteAccountConfirmBody),
               TextField(
                 decoration: InputDecoration(
-                  labelText: 'Confirm Password',
-                  hintText: 'Enter your password to confirm',
+                  labelText: AppLocalizations.of(context)!.confirmPassword,
+                  hintText: AppLocalizations.of(context)!.confirmPassword,
                 ),
                 obscureText: true,
                 controller: passwordController,
@@ -143,7 +143,7 @@ class _SettingsPageState extends State<SettingsPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () async {
@@ -151,7 +151,11 @@ class _SettingsPageState extends State<SettingsPage> {
                   await auth.deleteAccount(passwordController.text);
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Account deleted successfully')),
+                    SnackBar(
+                      content: Text(
+                        AppLocalizations.of(context)!.accountDeleted,
+                      ),
+                    ),
                   );
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -162,7 +166,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   );
                 }
               },
-              child: Text('Delete', style: TextStyle(color: Colors.red)),
+              child: Text(
+                AppLocalizations.of(context)!.delete,
+                style: TextStyle(color: Colors.red),
+              ),
             ),
           ],
         );
@@ -218,7 +225,9 @@ class _SettingsPageState extends State<SettingsPage> {
             }
 
             return AlertDialog(
-              title: Text('Update Health Information'),
+              title: Text(
+                AppLocalizations.of(context)!.updateHealthInformation,
+              ),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -228,7 +237,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       children: [
                         SizedBox(
                           child: RadioListTile<bool>(
-                            title: Text('Metric'),
+                            title: Text(AppLocalizations.of(context)!.metric),
                             value: true,
                             groupValue: isMetric,
                             onChanged: isSaving
@@ -256,7 +265,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         SizedBox(
                           child: RadioListTile<bool>(
-                            title: Text('Imperial'),
+                            title: Text(AppLocalizations.of(context)!.imperial),
                             value: false,
                             groupValue: isMetric,
                             onChanged: isSaving
@@ -289,8 +298,8 @@ class _SettingsPageState extends State<SettingsPage> {
                       controller: ageController,
                       enabled: !isSaving,
                       decoration: InputDecoration(
-                        labelText: 'Age',
-                        suffixText: 'years',
+                        labelText: AppLocalizations.of(context)!.age,
+                        suffixText: AppLocalizations.of(context)!.years,
                       ),
                       keyboardType: TextInputType.number,
                     ),
@@ -299,8 +308,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       controller: weightController,
                       enabled: !isSaving,
                       decoration: InputDecoration(
-                        labelText: 'Weight',
-                        suffixText: isMetric ? 'kg' : 'lbs',
+                        labelText: AppLocalizations.of(context)!.weight,
+                        suffixText: isMetric
+                            ? AppLocalizations.of(context)!.unitKg
+                            : AppLocalizations.of(context)!.unitLbs,
                       ),
                       keyboardType: TextInputType.number,
                     ),
@@ -310,8 +321,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         controller: heightController,
                         enabled: !isSaving,
                         decoration: InputDecoration(
-                          labelText: 'Height',
-                          suffixText: 'cm',
+                          labelText: AppLocalizations.of(context)!.height,
+                          suffixText: AppLocalizations.of(context)!.unitCm,
                         ),
                         keyboardType: TextInputType.number,
                       )
@@ -323,8 +334,10 @@ class _SettingsPageState extends State<SettingsPage> {
                               controller: feetController,
                               enabled: !isSaving,
                               decoration: InputDecoration(
-                                labelText: 'Height',
-                                suffixText: 'ft',
+                                labelText: AppLocalizations.of(context)!.height,
+                                suffixText: AppLocalizations.of(
+                                  context,
+                                )!.unitFt,
                               ),
                               keyboardType: TextInputType.number,
                             ),
@@ -336,7 +349,9 @@ class _SettingsPageState extends State<SettingsPage> {
                               enabled: !isSaving,
                               decoration: InputDecoration(
                                 labelText: '',
-                                suffixText: 'in',
+                                suffixText: AppLocalizations.of(
+                                  context,
+                                )!.unitIn,
                               ),
                               keyboardType: TextInputType.number,
                             ),
@@ -346,13 +361,33 @@ class _SettingsPageState extends State<SettingsPage> {
                     SizedBox(height: 8),
                     DropdownButtonFormField<ActivityLevel>(
                       value: activityLevel,
-                      decoration: InputDecoration(labelText: 'Activity Level'),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.activityLevel,
+                      ),
                       items: ActivityLevel.values.map((level) {
+                        String label;
+                        switch (level) {
+                          case ActivityLevel.sedentary:
+                            label = AppLocalizations.of(context)!.sedentary;
+                            break;
+                          case ActivityLevel.lightlyActive:
+                            label = AppLocalizations.of(context)!.lightlyActive;
+                            break;
+                          case ActivityLevel.moderatelyActive:
+                            label = AppLocalizations.of(
+                              context,
+                            )!.moderatelyActive;
+                            break;
+                          case ActivityLevel.veryActive:
+                            label = AppLocalizations.of(context)!.veryActive;
+                            break;
+                          case ActivityLevel.extraActive:
+                            label = AppLocalizations.of(context)!.extraActive;
+                            break;
+                        }
                         return DropdownMenuItem(
                           value: level,
-                          child: Text(
-                            camelToNormal(level.toString().split('.').last),
-                          ),
+                          child: Text(label),
                         );
                       }).toList(),
                       onChanged: isSaving
@@ -367,7 +402,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       SizedBox(height: 16),
                       CircularProgressIndicator(),
                       SizedBox(height: 8),
-                      Text('Saving...'),
+                      Text(AppLocalizations.of(context)!.saving),
                     ],
                   ],
                 ),
@@ -379,7 +414,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       : () {
                           Navigator.of(context).pop();
                         },
-                  child: Text('Cancel'),
+                  child: Text(AppLocalizations.of(context)!.cancel),
                 ),
                 TextButton(
                   onPressed: isSaving
@@ -392,7 +427,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           if (age == null || age <= 0) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Please enter a valid age'),
+                                content: Text(
+                                  AppLocalizations.of(context)!.invalidAge,
+                                ),
                               ),
                             );
                             return;
@@ -401,7 +438,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           if (weight == null || weight <= 0) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Please enter a valid weight'),
+                                content: Text(
+                                  AppLocalizations.of(context)!.invalidWeight,
+                                ),
                               ),
                             );
                             return;
@@ -413,7 +452,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             if (heightInCm == null || heightInCm <= 0) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Please enter a valid height'),
+                                  content: Text(
+                                    AppLocalizations.of(context)!.invalidHeight,
+                                  ),
                                 ),
                               );
                               return;
@@ -430,7 +471,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'Please enter valid height values',
+                                    AppLocalizations.of(context)!.invalidHeight,
                                   ),
                                 ),
                               );
@@ -479,12 +520,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      'Health information updated successfully!',
-                                      style: TextStyle(
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.onPrimaryContainer,
-                                      ),
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.updateHealthInformationSuccess,
                                     ),
                                     backgroundColor: Theme.of(
                                       context,
@@ -494,7 +532,11 @@ class _SettingsPageState extends State<SettingsPage> {
                                 );
                               }
                             } else {
-                              throw Exception('Could not load user profile');
+                              throw Exception(
+                                AppLocalizations.of(
+                                  context,
+                                )!.couldNotLoadUserProfile,
+                              );
                             }
                           } catch (e) {
                             if (context.mounted) {
@@ -504,7 +546,9 @@ class _SettingsPageState extends State<SettingsPage> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'Error saving health information: $e',
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.errorSavingHealthInformation(e),
                                   ),
                                   backgroundColor: Theme.of(
                                     context,
@@ -514,7 +558,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             }
                           }
                         },
-                  child: Text('Save'),
+                  child: Text(AppLocalizations.of(context)!.save),
                 ),
               ],
             );
@@ -528,7 +572,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(AppLocalizations.of(context)!.settings),
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -546,12 +590,16 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 sections: [
                   SettingsSection(
-                    title: Text('General'),
+                    title: Text(AppLocalizations.of(context)!.general),
                     tiles: [
                       SettingsTile(
-                        title: Text('Home Page Widgets'),
+                        title: Text(
+                          AppLocalizations.of(context)!.homePageWidgets,
+                        ),
                         description: Text(
-                          "Select what goals should appear on the homescreen",
+                          AppLocalizations.of(
+                            context,
+                          )!.selectHomeWidgetsDescription,
                         ),
                         leading: Icon(Icons.widgets),
                         onPressed: (context) => {
@@ -561,16 +609,20 @@ class _SettingsPageState extends State<SettingsPage> {
                     ],
                   ),
                   SettingsSection(
-                    title: Text('Nutrition Goals'),
+                    title: Text(AppLocalizations.of(context)!.nutritionGoals),
                     tiles: [
                       SettingsTile(
-                        title: Text('Update health information'),
+                        title: Text(
+                          AppLocalizations.of(context)!.updateHealthInformation,
+                        ),
                         leading: Icon(Icons.edit),
                         onPressed: (context) =>
                             _showUpdateHealthInformationDialog(context),
                       ),
                       SettingsTile(
-                        title: Text('Reset Nutrition Goals'),
+                        title: Text(
+                          AppLocalizations.of(context)!.resetNutritionGoals,
+                        ),
                         leading: Icon(Icons.refresh),
                         onPressed: (context) async {
                           final profile = await UserDatabase().getUserProfile(
@@ -591,7 +643,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  'Nutrition goals reset successfully',
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.nutritionGoalsReset,
                                 ),
                               ),
                             );
@@ -601,13 +655,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     ],
                   ),
                   SettingsSection(
-                    title: Text('Account'),
+                    title: Text(AppLocalizations.of(context)!.account),
                     tiles: [
                       if (auth.currentUser!.isAnonymous)
                         SettingsTile(
-                          title: Text('Create Account'),
+                          title: Text(
+                            AppLocalizations.of(context)!.createAccount,
+                          ),
                           description: Text(
-                            'Want to keep using our app? Create an account to save your data.',
+                            AppLocalizations.of(context)!.createAccountDesc,
                           ),
                           leading: Icon(Icons.email),
                           onPressed: (context) {
@@ -616,7 +672,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       if (kIsWeb)
                         SettingsTile(
-                          title: Text("Download App"),
+                          title: Text(
+                            AppLocalizations.of(context)!.downloadApp,
+                          ),
                           leading: Icon(Icons.phone_iphone),
                           onPressed: (context) {
                             launchUrlString(
@@ -625,7 +683,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           },
                         ),
                       SettingsTile(
-                        title: Text('Sign Out'),
+                        title: Text(AppLocalizations.of(context)!.signOut),
                         leading: Icon(Icons.logout),
                         onPressed: (context) {
                           auth.signOut().then((value) {
@@ -637,7 +695,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       SettingsTile(
                         title: Text(
-                          'Delete Account',
+                          AppLocalizations.of(context)!.deleteAccount,
                           style: TextStyle(color: Colors.red),
                         ),
                         leading: Icon(Icons.delete, color: Colors.red),

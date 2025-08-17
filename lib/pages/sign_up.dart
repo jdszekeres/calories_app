@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import '../l10n/app_localizations.dart';
 import 'sign_up_details.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations local = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       // appBar: AppBar(title: const Text('Sign Up')),
@@ -33,22 +35,22 @@ class _SignUpPageState extends State<SignUpPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'Create Account',
+                  Text(
+                    local.createAccount,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Step 1 of 2',
+                  Text(
+                    local.step1_2,
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
                   TextField(
                     controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
+                    decoration: InputDecoration(
+                      labelText: local.email,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.email),
                     ),
@@ -57,8 +59,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(height: 16),
                   TextField(
                     controller: usernameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
+                    decoration: InputDecoration(
+                      labelText: local.username,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.person),
                     ),
@@ -66,8 +68,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(height: 16),
                   TextField(
                     controller: passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
+                    decoration: InputDecoration(
+                      labelText: local.password,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
                     ),
@@ -76,8 +78,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(height: 16),
                   TextField(
                     controller: confirmPasswordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
+                    decoration: InputDecoration(
+                      labelText: local.confirmPassword,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock_outline),
                     ),
@@ -90,8 +92,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Text(
-                      'Next',
+                    child: Text(
+                      local.next,
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -100,13 +102,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     onPressed: () {
                       context.go('/signin');
                     },
-                    child: const Text('Already have an account? Sign In'),
+                    child: Text(local.alreadyHaveAccount),
                   ),
                   TextButton(
                     onPressed: () {
                       context.go('/sign_in_anonymous');
                     },
-                    child: const Text('Try without an account'),
+                    child: Text(local.tryAnon),
                   ),
                   TextButton(
                     onPressed: () {
@@ -115,7 +117,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         mode: LaunchMode.externalApplication,
                       );
                     },
-                    child: const Text("Download App"),
+                    child: Text(local.downloadApp),
                   ),
                 ],
               ),
@@ -133,7 +135,9 @@ class _SignUpPageState extends State<SignUpPage> {
         passwordController.text.isEmpty ||
         confirmPasswordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.pleaseFillAllFields),
+        ),
       );
       return;
     }
@@ -143,7 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
       r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
     ).hasMatch(emailController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid email address')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.invalidEmail)),
       );
       return;
     }
@@ -151,18 +155,18 @@ class _SignUpPageState extends State<SignUpPage> {
     // Validate password length
     if (passwordController.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password must be at least 6 characters long'),
-        ),
+        SnackBar(content: Text(AppLocalizations.of(context)!.passwordTooShort)),
       );
       return;
     }
 
     // Validate password match
     if (passwordController.text != confirmPasswordController.text) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.passwordsDoNotMatch),
+        ),
+      );
       return;
     }
 

@@ -1,3 +1,4 @@
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:calories_app/pages/ai_page.dart';
 import 'package:calories_app/pages/mobile_scanner.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,7 @@ class AddPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations local = AppLocalizations.of(context)!;
     return Scaffold(
       // appBar: AppBar(title: const Text('Add Page')),
       bottomNavigationBar: BottomNavbar(),
@@ -67,7 +69,7 @@ class AddPage extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             Button(
-              text: 'Scan Barcode',
+              text: local.scanBarcodeTitle,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -80,7 +82,7 @@ class AddPage extends StatelessWidget {
 
             const SizedBox(height: 20),
             Button(
-              text: 'Search For Product',
+              text: local.searchForProducts,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -92,7 +94,7 @@ class AddPage extends StatelessWidget {
             const SizedBox(height: 20),
             Button(
               icon: Icons.auto_awesome,
-              text: 'Log Meal using AI',
+              text: local.aiNutritionAnalysisTitle,
               onPressed: () {
                 Navigator.push(
                   context,

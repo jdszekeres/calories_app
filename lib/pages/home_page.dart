@@ -1,6 +1,6 @@
 import 'package:calories_app/widgets/calorie_circle.dart';
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../auth.dart';
@@ -58,7 +58,7 @@ class TypeIndicator extends StatelessWidget {
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
-  SettingsDatabase settingsDatabase = SettingsDatabase();
+  final SettingsDatabase settingsDatabase = SettingsDatabase();
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
         // If no goals are found, redirect to the home page
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('No goals found. Please set your goals.')),
+            SnackBar(content: Text(AppLocalizations.of(context)!.noGoalsFound)),
           );
           context.go('/settings');
         }
@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                     children: selectedWidgets
                         .map(
                           (nutrient) => TypeIndicator(
-                            type: camelToNormal(nutrient),
+                            type: NutrutionGoals.getName(context, nutrient),
                             goal: (goals == null)
                                 ? 1.0
                                 : (() {

@@ -1,5 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
+import '../l10n/app_localizations.dart';
+import 'package:flutter/widgets.dart';
+
 enum ActivityLevel {
   sedentary, // little or no exercise
   lightlyActive, // light exercise/sports 1-3 days a week
@@ -86,7 +89,7 @@ class MicroNutrientGoals {
   double calcium;
   double chlorine;
   double copper;
-  double flouride;
+  double fluoride;
   double iodine;
   double iron;
   double magnesium;
@@ -102,7 +105,7 @@ class MicroNutrientGoals {
     required this.calcium,
     required this.chlorine,
     required this.copper,
-    required this.flouride,
+    required this.fluoride,
     required this.iodine,
     required this.iron,
     required this.magnesium,
@@ -119,7 +122,7 @@ class MicroNutrientGoals {
     'calcium',
     'chlorine',
     'copper',
-    'flouride',
+    'fluoride',
     'iodine',
     'iron',
     'magnesium',
@@ -196,7 +199,7 @@ class NutrutionGoals {
         'calcium': microNutrientGoals.calcium,
         'chlorine': microNutrientGoals.chlorine,
         'copper': microNutrientGoals.copper,
-        'flouride': microNutrientGoals.flouride,
+        'fluoride': microNutrientGoals.fluoride,
         'iodine': microNutrientGoals.iodine,
         'iron': microNutrientGoals.iron,
         'magnesium': microNutrientGoals.magnesium,
@@ -259,7 +262,10 @@ class NutrutionGoals {
         calcium: getNumValue(microGoals, 'calcium'),
         chlorine: getNumValue(microGoals, 'chlorine'),
         copper: getNumValue(microGoals, 'copper'),
-        flouride: getNumValue(microGoals, 'flouride'),
+        // Support legacy key 'flouride' while preferring 'fluoride'
+        fluoride: (microGoals != null && microGoals.containsKey('fluoride'))
+            ? getNumValue(microGoals, 'fluoride')
+            : getNumValue(microGoals, 'flouride'),
         iodine: getNumValue(microGoals, 'iodine'),
         iron: getNumValue(microGoals, 'iron'),
         magnesium: getNumValue(microGoals, 'magnesium'),
@@ -307,7 +313,7 @@ class NutrutionGoals {
       case 'calcium':
       case 'chlorine':
       case 'copper':
-      case 'flouride':
+      case 'fluoride':
       case 'iron':
       case 'magnesium':
       case 'manganese':
@@ -318,6 +324,87 @@ class NutrutionGoals {
         return 'mg';
       default:
         return '';
+    }
+  }
+
+  static String getName(BuildContext context, String nutrient) {
+    switch (nutrient) {
+      case 'calories':
+        return AppLocalizations.of(context)!.calories;
+      case 'carbohydrates':
+        return AppLocalizations.of(context)!.carbohydrates;
+      case 'fiber':
+        return AppLocalizations.of(context)!.fiber;
+      case 'protein':
+        return AppLocalizations.of(context)!.protein;
+      case 'fat':
+        return AppLocalizations.of(context)!.fat;
+      case 'sugar':
+        return AppLocalizations.of(context)!.sugar;
+      case 'water':
+        return AppLocalizations.of(context)!.water;
+      case 'vitaminA':
+        return AppLocalizations.of(context)!.vitaminA;
+      case 'vitaminD':
+        return AppLocalizations.of(context)!.vitaminD;
+      case 'vitaminE':
+        return AppLocalizations.of(context)!.vitaminE;
+      case 'vitaminK':
+        return AppLocalizations.of(context)!.vitaminK;
+      case 'vitaminC':
+        return AppLocalizations.of(context)!.vitaminC;
+      case 'thiamin':
+        return AppLocalizations.of(context)!.thiamin;
+      case 'riboflavin':
+        return AppLocalizations.of(context)!.riboflavin;
+      case 'niacin':
+        return AppLocalizations.of(context)!.niacin;
+      case 'pantothenicAcid':
+        return AppLocalizations.of(context)!.pantothenicAcid;
+      case 'vitaminB6':
+        return AppLocalizations.of(context)!.vitaminB6;
+      case 'folate':
+        return AppLocalizations.of(context)!.folate;
+      case 'vitaminB12':
+        return AppLocalizations.of(context)!.vitaminB12;
+      case 'choline':
+        return AppLocalizations.of(context)!.choline;
+      case 'calcium':
+        return AppLocalizations.of(context)!.calcium;
+      case 'chlorine':
+        return AppLocalizations.of(context)!.chlorine;
+      case 'copper':
+        return AppLocalizations.of(context)!.copper;
+      case 'fluoride':
+        return AppLocalizations.of(context)!.fluoride;
+      case 'iodine':
+        return AppLocalizations.of(context)!.iodine;
+      case 'iron':
+        return AppLocalizations.of(context)!.iron;
+      case 'magnesium':
+        return AppLocalizations.of(context)!.magnesium;
+      case 'manganese':
+        return AppLocalizations.of(context)!.manganese;
+      case 'molybdenum':
+        return AppLocalizations.of(context)!.molybdenum;
+      case 'phosphorus':
+        return AppLocalizations.of(context)!.phosphorus;
+      case 'potassium':
+        return AppLocalizations.of(context)!.potassium;
+      case 'selenium':
+        return AppLocalizations.of(context)!.selenium;
+      case 'sodium':
+        return AppLocalizations.of(context)!.sodium;
+      case 'zinc':
+        return AppLocalizations.of(context)!.zinc;
+      case 'calorieGoals':
+        return AppLocalizations.of(context)!.calorieGoals;
+      case 'macroNutrientGoals':
+        return AppLocalizations.of(context)!.macroNutrientGoals;
+      case 'vitaminGoals':
+        return AppLocalizations.of(context)!.vitaminGoals;
+      default:
+        return nutrient; // Return the nutrient name if no localization found
     }
   }
 }
@@ -452,7 +539,7 @@ NutrutionGoals calculateGoals(
   double calcium = _getAgeBasedNutrients(age, 1300, 700, 260); // mg
   double chlorine = _getAgeBasedNutrients(age, 2300, 1500, 570); // mg
   double copper = _getAgeBasedNutrients(age, 900, 340, 200); // mcg
-  double flouride = _getAgeBasedNutrients(age, 400, 50, 0); // mcg
+  double fluoride = _getAgeBasedNutrients(age, 400, 50, 0); // mcg
   double iodine = _getAgeBasedNutrients(age, 150, 90, 130); // mcg
   double iron = _getAgeBasedNutrients(age, 18, 7, 11); // mg
   double magnesium = _getAgeBasedNutrients(age, 420, 80, 75); // mg
@@ -468,7 +555,7 @@ NutrutionGoals calculateGoals(
     calcium: calcium, // Recommended daily intake in mg
     chlorine: chlorine, // Recommended daily intake in mg
     copper: copper, // Recommended daily intake in mcg
-    flouride: flouride, // Recommended daily intake in mcg
+    fluoride: fluoride, // Recommended daily intake in mcg
     iodine: iodine, // Recommended daily intake in mcg
     iron: iron, // Recommended daily intake in mg
     magnesium: magnesium, // Recommended daily intake in mg

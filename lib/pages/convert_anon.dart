@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../auth.dart';
@@ -24,9 +25,11 @@ class _ConvertAnonState extends State<ConvertAnon> {
     String confirmPassword = confirmPasswordController.text.trim();
 
     if (password != confirmPassword) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Passwords do not match')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.passwordsDoNotMatch),
+        ),
+      );
       return;
     }
 
@@ -39,9 +42,11 @@ class _ConvertAnonState extends State<ConvertAnon> {
       return;
     }
     if (context.mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Account created successfully')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.createAccountSuccess),
+        ),
+      );
       context.go("/"); // Navigate back to the previous screen
     }
   }
@@ -49,7 +54,7 @@ class _ConvertAnonState extends State<ConvertAnon> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Account')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.createAccount)),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -61,22 +66,22 @@ class _ConvertAnonState extends State<ConvertAnon> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'Create Account',
+                  Text(
+                    AppLocalizations.of(context)!.createAccount,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Save your data and sync across devices',
+                  Text(
+                    AppLocalizations.of(context)!.createAccountTagline,
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
                   TextField(
                     controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.email,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.email),
                     ),
@@ -85,8 +90,8 @@ class _ConvertAnonState extends State<ConvertAnon> {
                   const SizedBox(height: 16),
                   TextField(
                     controller: usernameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.username,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.person),
                     ),
@@ -94,8 +99,8 @@ class _ConvertAnonState extends State<ConvertAnon> {
                   const SizedBox(height: 16),
                   TextField(
                     controller: passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.password,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
                     ),
@@ -104,8 +109,8 @@ class _ConvertAnonState extends State<ConvertAnon> {
                   const SizedBox(height: 16),
                   TextField(
                     controller: confirmPasswordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Confirm Password',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.confirmPassword,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock_outline),
                     ),
@@ -118,8 +123,8 @@ class _ConvertAnonState extends State<ConvertAnon> {
                       backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Text(
-                      'Create Account!',
+                    child: Text(
+                      AppLocalizations.of(context)!.createAccount,
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

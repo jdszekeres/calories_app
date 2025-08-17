@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../tools/meal_database.dart';
 
@@ -40,9 +41,13 @@ class _SearchFoodState extends State<SearchFood> {
         _searchResults = results;
       });
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error searching products: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.errorSearchingProducts(e),
+          ),
+        ),
+      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -54,7 +59,7 @@ class _SearchFoodState extends State<SearchFood> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Food'),
+        title: Text(AppLocalizations.of(context)!.searchFoodTitle),
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -70,7 +75,9 @@ class _SearchFoodState extends State<SearchFood> {
                       _searchProducts();
                     },
                     decoration: InputDecoration(
-                      labelText: 'Search for products',
+                      labelText: AppLocalizations.of(
+                        context,
+                      )!.searchForProducts,
                       suffixIcon: IconButton(
                         icon: Icon(Icons.search),
                         onPressed: _searchProducts,
@@ -81,7 +88,9 @@ class _SearchFoodState extends State<SearchFood> {
                   if (_isLoading)
                     Center(child: CircularProgressIndicator())
                   else if (_searchResults.isEmpty)
-                    Center(child: Text('No results found'))
+                    Center(
+                      child: Text(AppLocalizations.of(context)!.noResultsFound),
+                    )
                   else
                     Expanded(
                       child: ListView.builder(
@@ -116,7 +125,11 @@ class _SearchFoodState extends State<SearchFood> {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       debugPrintStack(stackTrace: snapshot.stackTrace);
-                      return Text('Error: ${snapshot.error}');
+                      return Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.errorWithMessage(snapshot.error!),
+                      );
                     } else {
                       return ServingsSelector(
                         initialServings: 1,
@@ -139,7 +152,11 @@ class _SearchFoodState extends State<SearchFood> {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       debugPrintStack(stackTrace: snapshot.stackTrace);
-                      return Text('Error: ${snapshot.error}');
+                      return Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.errorWithMessage(snapshot.error!),
+                      );
                     } else {
                       // Initialize _foodFacts if not already set
                       if (_foodFacts == null) {
@@ -163,8 +180,12 @@ class _SearchFoodState extends State<SearchFood> {
                                   _foodFacts = editedFoodFacts;
                                 });
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Nutrition facts updated!'),
+                                  SnackBar(
+                                    content: Text(
+                                      AppLocalizations.of(
+                                        context,
+                                      )!.nutritionFactsUpdated,
+                                    ),
                                     duration: Duration(seconds: 2),
                                   ),
                                 );
@@ -184,7 +205,7 @@ class _SearchFoodState extends State<SearchFood> {
                                 if (!mounted) return;
                                 context.go('/');
                               },
-                              child: const Text('Save'),
+                              child: Text(AppLocalizations.of(context)!.save),
                             ),
                           ],
                         ),

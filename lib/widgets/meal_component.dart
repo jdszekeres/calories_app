@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:calories_app/l10n/app_localizations.dart';
 
 class MealComponent extends StatelessWidget {
   final String mealName;
@@ -26,7 +27,7 @@ class MealComponent extends StatelessWidget {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         trailing: Text(
-          '${calories.toStringAsFixed(1)} kcal',
+          '${calories.toStringAsFixed(1)} ${AppLocalizations.of(context)!.unitKcal}',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),

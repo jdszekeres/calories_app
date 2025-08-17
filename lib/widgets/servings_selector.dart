@@ -1,5 +1,6 @@
 import 'package:calories_app/tools/food_facts.dart';
 import 'package:flutter/material.dart';
+import 'package:calories_app/l10n/app_localizations.dart';
 
 class ServingsSelector extends StatefulWidget {
   final double initialServings;
@@ -50,7 +51,7 @@ class _ServingsSelectorState extends State<ServingsSelector> {
         ),
         const SizedBox(height: 10),
         Text(
-          'Serving Size: ${widget.data.servingSize}',
+          '${AppLocalizations.of(context)!.servingSize}: ${widget.data.servingSize}',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         Slider(
@@ -80,7 +81,7 @@ class _ServingsSelectorState extends State<ServingsSelector> {
           onPressed: () {
             widget.onServingsChanged(servings);
           },
-          child: const Text('Confirm'),
+          child: Text(AppLocalizations.of(context)!.confirm),
         ),
       ],
     );

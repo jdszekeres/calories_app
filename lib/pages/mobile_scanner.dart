@@ -3,6 +3,7 @@ import 'package:calories_app/tools/food_facts.dart';
 import 'package:calories_app/widgets/nutri_facts.dart';
 import 'package:calories_app/widgets/servings_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -36,7 +37,7 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scan Barcode'),
+        title: Text(AppLocalizations.of(context)!.scanBarcodeTitle),
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -72,7 +73,11 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
                     return CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     debugPrintStack(stackTrace: snapshot.stackTrace);
-                    return Text('Error: ${snapshot.error}');
+                    return Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.errorWithMessage(snapshot.error!),
+                    );
                   } else {
                     return ServingsSelector(
                       initialServings: 1,
@@ -95,7 +100,11 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
                     return CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     debugPrintStack(stackTrace: snapshot.stackTrace);
-                    return Text('Error: ${snapshot.error}');
+                    return Text(
+                      AppLocalizations.of(
+                        context,
+                      )!.errorWithMessage(snapshot.error!),
+                    );
                   } else {
                     // Initialize _foodFacts if not already set
                     if (_foodFacts == null) {
@@ -119,8 +128,12 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
                                 _foodFacts = editedFoodFacts;
                               });
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Nutrition facts updated!'),
+                                SnackBar(
+                                  content: Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.nutritionFactsUpdated,
+                                  ),
                                   duration: Duration(seconds: 2),
                                 ),
                               );
@@ -140,7 +153,7 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
                               if (!mounted) return;
                               context.go('/');
                             },
-                            child: const Text('Save'),
+                            child: Text(AppLocalizations.of(context)!.save),
                           ),
                         ],
                       ),

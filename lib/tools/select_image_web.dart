@@ -5,3 +5,8 @@ Future<Uint8List?> selectImage() async {
   final imageData = await ImagePickerWeb.getImageAsBytes();
   return imageData;
 }
+
+Future<Uint8List?> selectImageFromGallery() async {
+  final imageData = await ImagePickerWeb.getImageAsBytes();
+  return imageData;
+}

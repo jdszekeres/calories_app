@@ -1,3 +1,4 @@
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -15,6 +16,7 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations local = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       // appBar: AppBar(title: const Text('Sign In')),
@@ -29,16 +31,16 @@ class SignInPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'Welcome Back',
+                  Text(
+                    local.welcomeBack,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
                   TextField(
                     controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
+                    decoration: InputDecoration(
+                      labelText: local.email,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.email),
                     ),
@@ -47,8 +49,8 @@ class SignInPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   TextField(
                     controller: passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
+                    decoration: InputDecoration(
+                      labelText: local.password,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.lock),
                     ),
@@ -77,8 +79,8 @@ class SignInPage extends StatelessWidget {
                       backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Text(
-                      'Sign In',
+                    child: Text(
+                      local.signIn,
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -87,13 +89,13 @@ class SignInPage extends StatelessWidget {
                     onPressed: () {
                       context.go('/signup');
                     },
-                    child: const Text('Don\'t have an account? Sign Up'),
+                    child: Text(local.noAccount),
                   ),
                   TextButton(
                     onPressed: () {
                       context.go('/sign_in_anonymous');
                     },
-                    child: const Text('Try without an account'),
+                    child: Text(local.tryAnon),
                   ),
                   TextButton(
                     onPressed: () {
@@ -109,7 +111,7 @@ class SignInPage extends StatelessWidget {
                         );
                       }
                     },
-                    child: const Text("Download App"),
+                    child: Text(local.downloadApp),
                   ),
                 ],
               ),

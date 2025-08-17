@@ -1,3 +1,4 @@
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:calories_app/tools/calculate_goals.dart';
 import 'package:calories_app/tools/meal_database.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class GoalAmount extends AbstractSettingsTile {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
     return IOSSettingsTile(
       tileType: SettingsTileType.simpleTile,
       leading: leading,
@@ -51,14 +53,14 @@ class GoalAmount extends AbstractSettingsTile {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('Set Goal for ${name.toString()}'),
+              title: Text(localizations.setGoalFor(name)),
               content: TextField(
                 keyboardType: TextInputType.number,
                 controller: controller,
                 autofocus: true,
                 decoration: InputDecoration(
-                  labelText: 'Goal',
-                  hintText: 'Enter your goal',
+                  labelText: localizations.goal,
+                  hintText: localizations.enterGoal,
                   suffixText: unit,
                 ),
                 onSubmitted: (value) {
@@ -66,32 +68,31 @@ class GoalAmount extends AbstractSettingsTile {
                   if (newGoal != null) {
                     Navigator.of(context).pop();
                     onGoalChanged(newGoal);
-                    // Removed navigation to allow immediate UI update
                   } else {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text('Invalid input')));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(localizations.invalidInput)),
+                    );
                   }
                 },
               ),
               actions: [
                 TextButton(
-                  child: const Text('Cancel'),
+                  child: Text(localizations.cancel),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
                 TextButton(
-                  child: const Text('Set Goal'),
+                  child: Text(localizations.setGoal),
                   onPressed: () {
                     double? newGoal = double.tryParse(controller.text);
                     if (newGoal != null) {
                       Navigator.of(context).pop();
                       onGoalChanged(newGoal);
                     } else {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text('Invalid input')));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(localizations.invalidInput)),
+                      );
                     }
                   },
                 ),
@@ -167,9 +168,7 @@ class _GoalsPageState extends State<GoalsPage> {
       if (fetchedGoals == null) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('No goals found. Please set your goals.'),
-            ),
+            SnackBar(content: Text(AppLocalizations.of(context)!.noGoalsFound)),
           );
           context.go('/settings');
         }
@@ -179,11 +178,17 @@ class _GoalsPageState extends State<GoalsPage> {
 
       setState(() {
         _isLoading = false;
-        _errorMessage = 'Error loading data: ${error.toString()}';
+        _errorMessage = AppLocalizations.of(
+          context,
+        )!.errorLoadingData(error.toString());
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading goals: ${error.toString()}')),
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context)!.errorLoadingGoals(error.toString()),
+          ),
+        ),
       );
     }
   }
@@ -191,10 +196,11 @@ class _GoalsPageState extends State<GoalsPage> {
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> jsonGoals = goals?.toJson() ?? {};
+    AppLocalizations localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Daily Goals'),
+        title: Text(localizations.dailyGoals),
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -222,7 +228,7 @@ class _GoalsPageState extends State<GoalsPage> {
                       });
                       _loadData();
                     },
-                    child: const Text('Retry'),
+                    child: Text(localizations.retry),
                   ),
                 ],
               ),
@@ -238,12 +244,12 @@ class _GoalsPageState extends State<GoalsPage> {
               key: ValueKey(goals),
               sections: jsonGoals.keys.toList().map((key) {
                 return SettingsSection(
-                  title: Text(camelToNormal(key)),
+                  title: Text(NutrutionGoals.getName(context, key)),
                   tiles: jsonGoals[key].keys
                       .toList()
                       .map((goalName) {
                         return GoalAmount(
-                          name: camelToNormal(goalName),
+                          name: NutrutionGoals.getName(context, goalName),
                           // leading: Icon(Icons.check_circle_outline),
                           goal: (jsonGoals[key][goalName] as num).toDouble(),
                           achieved: meals.fold(0.0, (sum, meal) {
@@ -280,9 +286,9 @@ class _GoalsPageState extends State<GoalsPage> {
                 );
               }).toList(),
             )
-          : const Center(
+          : Center(
               child: Text(
-                'No goals found. Please set your goals in settings.',
+                localizations.noGoalsFound,
                 textAlign: TextAlign.center,
               ),
             ),

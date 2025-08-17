@@ -1,3 +1,4 @@
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -32,6 +33,7 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations local = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       // // appBar: AppBar(
@@ -51,22 +53,22 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'Tell Us About Yourself',
+                  Text(
+                    local.tellUs,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'This helps us calculate your daily calorie goals',
+                  Text(
+                    local.tellUsExplain,
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
                   TextField(
                     controller: ageController,
-                    decoration: const InputDecoration(
-                      labelText: 'Age',
+                    decoration: InputDecoration(
+                      labelText: local.age,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.cake),
                     ),
@@ -75,7 +77,7 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                   ),
                   const SizedBox(height: 16),
                   SwitchListTile(
-                    title: const Text('Use Imperial Units'),
+                    title: Text(local.useImperial),
                     value: useImperial,
                     onChanged: (value) => setState(() => useImperial = value),
                   ),
@@ -83,7 +85,9 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                   TextField(
                     controller: weightController,
                     decoration: InputDecoration(
-                      labelText: useImperial ? 'Weight (lb)' : 'Weight (kg)',
+                      labelText: useImperial
+                          ? local.weightImperial
+                          : local.weight,
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.fitness_center),
                       suffixText: useImperial ? 'lb' : 'kg',
@@ -101,7 +105,9 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                   TextField(
                     controller: heightController,
                     decoration: InputDecoration(
-                      labelText: useImperial ? 'Height (in)' : 'Height (cm)',
+                      labelText: useImperial
+                          ? local.heightImperial
+                          : local.height,
                       border: const OutlineInputBorder(),
                       prefixIcon: const Icon(Icons.height),
                       suffixText: useImperial ? 'in' : 'cm',
@@ -118,14 +124,17 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
                     value: selectedSex,
-                    decoration: const InputDecoration(
-                      labelText: 'Sex',
+                    decoration: InputDecoration(
+                      labelText: local.sex,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.person),
                     ),
-                    items: const [
-                      DropdownMenuItem(value: 'male', child: Text('Male')),
-                      DropdownMenuItem(value: 'female', child: Text('Female')),
+                    items: [
+                      DropdownMenuItem(value: 'male', child: Text(local.male)),
+                      DropdownMenuItem(
+                        value: 'female',
+                        child: Text(local.female),
+                      ),
                     ],
                     onChanged: (value) {
                       setState(() {
@@ -136,39 +145,31 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                   const SizedBox(height: 16),
                   DropdownButtonFormField<ActivityLevel>(
                     value: selectedActivityLevel,
-                    decoration: const InputDecoration(
-                      labelText: 'Activity Level',
+                    decoration: InputDecoration(
+                      labelText: local.activityLevel,
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.directions_run),
                     ),
-                    items: const [
+                    items: [
                       DropdownMenuItem(
                         value: ActivityLevel.sedentary,
-                        child: Text('Sedentary (little or no exercise)'),
+                        child: Text(local.sedentary),
                       ),
                       DropdownMenuItem(
                         value: ActivityLevel.lightlyActive,
-                        child: Text(
-                          'Lightly Active (light exercise 1-3 days/week)',
-                        ),
+                        child: Text(local.lightlyActive),
                       ),
                       DropdownMenuItem(
                         value: ActivityLevel.moderatelyActive,
-                        child: Text(
-                          'Moderately Active (moderate exercise 3-5 days/week)',
-                        ),
+                        child: Text(local.moderatelyActive),
                       ),
                       DropdownMenuItem(
                         value: ActivityLevel.veryActive,
-                        child: Text(
-                          'Very Active (hard exercise 6-7 days/week)',
-                        ),
+                        child: Text(local.veryActive),
                       ),
                       DropdownMenuItem(
                         value: ActivityLevel.extraActive,
-                        child: Text(
-                          'Extra Active (very hard exercise & physical job)',
-                        ),
+                        child: Text(local.extraActive),
                       ),
                     ],
                     onChanged: (value) {
@@ -186,8 +187,8 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                     ),
                     child: _isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text(
-                            'Complete Sign Up',
+                        : Text(
+                            local.completeSignUp,
                             style: TextStyle(color: Colors.white),
                           ),
                   ),
@@ -195,7 +196,7 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
                   TextButton.icon(
                     onPressed: _isLoading ? null : () => context.pop(),
                     icon: const Icon(Icons.arrow_back),
-                    label: const Text('Back'),
+                    label: Text(local.back),
                   ),
                 ],
               ),
@@ -212,7 +213,9 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
         weightController.text.isEmpty ||
         heightController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.pleaseFillAllFields),
+        ),
       );
       return;
     }
@@ -222,9 +225,9 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
     double? height = double.tryParse(heightController.text);
 
     if (age == null || age <= 0 || age > 150) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please enter a valid age')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context)!.invalidAge)),
+      );
       return;
     }
 
@@ -236,14 +239,14 @@ class _SignUpDetailsPageState extends State<SignUpDetailsPage> {
 
     if (weight == null || weight <= 0 || weight > 500) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid weight')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.invalidWeight)),
       );
       return;
     }
 
     if (height == null || height <= 0 || height > 300) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid height')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.invalidHeight)),
       );
       return;
     }

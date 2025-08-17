@@ -215,9 +215,11 @@ Future<FoodFacts?> fetchFoodFacts(String barcode) async {
                         ?.toDouble() ??
                     0.0) *
                 1000, // Convert to milligrams
-            flouride:
-                ((product['nutriments']['flouride_serving'] as num?)
-                        ?.toDouble() ??
+            fluoride:
+                (((product['nutriments']['fluoride_serving'] as num?)
+                        ?.toDouble()) ??
+                    ((product['nutriments']['flouride_serving'] as num?)
+                        ?.toDouble()) ??
                     0.0) *
                 1000, // Convert to milligrams
             iodine:

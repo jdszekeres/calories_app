@@ -1,6 +1,7 @@
 import 'package:calories_app/tools/food_facts.dart';
 import 'package:calories_app/tools/calculate_goals.dart';
 import 'package:flutter/material.dart';
+import 'package:calories_app/l10n/app_localizations.dart';
 
 class NutriFacts extends StatefulWidget {
   final FoodFacts foodFacts;
@@ -62,17 +63,20 @@ class _NutriFactsState extends State<NutriFacts> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               if (_isEditing) ...[
-                TextButton(onPressed: _cancelEdit, child: const Text('Cancel')),
+                TextButton(
+                  onPressed: _cancelEdit,
+                  child: Text(AppLocalizations.of(context)!.cancel),
+                ),
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: _saveChanges,
-                  child: const Text('Save'),
+                  child: Text(AppLocalizations.of(context)!.save),
                 ),
               ] else
                 IconButton(
                   onPressed: () => setState(() => _isEditing = true),
                   icon: const Icon(Icons.edit),
-                  tooltip: 'Edit nutrition facts',
+                  tooltip: AppLocalizations.of(context)!.editNutritionFacts,
                 ),
             ],
           ),
@@ -111,9 +115,9 @@ class _NutriFactsState extends State<NutriFacts> {
           const SizedBox(height: 8),
 
           // Nutrition Facts Header
-          const Text(
-            'Nutrition Facts',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.nutritionFacts,
+            style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -125,9 +129,9 @@ class _NutriFactsState extends State<NutriFacts> {
           _isEditing
               ? TextFormField(
                   initialValue: _editableFoodFacts.servingSize,
-                  decoration: const InputDecoration(
-                    labelText: 'Serving size',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.servingSize,
+                    border: const OutlineInputBorder(),
                     isDense: true,
                   ),
                   style: const TextStyle(
@@ -142,23 +146,29 @@ class _NutriFactsState extends State<NutriFacts> {
                   },
                 )
               : Text(
-                  'Serving size ${_editableFoodFacts.servingSize}',
+                  AppLocalizations.of(
+                    context,
+                  )!.servingSizeValue(_editableFoodFacts.servingSize),
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
                 ),
-          Text('You ate ${widget.servings.toStringAsFixed(1)} servings'),
+          Text(
+            AppLocalizations.of(
+              context,
+            )!.youAteServings(widget.servings.toStringAsFixed(1)),
+          ),
           const Divider(color: Colors.black, thickness: 4),
 
           // Calories
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Calories',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.calories,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -217,10 +227,10 @@ class _NutriFactsState extends State<NutriFacts> {
           const Divider(color: Colors.black, thickness: 2),
 
           // Daily Value header
-          const Align(
+          Align(
             alignment: Alignment.centerRight,
             child: Text(
-              'Your Intake',
+              AppLocalizations.of(context)!.yourIntake,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -232,37 +242,37 @@ class _NutriFactsState extends State<NutriFacts> {
 
           // Macronutrients
           _buildEditableNutrientRow(
-            'Total Fat',
+            NutrutionGoals.getName(context, 'fat'),
             _editableFoodFacts.nutrutionInfo.macroNutrientGoals.fat,
             'g',
             (value) => _updateMacroNutrient('fat', value),
           ),
           _buildEditableNutrientRow(
-            'Total Carbohydrate',
+            NutrutionGoals.getName(context, 'carbohydrates'),
             _editableFoodFacts.nutrutionInfo.macroNutrientGoals.carbohydrates,
             'g',
             (value) => _updateMacroNutrient('carbohydrates', value),
           ),
           _buildEditableIndentedNutrientRow(
-            'Dietary Fiber',
+            NutrutionGoals.getName(context, 'fiber'),
             _editableFoodFacts.nutrutionInfo.macroNutrientGoals.fiber,
             'g',
             (value) => _updateMacroNutrient('fiber', value),
           ),
           _buildEditableIndentedNutrientRow(
-            'Total Sugars',
+            NutrutionGoals.getName(context, 'sugar'),
             _editableFoodFacts.nutrutionInfo.macroNutrientGoals.sugar,
             'g',
             (value) => _updateMacroNutrient('sugar', value),
           ),
           _buildEditableNutrientRow(
-            'Protein',
+            NutrutionGoals.getName(context, 'protein'),
             _editableFoodFacts.nutrutionInfo.macroNutrientGoals.protein,
             'g',
             (value) => _updateMacroNutrient('protein', value),
           ),
           _buildEditableIndentedNutrientRow(
-            'Water',
+            NutrutionGoals.getName(context, 'water'),
             _editableFoodFacts.nutrutionInfo.macroNutrientGoals.water,
             'L',
             (value) => _updateMacroNutrient('water', value),
@@ -278,8 +288,8 @@ class _NutriFactsState extends State<NutriFacts> {
           // Ingredients section
           if (_editableFoodFacts.ingredients.isNotEmpty) ...[
             const SizedBox(height: 12),
-            const Text(
-              'INGREDIENTS:',
+            Text(
+              AppLocalizations.of(context)!.ingredients,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
@@ -308,7 +318,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: value,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -326,7 +336,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: value,
             magnesium: micro.magnesium,
@@ -344,7 +354,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -362,7 +372,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -380,7 +390,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: value,
@@ -398,7 +408,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -416,7 +426,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -434,7 +444,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: value,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -452,7 +462,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -470,7 +480,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -488,7 +498,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: value,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -506,7 +516,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -524,7 +534,7 @@ class _NutriFactsState extends State<NutriFacts> {
             calcium: micro.calcium,
             chlorine: value,
             copper: micro.copper,
-            flouride: micro.flouride,
+            fluoride: micro.fluoride,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -537,12 +547,12 @@ class _NutriFactsState extends State<NutriFacts> {
             zinc: micro.zinc,
           );
           break;
-        case 'flouride':
+        case 'fluoride':
           updatedMicro = MicroNutrientGoals(
             calcium: micro.calcium,
             chlorine: micro.chlorine,
             copper: micro.copper,
-            flouride: value,
+            fluoride: value,
             iodine: micro.iodine,
             iron: micro.iron,
             magnesium: micro.magnesium,
@@ -1018,7 +1028,7 @@ class _NutriFactsState extends State<NutriFacts> {
     // Vitamins (convert to micrograms or milligrams and use appropriate units)
     rows.add(
       _buildEditableNutrientRow(
-        'Vitamin A',
+        NutrutionGoals.getName(context, 'vitaminA'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminA /
             1000000, // Convert to µg
         'µg',
@@ -1031,7 +1041,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Vitamin C',
+        NutrutionGoals.getName(context, 'vitaminC'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminC /
             1000, // Convert to mg
         'mg',
@@ -1044,7 +1054,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Vitamin D',
+        NutrutionGoals.getName(context, 'vitaminD'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminD /
             1000, // Convert to mg
         'mg',
@@ -1057,7 +1067,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Vitamin E',
+        NutrutionGoals.getName(context, 'vitaminE'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminE /
             1000, // Convert to mg
         'mg',
@@ -1070,7 +1080,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Vitamin K',
+        NutrutionGoals.getName(context, 'vitaminK'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminK /
             1000000, // Convert to µg
         'µg',
@@ -1083,7 +1093,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Thiamin (B1)',
+        NutrutionGoals.getName(context, 'thiamin'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.thiamin /
             1000, // Convert to mg
         'mg',
@@ -1096,7 +1106,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Riboflavin (B2)',
+        NutrutionGoals.getName(context, 'riboflavin'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.riboflavin /
             1000, // Convert to mg
         'mg',
@@ -1109,7 +1119,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Niacin (B3)',
+        NutrutionGoals.getName(context, 'niacin'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.niacin /
             1000, // Convert to mg
         'mg',
@@ -1122,7 +1132,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Pantothenic Acid (B5)',
+        NutrutionGoals.getName(context, 'pantothenicAcid'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.pantothenicAcid /
             1000, // Convert to mg
         'mg',
@@ -1135,7 +1145,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Vitamin B6',
+        NutrutionGoals.getName(context, 'vitaminB6'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB6 /
             1000, // Convert to mg
         'mg',
@@ -1148,7 +1158,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Folate',
+        NutrutionGoals.getName(context, 'folate'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.folate /
             1000000, // Convert to µg
         'µg',
@@ -1161,7 +1171,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Vitamin B12',
+        NutrutionGoals.getName(context, 'vitaminB12'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.vitaminB12 /
             1000000, // Convert to µg
         'µg',
@@ -1174,7 +1184,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Choline',
+        NutrutionGoals.getName(context, 'choline'),
         _editableFoodFacts.nutrutionInfo.vitaminGoals.choline /
             1000, // Convert to mg
         'mg',
@@ -1188,7 +1198,7 @@ class _NutriFactsState extends State<NutriFacts> {
     // Minerals (all editable)
     rows.add(
       _buildEditableNutrientRow(
-        'Calcium',
+        NutrutionGoals.getName(context, 'calcium'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.calcium,
         'mg',
         (value) => _updateMicroNutrient('calcium', value),
@@ -1197,7 +1207,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Iron',
+        NutrutionGoals.getName(context, 'iron'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.iron,
         'mg',
         (value) => _updateMicroNutrient('iron', value),
@@ -1206,7 +1216,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Magnesium',
+        NutrutionGoals.getName(context, 'magnesium'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.magnesium,
         'mg',
         (value) => _updateMicroNutrient('magnesium', value),
@@ -1215,7 +1225,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Phosphorus',
+        NutrutionGoals.getName(context, 'phosphorus'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.phosphorus,
         'mg',
         (value) => _updateMicroNutrient('phosphorus', value),
@@ -1224,7 +1234,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Potassium',
+        NutrutionGoals.getName(context, 'potassium'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.potassium,
         'mg',
         (value) => _updateMicroNutrient('potassium', value),
@@ -1233,7 +1243,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Sodium',
+        NutrutionGoals.getName(context, 'sodium'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.sodium,
         'mg',
         (value) => _updateMicroNutrient('sodium', value),
@@ -1242,7 +1252,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Zinc',
+        NutrutionGoals.getName(context, 'zinc'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.zinc,
         'mg',
         (value) => _updateMicroNutrient('zinc', value),
@@ -1251,7 +1261,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Copper',
+        NutrutionGoals.getName(context, 'copper'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.copper,
         'mg',
         (value) => _updateMicroNutrient('copper', value),
@@ -1260,7 +1270,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Manganese',
+        NutrutionGoals.getName(context, 'manganese'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.manganese,
         'mg',
         (value) => _updateMicroNutrient('manganese', value),
@@ -1269,7 +1279,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Selenium',
+        NutrutionGoals.getName(context, 'selenium'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.selenium,
         'µg',
         (value) => _updateMicroNutrient('selenium', value),
@@ -1278,7 +1288,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Iodine',
+        NutrutionGoals.getName(context, 'iodine'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.iodine,
         'µg',
         (value) => _updateMicroNutrient('iodine', value),
@@ -1287,7 +1297,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Molybdenum',
+        NutrutionGoals.getName(context, 'molybdenum'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.molybdenum,
         'µg',
         (value) => _updateMicroNutrient('molybdenum', value),
@@ -1296,7 +1306,7 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Chloride',
+        NutrutionGoals.getName(context, 'chlorine'),
         _editableFoodFacts.nutrutionInfo.microNutrientGoals.chlorine,
         'mg',
         (value) => _updateMicroNutrient('chlorine', value),
@@ -1305,10 +1315,10 @@ class _NutriFactsState extends State<NutriFacts> {
 
     rows.add(
       _buildEditableNutrientRow(
-        'Fluoride',
-        _editableFoodFacts.nutrutionInfo.microNutrientGoals.flouride,
+        NutrutionGoals.getName(context, 'fluoride'),
+        _editableFoodFacts.nutrutionInfo.microNutrientGoals.fluoride,
         'mg',
-        (value) => _updateMicroNutrient('flouride', value),
+        (value) => _updateMicroNutrient('fluoride', value),
       ),
     );
 

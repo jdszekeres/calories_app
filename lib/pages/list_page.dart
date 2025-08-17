@@ -1,3 +1,4 @@
+import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:calories_app/tools/meal_database.dart';
 import 'package:calories_app/widgets/meal_component.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,9 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   final auth = Auth();
   final List<FoodFacts> items = [];
-  final DateFormat dateFormat = DateFormat('MM/dd/yyyy hh:mm a');
+  DateFormat? dateFormat;
   // Format for day headers
-  final DateFormat headerDateFormat = DateFormat('MM/dd/yyyy');
+  DateFormat? headerDateFormat;
   @override
   void initState() {
     super.initState();
@@ -35,9 +36,17 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations local = AppLocalizations.of(context)!;
+    // Initialize locale-aware formats once context is available
+    dateFormat ??= DateFormat.yMd(
+      Localizations.localeOf(context).toString(),
+    ).add_jm();
+    headerDateFormat ??= DateFormat.yMd(
+      Localizations.localeOf(context).toString(),
+    );
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Meals'),
+        title: Text(local.myMeals),
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -48,13 +57,13 @@ class _ListPageState extends State<ListPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('No meals found.'),
+                  Text(local.noMealsFound),
                   SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
                       context.go("/add");
                     },
-                    child: Text('Add Meal'),
+                    child: Text(local.addMeal),
                   ),
                 ],
               ),
@@ -86,7 +95,7 @@ class _ListPageState extends State<ListPage> {
                           horizontal: 16.0,
                         ),
                         child: Text(
-                          headerDateFormat.format(item.uploaded!),
+                          headerDateFormat!.format(item.uploaded!),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -95,7 +104,7 @@ class _ListPageState extends State<ListPage> {
                       ),
                     MealComponent(
                       mealName: item.name,
-                      mealTime: dateFormat.format(item.uploaded!),
+                      mealTime: dateFormat!.format(item.uploaded!),
                       calories:
                           ((item.nutrutionInfo.calorieGoal as num) *
                           (item.numServings ?? 1)),

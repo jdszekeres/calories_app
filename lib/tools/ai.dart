@@ -49,7 +49,7 @@ final jsonSchema = Schema.object(
         'calcium': Schema.number(),
         'chlorine': Schema.number(),
         'copper': Schema.number(),
-        'flouride': Schema.number(),
+        'fluoride': Schema.number(),
         'iodine': Schema.number(),
         'iron': Schema.number(),
         'magnesium': Schema.number(),
@@ -84,10 +84,10 @@ class AiService {
     try {
       final imagePart = InlineDataPart('image/jpeg', image);
       final prompt = TextPart(
-        'You are a nutrition expert. Analyze the meal in the image and provide the nutrition facts in JSON format.',
+        'You are a nutrition expert. Analyze the meal in the image and provide the nutrition facts in JSON format. Take meal size into account.',
       );
       final textHint = TextPart(
-        "Return each nutrient with its correct unit. $units. Include unit in serving size i.e. '1 burger' or '100g'.",
+        "Return each nutrient with its correct unit. $units. Include unit in serving size i.e. '1 burger' or '100g', not '1 serving'.",
       );
       final response = await model.generateContent([
         Content.multi([prompt, textHint, imagePart]),

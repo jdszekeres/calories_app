@@ -4,6 +4,15 @@ import 'package:image_picker/image_picker.dart';
 Future<Uint8List?> selectImage() async {
   final picker = ImagePicker();
   final pickedFile = await picker.pickImage(
+    source: ImageSource.camera,
+    imageQuality: 80,
+  );
+  return pickedFile?.readAsBytes();
+}
+
+Future<Uint8List?> selectImageFromGallery() async {
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(
     source: ImageSource.gallery,
     imageQuality: 80,
   );
