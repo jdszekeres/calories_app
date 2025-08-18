@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>Spanish</string>
+	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
@@ -52,6 +57,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>GADApplicationIdentifier</key>
-<string>ca-app-pub-6898960062724754~2198749279</string>
+	<string>ca-app-pub-6898960062724754~2198749279</string>
 </dict>
 </plist>
