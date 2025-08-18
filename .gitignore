@@ -50,5 +50,5 @@ public
 .firebaserc
 firebase.json
 android/local.properties
-.env
+env
 untranslated.txt
