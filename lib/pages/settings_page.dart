@@ -641,7 +641,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(AppLocalizations.of(context)!.creditCount(credits));
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
@@ -672,18 +671,26 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         leading: Icon(Icons.auto_awesome),
                         trailing: Text(
-                          AppLocalizations.of(context)!.creditCount(credits),
+                          AppLocalizations.of(
+                            context,
+                          )!.creditCount(credits.toInt()),
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        onPressed: (context) async => {
-                          Ads().loadRewarded(context).then((ad) {
+                        onPressed: (context) async {
+                          try {
+                            final ad = await Ads().loadRewarded(context);
                             if (ad != null) {
-                              ad.show(
-                                onUserEarnedReward: (reward, ad) {
-                                  onAdEarned(context);
-                                },
+                              Ads().showRewardedAd(
+                                onUserEarnedReward: () => onAdEarned(context),
                               );
                             } else {
+                              // Fallback to web advertisement when ad fails to load
+                              // (common on simulators)
+                              if (kDebugMode) {
+                                print(
+                                  'Ad failed to load, showing web advertisement fallback',
+                                );
+                              }
                               showDialog(
                                 context: context,
                                 builder: (context) {
@@ -696,7 +703,21 @@ class _SettingsPageState extends State<SettingsPage> {
                                 },
                               );
                             }
-                          }),
+                          } catch (e) {
+                            print('Error loading ad: $e');
+                            // Show web advertisement as fallback
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return WebAdvertisement(
+                                  onClose: () {
+                                    Navigator.of(context).pop();
+                                    onAdEarned(context);
+                                  },
+                                );
+                              },
+                            );
+                          }
                         },
                         onToggle: (bool value) {},
                         value: null,

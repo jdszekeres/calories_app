@@ -1,11 +1,10 @@
-// web_launcher.dart
-// Platform-specific launcher for app download
+import 'package:url_launcher/url_launcher_string.dart';
 
 // For non-web platforms, this does nothing
 void launchAppDownload(String url) {
-  // Use url_launcher in main code
+  launchUrl(url);
 }
 
 void launchUrl(String url) {
-  // Use url_launcher in main code
+  launchUrlString(url);
 }

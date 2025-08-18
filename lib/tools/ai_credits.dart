@@ -5,7 +5,7 @@ class AiCreditManager {
     final DatabaseReference database = FirebaseDatabase.instance.ref();
     final ref = database.child('users/$userId/ai_credits');
     final snapshot = await ref.once();
-    return (snapshot.snapshot.value as double?) ??
+    return double.tryParse(snapshot.snapshot.value.toString()) ??
         10.0; // give 10 credits to start
   }
 
