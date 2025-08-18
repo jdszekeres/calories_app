@@ -555,4 +555,27 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get zinc => 'Zinc';
+
+  @override
+  String get loadingCredits => 'Cargando créditos...';
+
+  @override
+  String get insufficientCredits => 'Créditos Insuficientes';
+
+  @override
+  String insufficientCreditsMessage(Object credits) {
+    return 'Necesitas al menos 1 crédito para usar el análisis de IA. Actualmente tienes $credits créditos. Puedes ganar más créditos viendo anuncios en la página de Configuración.';
+  }
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get goToSettings => 'Ir a Configuración';
+
+  @override
+  String get tryAgain => 'Intentar de Nuevo';
+
+  @override
+  String get loading => 'Cargando...';
 }
