@@ -75,6 +75,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   Map<String, dynamic>? _settings;
   final Auth auth = Auth();
+  final Ads adsManager = Ads(); // Single instance for the entire widget
 
   double credits = 0;
 
@@ -678,9 +679,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         onPressed: (context) async {
                           try {
-                            final ad = await Ads().loadRewarded(context);
+                            final ad = await adsManager.loadRewarded(context);
                             if (ad != null) {
-                              Ads().showRewardedAd(
+                              adsManager.showRewardedAd(
                                 onUserEarnedReward: () => onAdEarned(context),
                               );
                             } else {
