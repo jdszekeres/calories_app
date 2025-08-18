@@ -25,6 +25,7 @@ class _AiPageState extends State<AiPage> {
   FoodFacts? _foodFacts;
   double _credits = 0.0;
   bool _isLoadingCredits = true;
+  bool _isAnalyzing = false;
 
   @override
   void initState() {
@@ -34,6 +35,22 @@ class _AiPageState extends State<AiPage> {
 
   Future<void> _loadCredits() async {
     try {
+      // Ensure Firebase is initialized
+      if (!auth.isInitialized) {
+        await Future.delayed(Duration(seconds: 1));
+        if (!auth.isInitialized) {
+          throw Exception('Firebase not initialized');
+        }
+      }
+
+      if (auth.currentUser == null) {
+        setState(() {
+          _credits = 10.0; // Default credits when not authenticated
+          _isLoadingCredits = false;
+        });
+        return;
+      }
+
       final credits = await AiCreditManager().getCredits(auth.currentUser!.uid);
       setState(() {
         _credits = credits;
@@ -41,12 +58,14 @@ class _AiPageState extends State<AiPage> {
       });
     } catch (e) {
       setState(() {
+        _credits = 10.0; // Default credits on error
         _isLoadingCredits = false;
       });
+      print('Error loading credits: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.errorWithMessage(e)),
+            content: Text('Failed to load credits. Using default value of 10.'),
           ),
         );
       }
@@ -55,31 +74,17 @@ class _AiPageState extends State<AiPage> {
 
   Future<FoodFacts?> _processAIAnalysis() async {
     if (_credits < 1.0) {
-      throw Exception(AppLocalizations.of(context)!.aiCreditDescription);
+      return null;
     }
 
     try {
-      // Deduct credits first
-      await AiCreditManager().deductCredits(auth.currentUser!.uid, 1.0);
-
-      // Update credits in UI
-      setState(() {
-        _credits -= 1.0;
-      });
-
-      // Perform AI analysis
       final result = await AiService().getMealNutrition(_imageData!);
+      // Only deduct credits from database, not locally (database is source of truth)
+      await AiCreditManager().deductCredits(auth.currentUser!.uid, 1.0);
+      // Reload credits from database to ensure consistency
+      await _loadCredits();
       return result;
     } catch (e) {
-      // If AI analysis failed, refund the credit
-      try {
-        await AiCreditManager().addCredits(auth.currentUser!.uid, 1.0);
-        setState(() {
-          _credits += 1.0;
-        });
-      } catch (refundError) {
-        debugPrint('Failed to refund credit: $refundError');
-      }
       rethrow;
     }
   }
@@ -105,7 +110,26 @@ class _AiPageState extends State<AiPage> {
         setState(() {
           _imageData = imageData;
           _foodFacts = null; // Reset food facts when new image is selected
+          _isAnalyzing = true;
         });
+
+        // Start the analysis
+        try {
+          final result = await _processAIAnalysis();
+          setState(() {
+            _foodFacts = result;
+            _isAnalyzing = false;
+          });
+        } catch (e) {
+          setState(() {
+            _isAnalyzing = false;
+          });
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Analysis failed: ${e.toString()}')),
+            );
+          }
+        }
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -162,16 +186,25 @@ class _AiPageState extends State<AiPage> {
         title: Text(AppLocalizations.of(context)!.aiNutritionAnalysisTitle),
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              setState(() {
+                _isLoadingCredits = true;
+              });
+              _loadCredits();
+            },
+            tooltip: 'Refresh Credits',
+          ),
+        ],
       ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       body: (_imageData == null)
           ? _buildWelcomeScreen(context)
           : Center(
-              child: FutureBuilder(
-                future: _processAIAnalysis(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Column(
+              child: _isAnalyzing
+                  ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CircularProgressIndicator(),
@@ -180,100 +213,79 @@ class _AiPageState extends State<AiPage> {
                           AppLocalizations.of(context)!.aiAnalysisDescription,
                         ),
                       ],
-                    );
-                  } else if (snapshot.hasError) {
-                    debugPrintStack(stackTrace: snapshot.stackTrace);
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error_outline,
-                          size: 64,
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                        SizedBox(height: 16),
-                        Text(
-                          AppLocalizations.of(
-                            context,
-                          )!.errorWithMessage(snapshot.error!),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _imageData = null;
-                              _foodFacts = null;
-                            });
-                          },
-                          child: Text(AppLocalizations.of(context)!.tryAgain),
-                        ),
-                      ],
-                    );
-                  } else {
-                    // Initialize _foodFacts if not already set
-                    if (_foodFacts == null && snapshot.data != null) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        setState(() {
-                          _foodFacts = snapshot.data;
-                        });
-                      });
-                      // Show loading while state updates
-                      return CircularProgressIndicator();
-                    } else if (_foodFacts == null) {
-                      // If snapshot.data is null, show error
-                      return Text(
-                        AppLocalizations.of(context)!.errorWithMessage(
-                          AppLocalizations.of(context)!.failedToAnalyzeImage,
-                        ),
-                      );
-                    }
-
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          NutriFacts(
-                            foodFacts: _foodFacts!,
-                            servings: _foodFacts!.numServings ?? 1,
-                            onEdit: (editedFoodFacts) {
-                              setState(() {
-                                _foodFacts = editedFoodFacts;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    )!.nutritionFactsUpdated,
-                                  ),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                            },
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (_foodFacts!.numServings != null) {
-                                await MealDatabase().addMeal(
-                                  auth.currentUser!.uid,
-                                  _foodFacts!,
-                                );
-                              }
-                              if (!mounted) return;
-                              context.go('/');
-                            },
-                            child: Text(AppLocalizations.of(context)!.save),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                },
-              ),
+                    )
+                  : _foodFacts != null
+                  ? _buildAnalysisResults()
+                  : _buildAnalysisError(),
             ),
+    );
+  }
+
+  Widget _buildAnalysisResults() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          NutriFacts(
+            foodFacts: _foodFacts!,
+            servings: _foodFacts!.numServings ?? 1,
+            onEdit: (editedFoodFacts) {
+              setState(() {
+                _foodFacts = editedFoodFacts;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    AppLocalizations.of(context)!.nutritionFactsUpdated,
+                  ),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            },
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_foodFacts!.numServings != null) {
+                await MealDatabase().addMeal(
+                  auth.currentUser!.uid,
+                  _foodFacts!,
+                );
+              }
+              if (!mounted) return;
+              context.go('/');
+            },
+            child: Text(AppLocalizations.of(context)!.save),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnalysisError() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.error_outline,
+          size: 64,
+          color: Theme.of(context).colorScheme.error,
+        ),
+        SizedBox(height: 16),
+        Text(
+          AppLocalizations.of(context)!.failedToAnalyzeImage,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Theme.of(context).colorScheme.error),
+        ),
+        SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              _imageData = null;
+              _foodFacts = null;
+            });
+          },
+          child: Text(AppLocalizations.of(context)!.tryAgain),
+        ),
+      ],
     );
   }
 
@@ -381,7 +393,7 @@ class _AiPageState extends State<AiPage> {
             child: ElevatedButton.icon(
               onPressed: _isLoadingCredits
                   ? null
-                  : () => _handleImageSelection(selectImage),
+                  : () => _handleImageSelection(selectImageFromGallery),
               style: ElevatedButton.styleFrom(
                 backgroundColor: _isLoadingCredits || _credits < 1.0
                     ? Theme.of(context).colorScheme.surfaceVariant
@@ -417,7 +429,7 @@ class _AiPageState extends State<AiPage> {
               child: ElevatedButton.icon(
                 onPressed: _isLoadingCredits
                     ? null
-                    : () => _handleImageSelection(selectImageFromGallery),
+                    : () => _handleImageSelection(selectImage),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _isLoadingCredits || _credits < 1.0
                       ? Theme.of(context).colorScheme.surfaceVariant

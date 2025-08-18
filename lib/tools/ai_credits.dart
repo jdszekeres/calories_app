@@ -2,11 +2,32 @@ import 'package:firebase_database/firebase_database.dart';
 
 class AiCreditManager {
   Future<double> getCredits(String userId) async {
-    final DatabaseReference database = FirebaseDatabase.instance.ref();
-    final ref = database.child('users/$userId/ai_credits');
-    final snapshot = await ref.once();
-    return double.tryParse(snapshot.snapshot.value.toString()) ??
-        10.0; // give 10 credits to start
+    try {
+      print('AiCreditManager.getCredits called for userId: $userId');
+      final DatabaseReference database = FirebaseDatabase.instance.ref();
+      final ref = database.child('users/$userId/ai_credits');
+      print('Attempting to read from path: users/$userId/ai_credits');
+
+      final snapshot = await ref.once();
+      print(
+        'Snapshot received - exists: ${snapshot.snapshot.exists}, value: ${snapshot.snapshot.value}',
+      );
+
+      if (!snapshot.snapshot.exists || snapshot.snapshot.value == null) {
+        print(
+          'No credits found for user, setting default 10.0 and saving to database',
+        );
+        // Set default credits in database for first-time users
+        await ref.set(10.0);
+        return 10.0;
+      }
+
+      final value = snapshot.snapshot.value;
+      final credits = double.tryParse(value.toString()) ?? 10.0;
+      return credits;
+    } catch (e) {
+      return 10.0;
+    }
   }
 
   Future<double> addCredits(String userId, double credits) async {
@@ -21,9 +42,16 @@ class AiCreditManager {
     final DatabaseReference database = FirebaseDatabase.instance.ref();
     final ref = database.child('users/$userId/ai_credits');
     final currentCredits = await getCredits(userId);
+    print('Current credits before deduction: $currentCredits');
+
     if (currentCredits >= credits) {
-      await ref.set(currentCredits - credits);
+      final newCredits = currentCredits - credits;
+      await ref.set(newCredits);
+      print('Credits deducted successfully. New balance: $newCredits');
     } else {
+      print(
+        'Insufficient credits. Current: $currentCredits, Required: $credits',
+      );
       throw Exception('Not enough AI credits');
     }
   }
