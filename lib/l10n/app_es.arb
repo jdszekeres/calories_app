@@ -170,5 +170,13 @@
     "potassium": "Potasio",
     "selenium": "Selenio",
     "sodium": "Sodio",
-    "zinc": "Zinc"
+    "zinc": "Zinc",
+
+    "loadingCredits": "Cargando créditos...",
+    "insufficientCredits": "Créditos Insuficientes",
+    "insufficientCreditsMessage": "Necesitas al menos 1 crédito para usar el análisis de IA. Actualmente tienes {credits} créditos. Puedes ganar más créditos viendo anuncios en la página de Configuración.",
+    "ok": "OK",
+    "goToSettings": "Ir a Configuración",
+    "tryAgain": "Intentar de Nuevo",
+    "loading": "Cargando..."
 }

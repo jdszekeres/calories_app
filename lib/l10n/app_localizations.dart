@@ -1099,6 +1099,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Zinc'**
   String get zinc;
+
+  /// No description provided for @loadingCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading credits...'**
+  String get loadingCredits;
+
+  /// No description provided for @insufficientCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient Credits'**
+  String get insufficientCredits;
+
+  /// No description provided for @insufficientCreditsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You need at least 1 credit to use AI analysis. You currently have {credits} credits. You can earn more credits by watching ads in the Settings page.'**
+  String insufficientCreditsMessage(Object credits);
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @goToSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get goToSettings;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
 }
 
 class _AppLocalizationsDelegate
