@@ -9,6 +9,25 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get aiCredits => 'AI Credits';
+
+  @override
+  String get aiCreditDescription =>
+      'You need AI credits to use AI food analysis. Click here to gain 5 more by watching an ad.';
+
+  @override
+  String creditCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Credits',
+      one: '1 Credit',
+      zero: 'No Credits',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get calorieGoals => 'Calorie Goals';
 
   @override
@@ -157,6 +176,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get downloadApp => 'Download App';
+
+  @override
+  String get webAdvertisementTitle =>
+      'We cannot offer advertisements on the web';
+
+  @override
+  String get mobileAdvertisementTitle => 'No advertisements available';
+
+  @override
+  String get useMobileAppMessage => 'Please use the mobile app to view ads';
+
+  @override
+  String get supportMeMessage => 'or consider supporting me via BuyMeACoffee.';
+
+  @override
+  String get supportMe => 'Support Me';
 
   @override
   String get appTitle => 'Calorie Tracker';

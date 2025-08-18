@@ -9,6 +9,25 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
+  String get aiCredits => 'Créditos de IA';
+
+  @override
+  String get aiCreditDescription =>
+      'Nececitas créditos para usar el análisis nutricional con IA. Presiona aqui para mirar un advertisio para ganar 5 créditos más.';
+
+  @override
+  String creditCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count créditos',
+      one: '1 crédito',
+      zero: '0 créditos',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get calorieGoals => 'Metas de Calorías';
 
   @override
@@ -159,6 +178,23 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get downloadApp => 'Descargar aplicación';
+
+  @override
+  String get webAdvertisementTitle => 'No podemos ofrecer anuncios en la web';
+
+  @override
+  String get mobileAdvertisementTitle => 'No hay anuncios disponibles';
+
+  @override
+  String get useMobileAppMessage =>
+      'Por favor usa la aplicación móvil para ver anuncios';
+
+  @override
+  String get supportMeMessage =>
+      'o considera apoyarme a través de BuyMeACoffee.';
+
+  @override
+  String get supportMe => 'Apóyame';
 
   @override
   String get appTitle => 'Contador de calorías';

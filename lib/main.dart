@@ -18,10 +18,12 @@ import 'pages/convert_anon.dart';
 import 'pages/sign_in_anon.dart';
 
 import './l10n/app_localizations.dart';
+import 'tools/ads.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+  await Ads.initializeAds();
 
   try {
     await Firebase.initializeApp(
@@ -144,6 +146,7 @@ class CaloriesTrackerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: AppLocalizations.of(context)?.appTitle ?? 'Calorie Tracker',
       routerConfig: _router,
       theme: ThemeData.from(

@@ -60,9 +60,9 @@ class _AiPageState extends State<AiPage> {
                     } else if (_foodFacts == null) {
                       // If snapshot.data is null, show error
                       return Text(
-                        AppLocalizations.of(
-                          context,
-                        )!.errorWithMessage(AppLocalizations.of(context)!.failedToAnalyzeImage),
+                        AppLocalizations.of(context)!.errorWithMessage(
+                          AppLocalizations.of(context)!.failedToAnalyzeImage,
+                        ),
                       );
                     }
 
@@ -292,6 +292,8 @@ class _AiPageState extends State<AiPage> {
                 ),
               ),
             ),
+
+          Text("-${AppLocalizations.of(context)!.creditCount(1)}"),
 
           const SizedBox(height: 16),
 

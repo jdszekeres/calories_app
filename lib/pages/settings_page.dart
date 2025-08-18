@@ -1,16 +1,67 @@
+import 'package:calories_app/tools/ads.dart';
 import 'package:calories_app/tools/calculate_goals.dart';
 import 'package:calories_app/tools/settings_database.dart';
 import 'package:calories_app/tools/user_database.dart';
 import 'package:calories_app/tools/user_profile.dart';
+import 'package:calories_app/widgets/web_advertisement.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
+// ignore: implementation_imports
+import 'package:settings_ui/src/tiles/platforms/ios_settings_tile.dart';
 
 import '../auth.dart';
+import '../tools/ai_credits.dart';
 import '../widgets/bottom_navbar.dart';
+
+class CustomSettingsTile extends AbstractSettingsTile {
+  final SettingsTileType tileType;
+  final Widget title;
+  final Widget? description;
+  final Widget? leading;
+  final Widget? trailing;
+  final Function(BuildContext)? onPressed;
+  final Function(bool)? onToggle;
+  final Widget? value;
+  final bool? initialValue;
+  final Color? activeSwitchColor;
+  final bool enabled;
+
+  const CustomSettingsTile({
+    required this.tileType,
+    required this.title,
+    this.description,
+    this.leading,
+    this.trailing,
+    this.onPressed,
+    this.value,
+    this.initialValue,
+    this.activeSwitchColor,
+    this.onToggle,
+    this.enabled = true,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IOSSettingsTile(
+      tileType: tileType,
+      title: title,
+      description: description,
+      leading: leading,
+      trailing: trailing,
+      onPressed: onPressed,
+      onToggle: onToggle,
+      value: value,
+      initialValue: initialValue,
+      activeSwitchColor: activeSwitchColor,
+      enabled: enabled,
+    );
+  }
+}
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key? key}) : super(key: key);
@@ -25,12 +76,19 @@ class _SettingsPageState extends State<SettingsPage> {
   Map<String, dynamic>? _settings;
   final Auth auth = Auth();
 
+  double credits = 0;
+
   @override
   void initState() {
     super.initState();
     widget.settingsDatabase.getSettings(Auth().currentUserId!).then((settings) {
       setState(() {
         _settings = settings;
+      });
+      AiCreditManager().getCredits(Auth().currentUserId!).then((value) {
+        setState(() {
+          credits = value;
+        });
       });
     });
   }
@@ -568,8 +626,22 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Future<void> onAdEarned(BuildContext context) async {
+    double newCredits = await AiCreditManager().addCredits(
+      auth.currentUser!.uid,
+      5.0,
+    );
+    setState(() => credits = newCredits);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("+${AppLocalizations.of(context)!.creditCount(5)}"),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(AppLocalizations.of(context)!.creditCount(credits));
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
@@ -592,6 +664,46 @@ class _SettingsPageState extends State<SettingsPage> {
                   SettingsSection(
                     title: Text(AppLocalizations.of(context)!.general),
                     tiles: [
+                      CustomSettingsTile(
+                        tileType: SettingsTileType.simpleTile,
+                        title: Text(AppLocalizations.of(context)!.aiCredits),
+                        description: Text(
+                          AppLocalizations.of(context)!.aiCreditDescription,
+                        ),
+                        leading: Icon(Icons.auto_awesome),
+                        trailing: Text(
+                          AppLocalizations.of(context)!.creditCount(credits),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: (context) async => {
+                          Ads().loadRewarded(context).then((ad) {
+                            if (ad != null) {
+                              ad.show(
+                                onUserEarnedReward: (reward, ad) {
+                                  onAdEarned(context);
+                                },
+                              );
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return WebAdvertisement(
+                                    onClose: () {
+                                      Navigator.of(context).pop();
+                                      onAdEarned(context);
+                                    },
+                                  );
+                                },
+                              );
+                            }
+                          }),
+                        },
+                        onToggle: (bool value) {},
+                        value: null,
+                        initialValue: null,
+                        activeSwitchColor: null,
+                        enabled: true,
+                      ),
                       SettingsTile(
                         title: Text(
                           AppLocalizations.of(context)!.homePageWidgets,

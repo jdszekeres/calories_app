@@ -98,6 +98,24 @@ abstract class AppLocalizations {
     Locale('es'),
   ];
 
+  /// No description provided for @aiCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Credits'**
+  String get aiCredits;
+
+  /// No description provided for @aiCreditDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You need AI credits to use AI food analysis. Click here to gain 5 more by watching an ad.'**
+  String get aiCreditDescription;
+
+  /// No description provided for @creditCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No Credits} =1{1 Credit} other{{count} Credits}}'**
+  String creditCount(num count);
+
   /// No description provided for @calorieGoals.
   ///
   /// In en, this message translates to:
@@ -385,6 +403,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download App'**
   String get downloadApp;
+
+  /// No description provided for @webAdvertisementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We cannot offer advertisements on the web'**
+  String get webAdvertisementTitle;
+
+  /// No description provided for @mobileAdvertisementTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No advertisements available'**
+  String get mobileAdvertisementTitle;
+
+  /// No description provided for @useMobileAppMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please use the mobile app to view ads'**
+  String get useMobileAppMessage;
+
+  /// No description provided for @supportMeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'or consider supporting me via BuyMeACoffee.'**
+  String get supportMeMessage;
+
+  /// No description provided for @supportMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Me'**
+  String get supportMe;
 
   /// No description provided for @appTitle.
   ///

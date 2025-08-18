@@ -1,5 +1,9 @@
 {
 
+    "aiCredits": "AI Credits",
+    "aiCreditDescription": "You need AI credits to use AI food analysis. Click here to gain 5 more by watching an ad.",
+    "creditCount": "{count, plural, =0{No Credits} =1{1 Credit} other{{count} Credits}}",
+
     "calorieGoals": "Calorie Goals",
     "macroNutrientGoals": "Macro Nutrient Goals",
     "vitaminGoals": "Vitamin Goals",
@@ -52,6 +56,11 @@
     "noAccount": "Don't have an account? Sign Up",
     "tryAnon": "Try without an account",
     "downloadApp": "Download App",
+    "webAdvertisementTitle": "We cannot offer advertisements on the web",
+    "mobileAdvertisementTitle": "No advertisements available",
+    "useMobileAppMessage": "Please use the mobile app to view ads",
+    "supportMeMessage": "or consider supporting me via BuyMeACoffee.",
+    "supportMe": "Support Me",
 
     "appTitle": "Calorie Tracker",
     "alreadyHaveAccount": "Already have an account? Sign In",

@@ -1,4 +1,8 @@
 {
+    "aiCredits": "Créditos de IA",
+    "aiCreditDescription": "Nececitas créditos para usar el análisis nutricional con IA. Presiona aqui para mirar un advertisio para ganar 5 créditos más.",
+    "creditCount": "{count, plural, =0{0 créditos} =1{1 crédito} other{{count} créditos}}",
+
     "calorieGoals": "Metas de Calorías",
     "macroNutrientGoals": "Metas de Macronutrientes",
     "vitaminGoals": "Metas de Vitaminas",
@@ -47,6 +51,11 @@
     "noAccount": "¿No tienes cuenta? Regístrate",
     "tryAnon": "Probar sin cuenta",
     "downloadApp": "Descargar aplicación",
+    "webAdvertisementTitle": "No podemos ofrecer anuncios en la web",
+    "mobileAdvertisementTitle": "No hay anuncios disponibles",
+    "useMobileAppMessage": "Por favor usa la aplicación móvil para ver anuncios",
+    "supportMeMessage": "o considera apoyarme a través de BuyMeACoffee.",
+    "supportMe": "Apóyame",
 
     "appTitle": "Contador de calorías",
     "alreadyHaveAccount": "¿Ya tienes una cuenta? Inicia sesión",

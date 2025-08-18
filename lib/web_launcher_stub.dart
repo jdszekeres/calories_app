@@ -5,3 +5,7 @@
 void launchAppDownload(String url) {
   // Use url_launcher in main code
 }
+
+void launchUrl(String url) {
+  // Use url_launcher in main code
+}
