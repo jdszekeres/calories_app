@@ -578,4 +578,22 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get loading => 'Cargando...';
+
+  @override
+  String get selectLanguage => 'Seleccionar idioma';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get spanish => 'Español';
+
+  @override
+  String get chinese => '中文';
+
+  @override
+  String get arabic => 'العربية';
+
+  @override
+  String get languageChangedSuccessfully => '¡Idioma cambiado exitosamente!';
 }

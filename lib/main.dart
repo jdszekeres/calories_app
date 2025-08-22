@@ -154,6 +154,19 @@ class CaloriesTrackerApp extends StatelessWidget {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      localeResolutionCallback: (locale, supportedLocales) {
+        // For Arabic locale, ensure proper RTL support
+        if (locale?.languageCode == 'ar') {
+          return const Locale('ar');
+        }
+        // Default locale resolution logic
+        for (var supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first; // Fallback to first supported locale
+      },
     );
   }
 }

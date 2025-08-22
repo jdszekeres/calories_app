@@ -4,156 +4,152 @@ import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for English (`en`).
-class AppLocalizationsEn extends AppLocalizations {
-  AppLocalizationsEn([String locale = 'en']) : super(locale);
+/// The translations for Chinese (`zh`).
+class AppLocalizationsZh extends AppLocalizations {
+  AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get aiCredits => 'AI Credits';
+  String get aiCredits => 'AI积分';
 
   @override
-  String get aiCreditDescription =>
-      'You need AI credits to use AI food analysis. Click here to gain 5 more by watching an ad.';
+  String get aiCreditDescription => '您需要AI积分来使用AI食物分析。点击这里通过观看广告获得5个积分。';
 
   @override
   String creditCount(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Credits',
-      one: '1 Credit',
-      zero: 'No Credits',
+      other: '$count个积分',
+      one: '1个积分',
+      zero: '无积分',
     );
     return '$_temp0';
   }
 
   @override
-  String get calorieGoals => 'Calorie Goals';
+  String get calorieGoals => '卡路里目标';
 
   @override
-  String get macroNutrientGoals => 'Macro Nutrient Goals';
+  String get macroNutrientGoals => '宏量营养素目标';
 
   @override
-  String get vitaminGoals => 'Vitamin Goals';
+  String get vitaminGoals => '维生素目标';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => '取消';
 
   @override
-  String get setGoal => 'Set Goal';
+  String get setGoal => '设定目标';
 
   @override
-  String get invalidInput => 'Invalid input';
+  String get invalidInput => '无效输入';
 
   @override
-  String get fillForm => 'Please fill out all form fields.';
+  String get fillForm => '请填写所有表单字段。';
 
   @override
-  String get dailyGoals => 'Daily Goals';
+  String get dailyGoals => '每日目标';
 
   @override
-  String get retry => 'Retry';
+  String get retry => '重试';
 
   @override
-  String get noGoalsFound =>
-      'No goals found. Please set your goals in settings.';
+  String get noGoalsFound => '未找到目标。请在设置中设定您的目标。';
 
   @override
-  String get myMeals => 'My Meals';
+  String get myMeals => '我的餐食';
 
   @override
-  String get noMealsFound => 'No meals found. Please add some meals.';
+  String get noMealsFound => '未找到餐食。请添加一些餐食。';
 
   @override
-  String get addMeal => 'Add Meal';
+  String get addMeal => '添加餐食';
 
   @override
-  String get goal => 'Goal';
+  String get goal => '目标';
 
   @override
-  String get enterGoal => 'Enter your goal';
+  String get enterGoal => '输入您的目标';
 
   @override
   String setGoalFor(Object foodType) {
-    return 'Set goal for $foodType';
+    return '为$foodType设定目标';
   }
 
   @override
-  String get welcomeBack => 'Welcome Back!';
+  String get welcomeBack => '欢迎回来！';
 
   @override
-  String get username => 'Username';
+  String get username => '用户名';
 
   @override
-  String get email => 'Email';
+  String get email => '邮箱';
 
   @override
-  String get password => 'Password';
+  String get password => '密码';
 
   @override
-  String get confirmPassword => 'Confirm Password';
+  String get confirmPassword => '确认密码';
 
   @override
-  String get next => 'Next';
+  String get next => '下一步';
 
   @override
-  String get createAccount => 'Create Account';
+  String get createAccount => '创建账户';
 
   @override
-  String get step1_2 => 'Step 1/2';
+  String get step1_2 => '第1步/共2步';
 
   @override
-  String get step2_2 => 'Step 2/2';
+  String get step2_2 => '第2步/共2步';
 
   @override
-  String get tellUs => 'Tell us more about yourself';
+  String get tellUs => '告诉我们更多关于您的信息';
 
   @override
-  String get tellUsExplain =>
-      'This helps us calculate your daily calorie goals';
+  String get tellUsExplain => '这有助于我们计算您的每日卡路里目标';
 
   @override
-  String get age => 'Age';
+  String get age => '年龄';
 
   @override
-  String get useImperial => 'Use imperial units';
+  String get useImperial => '使用英制单位';
 
   @override
-  String get weight => 'Weight (kg)';
+  String get weight => '体重 (公斤)';
 
   @override
-  String get weightImperial => 'Weight (lb)';
+  String get weightImperial => '体重 (磅)';
 
   @override
-  String get height => 'Height (cm)';
+  String get height => '身高 (厘米)';
 
   @override
-  String get heightImperial => 'Height (in)';
+  String get heightImperial => '身高 (英寸)';
 
   @override
-  String get sex => 'Sex';
+  String get sex => '性别';
 
   @override
-  String get male => 'Male';
+  String get male => '男性';
 
   @override
-  String get female => 'Female';
+  String get female => '女性';
 
   @override
-  String get activityLevel => 'Activity Level';
+  String get activityLevel => '活动水平';
 
   @override
-  String get sedentary => 'Sedentary (little or no exercise)';
+  String get sedentary => '久坐 (很少或不运动)';
 
   @override
-  String get lightlyActive => 'Lightly Active (light exercise 1-3 days/week)';
+  String get lightlyActive => '轻度活跃 (每周轻度运动1-3天)';
 
   @override
-  String get moderatelyActive =>
-      'Moderately Active (moderate exercise 3-5 days/week)';
+  String get moderatelyActive => '中度活跃 (每周中度运动3-5天)';
 
   @override
-  String get veryActive => 'Very Active (hard exercise 6-7 days a week)';
+  String get veryActive => '高度活跃 (每周高强度运动6-7天)';
 
   @override
   String get extraActive =>
@@ -166,7 +162,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get back => 'Back';
 
   @override
-  String get signIn => 'Sign In';
+  String get signIn => '登录';
 
   @override
   String get noAccount => 'Don\'t have an account? Sign Up';
@@ -175,7 +171,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tryAnon => 'Try without an account';
 
   @override
-  String get downloadApp => 'Download App';
+  String get downloadApp => '下载应用';
 
   @override
   String get webAdvertisementTitle =>
@@ -216,159 +212,155 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordTooShort => 'Password must be at least 6 characters long';
 
   @override
-  String get passwordsDoNotMatch => 'Passwords do not match';
+  String get passwordsDoNotMatch => '密码不匹配。';
 
   @override
-  String get invalidAge => 'Please enter a valid age';
+  String get invalidAge => '请输入有效年龄';
 
   @override
-  String get invalidWeight => 'Please enter a valid weight';
+  String get invalidWeight => '请输入有效体重';
 
   @override
-  String get invalidHeight => 'Please enter a valid height';
+  String get invalidHeight => '请输入有效身高';
 
   @override
   String errorLoadingData(Object message) {
-    return 'Error loading data: $message';
+    return '加载数据时出错：$message';
   }
 
   @override
   String errorLoadingGoals(Object message) {
-    return 'Error loading goals: $message';
+    return '加载目标时出错：$message';
   }
 
   @override
-  String get editNutritionFacts => 'Edit nutrition facts';
+  String get editNutritionFacts => '编辑营养成分';
 
   @override
-  String get nutritionFacts => 'Nutrition Facts';
+  String get nutritionFacts => '营养成分';
 
   @override
-  String get servingSize => 'Serving size';
+  String get servingSize => '份量';
 
   @override
   String servingSizeValue(Object servingSize) {
-    return 'Serving size $servingSize';
+    return '份量大小 $servingSize';
   }
 
   @override
   String youAteServings(Object servings) {
-    return 'You ate $servings servings';
+    return '您吃了 $servings 份';
   }
 
   @override
-  String get yourIntake => 'Your Intake';
+  String get yourIntake => '您的摄入量';
 
   @override
-  String get ingredients => 'Ingredients';
+  String get ingredients => '成分';
 
   @override
-  String get save => 'Save';
+  String get save => '保存';
 
   @override
-  String get confirm => 'Confirm';
+  String get confirm => '确认';
 
   @override
-  String get settings => 'Settings';
+  String get settings => '设置';
 
   @override
-  String get general => 'General';
+  String get general => '通用';
 
   @override
-  String get homePageWidgets => 'Home Page Widgets';
+  String get homePageWidgets => '首页小部件';
 
   @override
-  String get selectHomeWidgetsDescription =>
-      'Select what goals should appear on the homescreen';
+  String get selectHomeWidgetsDescription => '选择哪些目标应显示在主屏幕上';
 
   @override
-  String get selectHomePageWidgets => 'Select Home Page Widgets';
+  String get selectHomePageWidgets => '选择首页小部件';
 
   @override
-  String get homePageWidgetsUpdated => 'Home page widgets updated successfully';
+  String get homePageWidgetsUpdated => '首页小部件更新成功';
 
   @override
-  String get nutritionGoals => 'Nutrition Goals';
+  String get nutritionGoals => '营养目标';
 
   @override
-  String get updateHealthInformation => 'Update health information';
+  String get updateHealthInformation => '更新健康信息';
 
   @override
-  String get resetNutritionGoals => 'Reset Nutrition Goals';
+  String get resetNutritionGoals => '重置营养目标';
 
   @override
-  String get nutritionGoalsReset => 'Nutrition goals reset successfully';
+  String get nutritionGoalsReset => '营养目标重置成功';
 
   @override
-  String get account => 'Account';
+  String get account => '账户';
 
   @override
-  String get createAccountDesc =>
-      'Want to keep using our app? Create an account to save your data.';
+  String get createAccountDesc => '想继续使用我们的应用？创建账户以保存您的数据。';
 
   @override
-  String get signOut => 'Sign Out';
+  String get signOut => '退出登录';
 
   @override
-  String get deleteAccount => 'Delete Account';
+  String get deleteAccount => '删除账户';
 
   @override
-  String get delete => 'Delete';
+  String get delete => '删除';
 
   @override
-  String get deleteAccountConfirmTitle => 'Delete Account';
+  String get deleteAccountConfirmTitle => '删除账户';
 
   @override
-  String get deleteAccountConfirmBody =>
-      'Are you sure you want to delete your account? This action cannot be undone.';
+  String get deleteAccountConfirmBody => '您确定要删除您的账户吗？此操作无法撤销。';
 
   @override
-  String get accountDeleted => 'Account deleted successfully';
+  String get accountDeleted => '账户删除成功';
 
   @override
-  String get metric => 'Metric';
+  String get metric => '公制';
 
   @override
-  String get imperial => 'Imperial';
+  String get imperial => '英制';
 
   @override
-  String get years => 'years';
+  String get years => '年';
 
   @override
-  String get saving => 'Saving...';
+  String get saving => '保存中...';
 
   @override
-  String get updateHealthInformationSuccess =>
-      'Health information updated successfully!';
+  String get updateHealthInformationSuccess => '健康信息更新成功！';
 
   @override
-  String get couldNotLoadUserProfile => 'Could not load user profile';
+  String get couldNotLoadUserProfile => '无法加载用户配置文件';
 
   @override
   String errorSavingHealthInformation(Object message) {
-    return 'Error saving health information: $message';
+    return '保存健康信息时出错：$message';
   }
 
   @override
-  String get createAccountTagline => 'Save your data and sync across devices';
+  String get createAccountTagline => '保存您的数据并跨设备同步';
 
   @override
-  String get createAccountSuccess => 'Account created successfully';
+  String get createAccountSuccess => '账户创建成功';
 
   @override
-  String get unitKg => 'kg';
+  String get unitKg => '公斤';
 
   @override
-  String get unitLbs => 'lbs';
+  String get unitLbs => '磅';
 
   @override
-  String get unitCm => 'cm';
+  String get unitCm => '厘米';
 
   @override
-  String get unitFt => 'ft';
+  String get unitFt => '英尺';
 
   @override
-  String get unitIn => 'in';
+  String get unitIn => '英寸';
 
   @override
   String get unitKcal => 'kcal';
@@ -446,28 +438,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToAnalyzeImage => 'Failed to analyze image';
 
   @override
-  String get calories => 'Calories';
+  String get calories => '卡路里';
 
   @override
-  String get carbohydrates => 'Carbohydrates';
+  String get carbohydrates => '碳水化合物';
 
   @override
-  String get fiber => 'Fiber';
+  String get fiber => '纤维';
 
   @override
-  String get protein => 'Protein';
+  String get protein => '蛋白质';
 
   @override
-  String get fat => 'Fat';
+  String get fat => '脂肪';
 
   @override
-  String get sugar => 'Sugar';
+  String get sugar => '糖';
 
   @override
   String get water => 'Water';
 
   @override
-  String get vitaminA => 'Vitamin A';
+  String get vitaminA => '维生素A';
 
   @override
   String get vitaminD => 'Vitamin D';
@@ -479,7 +471,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vitaminK => 'Vitamin K';
 
   @override
-  String get vitaminC => 'Vitamin C';
+  String get vitaminC => '维生素C';
 
   @override
   String get thiamin => 'Thiamin';
@@ -506,7 +498,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choline => 'Choline';
 
   @override
-  String get calcium => 'Calcium';
+  String get calcium => '钙';
 
   @override
   String get chlorine => 'Chlorine';
@@ -521,7 +513,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get iodine => 'Iodine';
 
   @override
-  String get iron => 'Iron';
+  String get iron => '铁';
 
   @override
   String get magnesium => 'Magnesium';
@@ -542,7 +534,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get selenium => 'Selenium';
 
   @override
-  String get sodium => 'Sodium';
+  String get sodium => '钠';
 
   @override
   String get zinc => 'Zinc';
@@ -568,10 +560,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tryAgain => 'Try Again';
 
   @override
-  String get loading => 'Loading...';
+  String get loading => '加载中...';
 
   @override
-  String get selectLanguage => 'Select Language';
+  String get selectLanguage => '选择语言';
 
   @override
   String get english => 'English';
@@ -586,5 +578,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get arabic => 'العربية';
 
   @override
-  String get languageChangedSuccessfully => 'Language changed successfully!';
+  String get languageChangedSuccessfully => '语言更改成功！';
 }

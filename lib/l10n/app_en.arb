@@ -183,5 +183,12 @@
     "ok": "OK",
     "goToSettings": "Go to Settings",
     "tryAgain": "Try Again",
-    "loading": "Loading..."
+    "loading": "Loading...",
+
+    "selectLanguage": "Select Language",
+    "english": "English",
+    "spanish": "Español",
+    "chinese": "中文",
+    "arabic": "العربية",
+    "languageChangedSuccessfully": "Language changed successfully!"
 }

@@ -178,5 +178,12 @@
     "ok": "OK",
     "goToSettings": "Ir a Configuración",
     "tryAgain": "Intentar de Nuevo",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+
+    "selectLanguage": "Seleccionar idioma",
+    "english": "English",
+    "spanish": "Español",
+    "chinese": "中文",
+    "arabic": "العربية",
+    "languageChangedSuccessfully": "¡Idioma cambiado exitosamente!"
 }

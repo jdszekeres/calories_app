@@ -607,7 +607,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                   content: Text(
                                     AppLocalizations.of(
                                       context,
-                                    )!.errorSavingHealthInformation(e),
+                                    )!.errorSavingHealthInformation(
+                                      e.toString(),
+                                    ),
                                   ),
                                   backgroundColor: Theme.of(
                                     context,
@@ -726,6 +728,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         activeSwitchColor: null,
                         enabled: true,
                       ),
+
                       SettingsTile(
                         title: Text(
                           AppLocalizations.of(context)!.homePageWidgets,
