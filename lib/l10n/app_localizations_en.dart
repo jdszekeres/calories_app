@@ -586,5 +586,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get arabic => 'العربية';
 
   @override
+  String get hindi => 'हिंदी';
+
+  @override
   String get languageChangedSuccessfully => 'Language changed successfully!';
 }

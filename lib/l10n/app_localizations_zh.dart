@@ -578,5 +578,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get arabic => 'العربية';
 
   @override
+  String get hindi => 'हिंदी';
+
+  @override
   String get languageChangedSuccessfully => '语言更改成功！';
 }
