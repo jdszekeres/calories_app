@@ -20,6 +20,8 @@ import 'pages/sign_in_anon.dart';
 import './l10n/app_localizations.dart';
 import 'tools/ads.dart';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "env");
@@ -29,6 +31,10 @@ Future<void> main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
+    // Initialize Firebase Analytics after Firebase Core is initialized
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    await analytics.logAppOpen();
   } catch (e) {
     debugPrint('Error initializing Firebase: $e');
   }

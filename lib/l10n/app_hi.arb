@@ -18,6 +18,7 @@
     "myMeals": "मेरे भोजन",
     "noMealsFound": "कोई भोजन नहीं मिला। कृपया कुछ भोजन जोड़ें।",
     "addMeal": "भोजन जोड़ें",
+    "reAddMeal": "भोजन फिर से जोड़ें",
 
     "goal": "लक्ष्य",
     "enterGoal": "अपना लक्ष्य दर्ज करें",
@@ -205,6 +206,7 @@
     "scanBarcodeTitle": "बारकोड स्कैन करें",
     "mealDetailsTitle": "भोजन विवरण",
     "aiNutritionAnalysisTitle": "एआई पोषण विश्लेषण",
+    "aiDescriptionAnalysisTitle": "एआई के साथ भोजन का वर्णन करें",
     "noImageSelected": "कोई छवि चयनित नहीं",
     "aiPoweredNutritionAnalysis": "एआई-संचालित पोषण विश्लेषण",
     "aiAnalysisDescription": "अपने भोजन की फोटो अपलोड करें और हमारे एआई को तुरंत इसकी पोषण सामग्री का विश्लेषण करने दें",

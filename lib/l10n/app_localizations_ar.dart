@@ -68,6 +68,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addMeal => 'إضافة وجبة';
 
   @override
+  String get reAddMeal => 'إعادة إضافة وجبة';
+
+  @override
   String get goal => 'الهدف';
 
   @override
@@ -403,6 +406,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get aiNutritionAnalysisTitle => 'تحليل التغذية بالذكاء الاصطناعي';
+
+  @override
+  String get aiDescriptionAnalysisTitle => 'Describe Meal With AI';
 
   @override
   String get noImageSelected => 'لم يتم اختيار صورة';

@@ -1,6 +1,7 @@
 import 'package:calories_app/l10n/app_localizations.dart';
-import 'package:calories_app/pages/ai_page.dart';
+import 'package:calories_app/pages/ai_image_page.dart';
 import 'package:calories_app/pages/mobile_scanner.dart';
+import 'package:calories_app/pages/ai_desc_page.dart';
 import 'package:flutter/material.dart';
 import '../widgets/bottom_navbar.dart';
 import 'search_food.dart';
@@ -99,6 +100,17 @@ class AddPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AiPage()),
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            Button(
+              icon: Icons.text_snippet,
+              text: local.aiDescriptionAnalysisTitle,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AiDescPage()),
                 );
               },
             ),

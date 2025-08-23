@@ -66,6 +66,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addMeal => '添加餐食';
 
   @override
+  String get reAddMeal => '重新添加餐食';
+
+  @override
   String get goal => '目标';
 
   @override
@@ -395,6 +398,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get aiNutritionAnalysisTitle => 'AI Nutrition Analysis';
+
+  @override
+  String get aiDescriptionAnalysisTitle => 'Describe Meal With AI';
 
   @override
   String get noImageSelected => 'No image selected';

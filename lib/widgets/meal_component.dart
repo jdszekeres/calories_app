@@ -6,6 +6,7 @@ class MealComponent extends StatelessWidget {
   final String mealTime;
   final num calories;
   final VoidCallback? onTap;
+  final VoidCallback? onReAdd;
 
   const MealComponent({
     Key? key,
@@ -13,6 +14,7 @@ class MealComponent extends StatelessWidget {
     required this.mealTime,
     required this.calories,
     this.onTap,
+    this.onReAdd,
   }) : super(key: key);
 
   @override
@@ -26,9 +28,22 @@ class MealComponent extends StatelessWidget {
           mealTime,
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        trailing: Text(
-          '${calories.toStringAsFixed(1)} ${AppLocalizations.of(context)!.unitKcal}',
-          style: Theme.of(context).textTheme.bodyLarge,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '${calories.toStringAsFixed(1)} ${AppLocalizations.of(context)!.unitKcal}',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            if (onReAdd != null) ...[
+              const SizedBox(width: 8),
+              IconButton(
+                icon: const Icon(Icons.replay),
+                onPressed: onReAdd,
+                tooltip: AppLocalizations.of(context)!.reAddMeal,
+              ),
+            ],
+          ],
         ),
       ),
     );

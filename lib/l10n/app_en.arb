@@ -18,6 +18,7 @@
     "myMeals": "My Meals",
     "noMealsFound": "No meals found. Please add some meals.",
     "addMeal": "Add Meal",
+    "reAddMeal": "Re-add Meal",
 
     "goal": "Goal",
     "enterGoal": "Enter your goal",
@@ -128,6 +129,7 @@
     "scanBarcodeTitle": "Scan Barcode",
     "mealDetailsTitle": "Meal Details",
     "aiNutritionAnalysisTitle": "AI Nutrition Analysis",
+    "aiDescriptionAnalysisTitle": "Describe Meal With AI",
     "noImageSelected": "No image selected",
     "aiPoweredNutritionAnalysis": "AI-Powered Nutrition Analysis",
     "aiAnalysisDescription": "Upload a photo of your meal and let our AI analyze its nutritional content instantly",

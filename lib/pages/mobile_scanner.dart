@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-
+import 'package:firebase_analytics/firebase_analytics.dart';
 import '../tools/meal_database.dart';
 
 class MobileScannerWidget extends StatefulWidget {
@@ -142,6 +142,14 @@ class _MobileScannerWidgetState extends State<MobileScannerWidget> {
                           ElevatedButton(
                             onPressed: () async {
                               if (servings != null) {
+                                FirebaseAnalytics.instance.logEvent(
+                                  name: 'meal_added',
+                                  parameters: {
+                                    'barcode': scannedBarcode!,
+                                    'name': _foodFacts!.name,
+                                    'servings': servings!,
+                                  },
+                                );
                                 await MealDatabase().addMeal(
                                   auth.currentUser!.uid,
                                   _foodFacts!.copyWith(

@@ -18,6 +18,7 @@
     "myMeals": "我的餐食",
     "noMealsFound": "未找到餐食。请添加一些餐食。",
     "addMeal": "添加餐食",
+    "reAddMeal": "重新添加餐食",
 
     "goal": "目标",
     "enterGoal": "输入您的目标",

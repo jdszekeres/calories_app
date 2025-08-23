@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class Ads {
   static String get adUnitId {
@@ -33,6 +34,7 @@ class Ads {
     }
     if (isSupported) {
       await MobileAds.instance.initialize();
+
       print('Ads initialized successfully.');
     } else {
       print('Ads are not supported on this platform.');
@@ -69,6 +71,23 @@ class Ads {
         request: AdRequest(),
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           onAdLoaded: (RewardedAd ad) {
+            ad.onPaidEvent =
+                (
+                  Ad ad,
+                  double adValue,
+                  PrecisionType precision,
+                  String currencyCode,
+                ) {
+                  FirebaseAnalytics.instance.logEvent(
+                    name: 'ad_rewarded',
+                    parameters: {
+                      'ad_unit_id': ad.adUnitId,
+                      'ad_value': adValue,
+                      'precision': precision.toString(),
+                      'currency_code': currencyCode,
+                    },
+                  );
+                };
             timeoutTimer.cancel();
             _rewardedAd = ad;
             _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
@@ -83,7 +102,6 @@ class Ads {
                     _rewardedAd = null;
                   },
             );
-            print("loaded ${_rewardedAd?.adUnitId}");
             if (!completer.isCompleted) {
               completer.complete(_rewardedAd);
             }

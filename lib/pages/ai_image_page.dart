@@ -78,7 +78,7 @@ class _AiPageState extends State<AiPage> {
     }
 
     try {
-      final result = await AiService().getMealNutrition(_imageData!);
+      final result = await AiService().getMealNutritionByImage(_imageData!);
       // Only deduct credits from database, not locally (database is source of truth)
       await AiCreditManager().deductCredits(auth.currentUser!.uid, 1.0);
       // Reload credits from database to ensure consistency

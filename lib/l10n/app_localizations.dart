@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Add Meal'**
   String get addMeal;
 
+  /// No description provided for @reAddMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-add Meal'**
+  String get reAddMeal;
+
   /// No description provided for @goal.
   ///
   /// In en, this message translates to:
@@ -823,6 +829,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'AI Nutrition Analysis'**
   String get aiNutritionAnalysisTitle;
+
+  /// No description provided for @aiDescriptionAnalysisTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe Meal With AI'**
+  String get aiDescriptionAnalysisTitle;
 
   /// No description provided for @noImageSelected.
   ///

@@ -2,7 +2,6 @@ import 'package:calories_app/l10n/app_localizations.dart';
 import 'package:calories_app/tools/meal_database.dart';
 import 'package:calories_app/widgets/meal_component.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../auth.dart';
@@ -20,18 +19,51 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   final auth = Auth();
   final List<FoodFacts> items = [];
+  final MealDatabase mealDatabase = MealDatabase();
+  final ScrollController _scrollController = ScrollController();
   DateFormat? dateFormat;
   // Format for day headers
   DateFormat? headerDateFormat;
   @override
   void initState() {
     super.initState();
-    MealDatabase().getMeals(auth.currentUser!.uid).then((fetchedItems) {
+    mealDatabase.getMeals(auth.currentUser!.uid).then((fetchedItems) {
       setState(() {
         items.addAll(fetchedItems);
         items.sort((a, b) => b.uploaded!.compareTo(a.uploaded!));
       });
     });
+  }
+
+  Future<void> _reAddMeal(FoodFacts originalMeal) async {
+    try {
+      // Create a copy of the meal with current timestamp
+      final copiedMeal = FoodFacts(
+        name: originalMeal.name,
+        servingSize: originalMeal.servingSize,
+        numServings: originalMeal.numServings,
+        uploaded: DateTime.now(),
+        image: originalMeal.image,
+        ingredients: originalMeal.ingredients,
+        nutrutionInfo: originalMeal.nutrutionInfo,
+      );
+
+      // Add the copied meal to the database
+      await mealDatabase.addMeal(auth.currentUser!.uid, copiedMeal);
+
+      // Add to local list and refresh the UI
+      setState(() {
+        items.add(copiedMeal);
+        items.sort((a, b) => b.uploaded!.compareTo(a.uploaded!));
+      });
+      _scrollController.animateTo(
+        0.0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -69,6 +101,7 @@ class _ListPageState extends State<ListPage> {
               ),
             )
           : ListView.builder(
+              controller: _scrollController,
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final item = items[index];
@@ -123,11 +156,18 @@ class _ListPageState extends State<ListPage> {
                           ),
                         );
                       },
+                      onReAdd: () => _reAddMeal(item),
                     ),
                   ],
                 );
               },
             ),
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }

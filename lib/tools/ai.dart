@@ -74,21 +74,66 @@ class AiService {
     ),
   );
   late final String units;
+  late final TextPart textHint;
   AiService() {
     units = NutrutionGoals.keys.fold("", (previousValue, element) {
       return "$previousValue$element:${NutrutionGoals.getUnit(element)},";
     });
+    textHint = TextPart(
+      "Return each nutrient with its correct unit. $units. Include unit in serving size i.e. '1 burger' or '100g', not '1 serving'.",
+    );
   }
 
-  Future<FoodFacts?> getMealNutrition(Uint8List image) async {
+  Future<FoodFacts?> getMealNutritionByDescription(String description) async {
+    try {
+      final prompt = TextPart(
+        "You are a nutrition expert. Carefully analyze the following meal description and provide the nutrition facts in JSON format: $description",
+      );
+      final response = await model.generateContent([
+        Content.multi([prompt, textHint]),
+      ]);
+      if (response.text == null || response.text!.isEmpty) {
+        return null;
+      }
+      final jsonResponse = response.text;
+      final data = jsonDecode(jsonResponse!) as Map<String, dynamic>;
+      // Map AI JSON into our data models
+      final info = data['info'] as Map<String, dynamic>? ?? {};
+      final name = info['name'] as String? ?? 'Unknown';
+      final numServings = (info['servingSize'] as num?)?.toDouble() ?? 1.0;
+      final servingCount =
+          info['servingCount'] as String? ?? numServings.toString();
+      final ingredients =
+          (data['ingredients'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [];
+      final nutrInfo = NutrutionGoals.fromJson(data);
+      return FoodFacts(
+        name: name,
+        servingSize: servingCount,
+        numServings: numServings,
+        uploaded: DateTime.now(),
+        image:
+            "https://placehold.co/600x400.png?text=Described%20With%20AI", // Placeholder for image URL
+        ingredients: ingredients,
+        nutrutionInfo: nutrInfo,
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error in AI service: $e');
+      }
+      return null;
+    }
+  }
+
+  Future<FoodFacts?> getMealNutritionByImage(Uint8List image) async {
     try {
       final imagePart = InlineDataPart('image/jpeg', image);
       final prompt = TextPart(
         'You are a nutrition expert. Analyze the meal in the image and provide the nutrition facts in JSON format. Take meal size into account.',
       );
-      final textHint = TextPart(
-        "Return each nutrient with its correct unit. $units. Include unit in serving size i.e. '1 burger' or '100g', not '1 serving'.",
-      );
+
       final response = await model.generateContent([
         Content.multi([prompt, textHint, imagePart]),
       ]);
