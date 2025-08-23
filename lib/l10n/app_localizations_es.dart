@@ -259,6 +259,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get servingCount => 'Número de porciones';
+
+  @override
   String youAteServings(Object servings) {
     return 'Comiste $servings porciones';
   }

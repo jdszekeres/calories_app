@@ -80,6 +80,7 @@
     "nutritionFacts": "Nutrition Facts",
     "servingSize": "Serving size",
     "servingSizeValue": "Serving size {servingSize}",
+    "servingCount": "Number of Servings",
     "youAteServings": "You ate {servings} servings",
     "yourIntake": "Your Intake",
     "ingredients": "Ingredients",

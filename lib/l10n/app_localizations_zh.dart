@@ -251,6 +251,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get servingCount => '份数';
+
+  @override
   String youAteServings(Object servings) {
     return '您吃了 $servings 份';
   }

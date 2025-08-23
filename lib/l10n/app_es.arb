@@ -75,6 +75,7 @@
     "nutritionFacts": "Información nutricional",
     "servingSize": "Tamaño de la porción",
     "servingSizeValue": "Tamaño de la porción {servingSize}",
+    "servingCount": "Número de porciones",
     "youAteServings": "Comiste {servings} porciones",
     "yourIntake": "Tu ingesta",
     "ingredients": "INGREDIENTES:",

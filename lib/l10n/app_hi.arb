@@ -159,6 +159,7 @@
 
     "servingSize": "परोसने का आकार",
     "servingSizeValue": "परोसने का आकार {servingSize}",
+    "servingCount": "सेव की गई सर्विंग्स की संख्या",
     "youAteServings": "आपने {servings} भाग खाए",
     "yourIntake": "आपका सेवन",
     "ingredients": "सामग्री",

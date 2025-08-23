@@ -79,6 +79,7 @@
     "nutritionFacts": "حقائق التغذية",
     "servingSize": "حجم الحصة",
     "servingSizeValue": "حجم الحصة {servingSize}",
+    "servingCount": "عدد الحصص",
     "youAteServings": "تناولت {servings} حصص",
     "yourIntake": "استهلاكك",
     "ingredients": "المكونات",

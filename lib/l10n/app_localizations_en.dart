@@ -255,6 +255,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get servingCount => 'Number of Servings';
+
+  @override
   String youAteServings(Object servings) {
     return 'You ate $servings servings';
   }

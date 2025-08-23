@@ -255,6 +255,9 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get servingCount => 'عدد الحصص';
+
+  @override
   String youAteServings(Object servings) {
     return 'تناولت $servings حصص';
   }

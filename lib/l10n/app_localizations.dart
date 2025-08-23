@@ -548,6 +548,12 @@ abstract class AppLocalizations {
   /// **'Serving size {servingSize}'**
   String servingSizeValue(Object servingSize);
 
+  /// No description provided for @servingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Servings'**
+  String get servingCount;
+
   /// No description provided for @youAteServings.
   ///
   /// In en, this message translates to:

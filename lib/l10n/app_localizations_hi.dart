@@ -255,6 +255,9 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String get servingCount => 'सेव की गई सर्विंग्स की संख्या';
+
+  @override
   String youAteServings(Object servings) {
     return 'आपने $servings भाग खाए';
   }

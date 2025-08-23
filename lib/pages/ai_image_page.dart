@@ -228,6 +228,7 @@ class _AiPageState extends State<AiPage> {
           NutriFacts(
             foodFacts: _foodFacts!,
             servings: _foodFacts!.numServings ?? 1,
+            servingsEditable: true,
             onEdit: (editedFoodFacts) {
               setState(() {
                 _foodFacts = editedFoodFacts;

@@ -66,6 +66,17 @@ class _ListPageState extends State<ListPage> {
     }
   }
 
+  Future<void> _deleteMeal(FoodFacts meal) async {
+    try {
+      await mealDatabase.deleteMeal(auth.currentUser!.uid, meal.uploaded!);
+      setState(() {
+        items.remove(meal);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     AppLocalizations local = AppLocalizations.of(context)!;
@@ -157,6 +168,7 @@ class _ListPageState extends State<ListPage> {
                         );
                       },
                       onReAdd: () => _reAddMeal(item),
+                      onDelete: () => _deleteMeal(item),
                     ),
                   ],
                 );

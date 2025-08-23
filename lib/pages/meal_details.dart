@@ -41,6 +41,7 @@ class _MealDetailsState extends State<MealDetails> {
             NutriFacts(
               foodFacts: foodFacts,
               servings: foodFacts.numServings ?? 1,
+              servingsEditable: true,
               onEdit: (newFoodFacts) {
                 setState(() {
                   foodFacts = newFoodFacts;

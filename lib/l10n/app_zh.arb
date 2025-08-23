@@ -236,6 +236,7 @@
     "yourIntake": "您的摄入量",
     "ingredients": "成分",
     "servingSizeValue": "份量大小 {servingSize}",
+    "servingCount": "份数",
     "youAteServings": "您吃了 {servings} 份",
     "editNutritionFacts": "编辑营养成分",
     "errorLoadingData": "加载数据时出错：{message}",

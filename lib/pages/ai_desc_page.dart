@@ -227,6 +227,7 @@ class _AiDescPageState extends State<AiDescPage> {
           NutriFacts(
             foodFacts: _foodFacts!,
             servings: _foodFacts!.numServings ?? 1,
+            servingsEditable: true,
             onEdit: (editedFoodFacts) {
               setState(() {
                 _foodFacts = editedFoodFacts;

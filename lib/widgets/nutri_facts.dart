@@ -7,12 +7,14 @@ class NutriFacts extends StatefulWidget {
   final FoodFacts foodFacts;
   final double servings;
   final Function(FoodFacts) onEdit;
+  final bool servingsEditable;
 
   const NutriFacts({
     super.key,
     required this.foodFacts,
     required this.servings,
     required this.onEdit,
+    this.servingsEditable = false,
   });
 
   @override
@@ -155,11 +157,37 @@ class _NutriFactsState extends State<NutriFacts> {
                     color: Colors.black,
                   ),
                 ),
-          Text(
-            AppLocalizations.of(
-              context,
-            )!.youAteServings(widget.servings.toStringAsFixed(1)),
-          ),
+
+          (_isEditing && widget.servingsEditable
+              ? const SizedBox(height: 20)
+              : SizedBox.shrink()),
+
+          _isEditing && widget.servingsEditable
+              ? (TextFormField(
+                  initialValue: _editableFoodFacts.numServings!
+                      .toInt()
+                      .toString(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.servingCount,
+                    border: const OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                  onChanged: (value) {
+                    _editableFoodFacts = _editableFoodFacts.copyWith(
+                      numServings: double.tryParse(value) ?? 0,
+                    );
+                  },
+                ))
+              : (Text(
+                  AppLocalizations.of(
+                    context,
+                  )!.youAteServings(widget.servings.toStringAsFixed(1)),
+                )),
           const Divider(color: Colors.black, thickness: 4),
 
           // Calories
