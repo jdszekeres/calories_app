@@ -25,7 +25,6 @@ class MacroNutrientGoals {
     'protein',
     'fat',
     'sugar',
-    'water',
   ];
 
   MacroNutrientGoals({

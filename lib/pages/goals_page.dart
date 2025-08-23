@@ -247,6 +247,7 @@ class _GoalsPageState extends State<GoalsPage> {
                   title: Text(NutrutionGoals.getName(context, key)),
                   tiles: jsonGoals[key].keys
                       .toList()
+                      .where((goalName) => goalName != "water")
                       .map((goalName) {
                         return GoalAmount(
                           name: NutrutionGoals.getName(context, goalName),
