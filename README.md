@@ -159,12 +159,10 @@ If you encounter any issues or have questions:
 
 ## 🎯 Roadmap
 
-- [ ] Integration with fitness trackers
 - [ ] Meal planning and recipes
 - [ ] Social features and community sharing
 - [ ] Advanced analytics and insights
 - [ ] Machine learning for better food recognition
-- [ ] Nutritionist recommendations
 
 ---
 
