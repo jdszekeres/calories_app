@@ -194,5 +194,23 @@
     "chinese": "中文",
     "arabic": "العربية",
     "hindi": "हिंदी",
-    "languageChangedSuccessfully": "Language changed successfully!"
+    "languageChangedSuccessfully": "Language changed successfully!",
+
+    "onboardingWelcome": "Welcome to Calories Tracker Pro Max!",
+    "onboardingCalorieCircle": "This shows your daily calorie progress. Track your calorie progress throughout the day.",
+    "onboardingNutrientBars": "These progress bars show your intake for certain macronutrients. You can customize which bars appear in settings.",
+    "onboardingNutrientTitle": "Nutrient Progress",
+    "onboardingNutrientDescription": "These progress bars show your macronutrient intake for protein, carbohydrates, and fat throughout the day.",
+    "onboardingHomeTitle": "Home",
+    "onboardingHomeDescription": "View your daily calorie and nutrition progress here.",
+    "onboardingGoalsTitle": "Goals Page", 
+    "onboardingGoalsDescription": "See all your goals and daily progress here.",
+    "onboardingAddTitle": "Log Your Meals",
+    "onboardingAddDescription": "You can log meals here using barcodes, search, AI Images, and AI meal descriptions. You get 10 free AI credits, then you can watch ads for more.",
+    "onboardingListTitle": "Meal List",
+    "onboardingListDescription": "See all logged meals here.",
+    "onboardingSettingsTitle": "Settings",
+    "onboardingSettingsDescription": "Get AI credits, customize the homepage, and manage your account here.",
+    "skipOnboarding": "Skip",
+    "resetOnboarding": "Rewatch Tutorial"
 }

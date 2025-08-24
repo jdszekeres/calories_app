@@ -3,9 +3,24 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:showcaseview/showcaseview.dart';
+import '../l10n/app_localizations.dart';
 
 class BottomNavbar extends StatefulWidget {
-  const BottomNavbar({Key? key}) : super(key: key);
+  final GlobalKey? homeButtonKey;
+  final GlobalKey? goalsButtonKey;
+  final GlobalKey? addButtonKey;
+  final GlobalKey? listButtonKey;
+  final GlobalKey? settingsButtonKey;
+
+  const BottomNavbar({
+    Key? key,
+    this.homeButtonKey,
+    this.goalsButtonKey,
+    this.addButtonKey,
+    this.listButtonKey,
+    this.settingsButtonKey,
+  }) : super(key: key);
 
   @override
   State<BottomNavbar> createState() => _BottomNavbarState();
@@ -80,23 +95,68 @@ class _BottomNavbarState extends State<BottomNavbar> {
       ),
       items: [
         PersistentBottomNavBarItem(
-          icon: Icon(Icons.home),
+          icon: widget.homeButtonKey != null
+              ? Showcase(
+                  key: widget.homeButtonKey!,
+                  title: AppLocalizations.of(context)!.onboardingHomeTitle,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.onboardingHomeDescription,
+                  child: Icon(Icons.home),
+                )
+              : Icon(Icons.home),
           activeColorPrimary: Theme.of(context).colorScheme.inversePrimary,
         ),
         PersistentBottomNavBarItem(
-          icon: Icon(Icons.fastfood),
+          icon: widget.goalsButtonKey != null
+              ? Showcase(
+                  key: widget.goalsButtonKey!,
+                  title: AppLocalizations.of(context)!.onboardingGoalsTitle,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.onboardingGoalsDescription,
+                  child: Icon(Icons.fastfood),
+                )
+              : Icon(Icons.fastfood),
           activeColorPrimary: Theme.of(context).colorScheme.inversePrimary,
         ),
         PersistentBottomNavBarItem(
-          icon: Icon(Icons.add),
+          icon: widget.addButtonKey != null
+              ? Showcase(
+                  key: widget.addButtonKey!,
+                  title: AppLocalizations.of(context)!.onboardingAddTitle,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.onboardingAddDescription,
+                  child: Icon(Icons.add),
+                )
+              : Icon(Icons.add),
           activeColorPrimary: Theme.of(context).colorScheme.inversePrimary,
         ),
         PersistentBottomNavBarItem(
-          icon: Icon(Icons.list),
+          icon: widget.listButtonKey != null
+              ? Showcase(
+                  key: widget.listButtonKey!,
+                  title: AppLocalizations.of(context)!.onboardingListTitle,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.onboardingListDescription,
+                  child: Icon(Icons.list),
+                )
+              : Icon(Icons.list),
           activeColorPrimary: Theme.of(context).colorScheme.inversePrimary,
         ),
         PersistentBottomNavBarItem(
-          icon: Icon(Icons.settings),
+          icon: widget.settingsButtonKey != null
+              ? Showcase(
+                  key: widget.settingsButtonKey!,
+                  title: AppLocalizations.of(context)!.onboardingSettingsTitle,
+                  description: AppLocalizations.of(
+                    context,
+                  )!.onboardingSettingsDescription,
+                  child: Icon(Icons.settings),
+                )
+              : Icon(Icons.settings),
           activeColorPrimary: Theme.of(context).colorScheme.inversePrimary,
         ),
         // Navigator.pushNamed(context, '/page$index');

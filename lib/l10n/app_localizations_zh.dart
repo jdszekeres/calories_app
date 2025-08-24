@@ -155,64 +155,61 @@ class AppLocalizationsZh extends AppLocalizations {
   String get veryActive => '高度活跃 (每周高强度运动6-7天)';
 
   @override
-  String get extraActive =>
-      'Extra Active (very hard exercise, physical job, or training twice a day)';
+  String get extraActive => '超级活跃 (非常高强度运动，体力工作，或一天两次训练)';
 
   @override
-  String get completeSignUp => 'Complete Sign Up';
+  String get completeSignUp => '完成注册';
 
   @override
-  String get back => 'Back';
+  String get back => '返回';
 
   @override
   String get signIn => '登录';
 
   @override
-  String get noAccount => 'Don\'t have an account? Sign Up';
+  String get noAccount => '没有账户？注册';
 
   @override
-  String get tryAnon => 'Try without an account';
+  String get tryAnon => '无账户试用';
 
   @override
   String get downloadApp => '下载应用';
 
   @override
-  String get webAdvertisementTitle =>
-      'We cannot offer advertisements on the web';
+  String get webAdvertisementTitle => '我们无法在网页上提供广告';
 
   @override
-  String get mobileAdvertisementTitle => 'No advertisements available';
+  String get mobileAdvertisementTitle => '没有可用的广告';
 
   @override
-  String get useMobileAppMessage => 'Please use the mobile app to view ads';
+  String get useMobileAppMessage => '请使用移动应用观看广告';
 
   @override
-  String get supportMeMessage => 'or consider supporting me via BuyMeACoffee.';
+  String get supportMeMessage => '或考虑通过 BuyMeACoffee 支持我。';
 
   @override
-  String get supportMe => 'Support Me';
+  String get supportMe => '支持我';
 
   @override
-  String get appTitle => 'Calorie Tracker';
+  String get appTitle => '卡路里追踪器';
 
   @override
-  String get alreadyHaveAccount => 'Already have an account? Sign In';
+  String get alreadyHaveAccount => '已有账户？登录';
 
   @override
-  String get creatingAnon => 'Creating an Anonymous Account';
+  String get creatingAnon => '创建匿名账户';
 
   @override
-  String get creatingAnonExplain =>
-      'We still need some information to set up your profile and calculate your goals.';
+  String get creatingAnonExplain => '我们仍需要一些信息来设置您的个人资料并计算您的目标。';
 
   @override
-  String get pleaseFillAllFields => 'Please fill in all fields';
+  String get pleaseFillAllFields => '请填写所有字段';
 
   @override
-  String get invalidEmail => 'Please enter a valid email address';
+  String get invalidEmail => '请输入有效的邮箱地址';
 
   @override
-  String get passwordTooShort => 'Password must be at least 6 characters long';
+  String get passwordTooShort => '密码必须至少6个字符';
 
   @override
   String get passwordsDoNotMatch => '密码不匹配。';
@@ -369,82 +366,80 @@ class AppLocalizationsZh extends AppLocalizations {
   String get unitIn => '英寸';
 
   @override
-  String get unitKcal => 'kcal';
+  String get unitKcal => '千卡';
 
   @override
-  String get searchFoodTitle => 'Search Food';
+  String get searchFoodTitle => '搜索食物';
 
   @override
-  String get searchForProducts => 'Search for products';
+  String get searchForProducts => '搜索产品';
 
   @override
-  String get noResultsFound => 'No results found';
+  String get noResultsFound => '未找到结果';
 
   @override
   String errorSearchingProducts(Object message) {
-    return 'Error searching products: $message';
+    return '搜索产品时出错：$message';
   }
 
   @override
   String errorWithMessage(Object message) {
-    return 'Error: $message';
+    return '错误：$message';
   }
 
   @override
-  String get nutritionFactsUpdated => 'Nutrition facts updated!';
+  String get nutritionFactsUpdated => '营养成分已更新！';
 
   @override
-  String get scanBarcodeTitle => 'Scan Barcode';
+  String get scanBarcodeTitle => '扫描条形码';
 
   @override
-  String get mealDetailsTitle => 'Meal Details';
+  String get mealDetailsTitle => '餐食详情';
 
   @override
-  String get aiNutritionAnalysisTitle => 'AI Nutrition Analysis';
+  String get aiNutritionAnalysisTitle => 'AI营养分析';
 
   @override
-  String get aiDescriptionAnalysisTitle => 'Describe Meal With AI';
+  String get aiDescriptionAnalysisTitle => '用AI描述餐食';
 
   @override
-  String get noImageSelected => 'No image selected';
+  String get noImageSelected => '未选择图片';
 
   @override
-  String get aiPoweredNutritionAnalysis => 'AI-Powered Nutrition Analysis';
+  String get aiPoweredNutritionAnalysis => 'AI驱动的营养分析';
 
   @override
-  String get aiAnalysisDescription =>
-      'Upload a photo of your meal and let our AI analyze its nutritional content instantly';
+  String get aiAnalysisDescription => '上传您餐食的照片，让我们的AI立即分析其营养成分';
 
   @override
-  String get whatAiCanIdentify => 'What our AI can identify:';
+  String get whatAiCanIdentify => '我们的AI可以识别：';
 
   @override
-  String get foodIdentification => 'Food identification';
+  String get foodIdentification => '食物识别';
 
   @override
-  String get portionEstimation => 'Portion estimation';
+  String get portionEstimation => '份量估算';
 
   @override
-  String get calorieCalculation => 'Calorie calculation';
+  String get calorieCalculation => '卡路里计算';
 
   @override
-  String get macroMicronutrients => 'Macro & micronutrients';
+  String get macroMicronutrients => '宏量和微量营养素';
 
   @override
-  String get ingredientBreakdown => 'Ingredient breakdown';
+  String get ingredientBreakdown => '成分分解';
 
   @override
-  String get uploadPhoto => 'Upload Photo';
+  String get uploadPhoto => '上传照片';
 
   @override
-  String get takePhoto => 'Take a Photo';
+  String get takePhoto => '拍照';
 
   @override
-  String get aiTipMessage =>
-      'Tip: For best results, take a clear photo with good lighting and include the entire meal in frame.';
+  String get aiTipMessage => '提示：为获得最佳效果，请在良好光线下拍摄清晰照片，并将整个餐食包含在画面中。';
 
   @override
-  String get failedToAnalyzeImage => 'Failed to analyze image';
+  String get failedToAnalyzeImage => '图片分析失败';
 
   @override
   String get calories => '卡路里';
@@ -465,108 +460,108 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sugar => '糖';
 
   @override
-  String get water => 'Water';
+  String get water => '水';
 
   @override
   String get vitaminA => '维生素A';
 
   @override
-  String get vitaminD => 'Vitamin D';
+  String get vitaminD => '维生素D';
 
   @override
-  String get vitaminE => 'Vitamin E';
+  String get vitaminE => '维生素E';
 
   @override
-  String get vitaminK => 'Vitamin K';
+  String get vitaminK => '维生素K';
 
   @override
   String get vitaminC => '维生素C';
 
   @override
-  String get thiamin => 'Thiamin';
+  String get thiamin => '硫胺素';
 
   @override
-  String get riboflavin => 'Riboflavin';
+  String get riboflavin => '核黄素';
 
   @override
-  String get niacin => 'Niacin';
+  String get niacin => '烟酸';
 
   @override
-  String get pantothenicAcid => 'Pantothenic Acid';
+  String get pantothenicAcid => '泛酸';
 
   @override
-  String get vitaminB6 => 'Vitamin B6';
+  String get vitaminB6 => '维生素B6';
 
   @override
-  String get folate => 'Folate';
+  String get folate => '叶酸';
 
   @override
-  String get vitaminB12 => 'Vitamin B12';
+  String get vitaminB12 => '维生素B12';
 
   @override
-  String get choline => 'Choline';
+  String get choline => '胆碱';
 
   @override
   String get calcium => '钙';
 
   @override
-  String get chlorine => 'Chlorine';
+  String get chlorine => '氯';
 
   @override
-  String get copper => 'Copper';
+  String get copper => '铜';
 
   @override
-  String get fluoride => 'Fluoride';
+  String get fluoride => '氟';
 
   @override
-  String get iodine => 'Iodine';
+  String get iodine => '碘';
 
   @override
   String get iron => '铁';
 
   @override
-  String get magnesium => 'Magnesium';
+  String get magnesium => '镁';
 
   @override
-  String get manganese => 'Manganese';
+  String get manganese => '锰';
 
   @override
-  String get molybdenum => 'Molybdenum';
+  String get molybdenum => '钼';
 
   @override
-  String get phosphorus => 'Phosphorus';
+  String get phosphorus => '磷';
 
   @override
-  String get potassium => 'Potassium';
+  String get potassium => '钾';
 
   @override
-  String get selenium => 'Selenium';
+  String get selenium => '硒';
 
   @override
   String get sodium => '钠';
 
   @override
-  String get zinc => 'Zinc';
+  String get zinc => '锌';
 
   @override
-  String get loadingCredits => 'Loading credits...';
+  String get loadingCredits => '加载积分中...';
 
   @override
-  String get insufficientCredits => 'Insufficient Credits';
+  String get insufficientCredits => '积分不足';
 
   @override
   String insufficientCreditsMessage(Object credits) {
-    return 'You need at least 1 credit to use AI analysis. You currently have $credits credits. You can earn more credits by watching ads in the Settings page.';
+    return '您需要至少1个积分来使用AI分析。您目前有$credits个积分。您可以在设置页面观看广告来获得更多积分。';
   }
 
   @override
-  String get ok => 'OK';
+  String get ok => '确定';
 
   @override
-  String get goToSettings => 'Go to Settings';
+  String get goToSettings => '前往设置';
 
   @override
-  String get tryAgain => 'Try Again';
+  String get tryAgain => '重试';
 
   @override
   String get loading => '加载中...';
@@ -591,4 +586,57 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get languageChangedSuccessfully => '语言更改成功！';
+
+  @override
+  String get onboardingWelcome => '欢迎使用卡路里追踪器专业版！';
+
+  @override
+  String get onboardingCalorieCircle => '这显示您的每日卡路里进度。全天跟踪您的卡路里进度。';
+
+  @override
+  String get onboardingNutrientBars => '这些进度条显示您对某些宏量营养素的摄入量。您可以在设置中自定义显示哪些条。';
+
+  @override
+  String get onboardingNutrientTitle => '营养素进度';
+
+  @override
+  String get onboardingNutrientDescription =>
+      '这些进度条显示您全天对蛋白质、碳水化合物和脂肪的宏量营养素摄入量。';
+
+  @override
+  String get onboardingHomeTitle => '主页';
+
+  @override
+  String get onboardingHomeDescription => '在这里查看您的每日卡路里和营养进度。';
+
+  @override
+  String get onboardingGoalsTitle => '目标页面';
+
+  @override
+  String get onboardingGoalsDescription => '在这里查看您的所有目标和每日进度。';
+
+  @override
+  String get onboardingAddTitle => '记录您的餐食';
+
+  @override
+  String get onboardingAddDescription =>
+      '您可以在这里使用条形码、搜索、AI图像和AI餐食描述来记录餐食。您可获得10个免费AI积分，然后可以观看广告获得更多。';
+
+  @override
+  String get onboardingListTitle => '餐食列表';
+
+  @override
+  String get onboardingListDescription => '在这里查看所有记录的餐食。';
+
+  @override
+  String get onboardingSettingsTitle => '设置';
+
+  @override
+  String get onboardingSettingsDescription => '获取AI积分、自定义主页，并在这里管理您的账户。';
+
+  @override
+  String get skipOnboarding => '跳过';
+
+  @override
+  String get resetOnboarding => '重新观看教程';
 }

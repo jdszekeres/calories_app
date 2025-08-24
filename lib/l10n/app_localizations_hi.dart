@@ -600,4 +600,63 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get languageChangedSuccessfully => 'भाषा सफलतापूर्वक बदल दी गई!';
+
+  @override
+  String get onboardingWelcome =>
+      'कैलोरीज़ ट्रैकर प्रो मैक्स में आपका स्वागत है!';
+
+  @override
+  String get onboardingCalorieCircle =>
+      'यह आपकी दैनिक कैलोरी प्रगति दिखाता है। दिन भर अपनी कैलोरी प्रगति को ट्रैक करें।';
+
+  @override
+  String get onboardingNutrientBars =>
+      'ये प्रगति बार कुछ मैक्रोन्यूट्रिएंट्स के लिए आपका सेवन दिखाते हैं। आप सेटिंग्स में कस्टमाइज़ कर सकते हैं कि कौन से बार दिखाई दें।';
+
+  @override
+  String get onboardingNutrientTitle => 'पोषक तत्व प्रगति';
+
+  @override
+  String get onboardingNutrientDescription =>
+      'ये प्रगति बार दिन भर प्रोटीन, कार्बोहाइड्रेट और वसा के लिए आपके मैक्रोन्यूट्रिएंट सेवन को दिखाते हैं।';
+
+  @override
+  String get onboardingHomeTitle => 'होम';
+
+  @override
+  String get onboardingHomeDescription =>
+      'यहाँ अपनी दैनिक कैलोरी और पोषण प्रगति देखें।';
+
+  @override
+  String get onboardingGoalsTitle => 'लक्ष्य पेज';
+
+  @override
+  String get onboardingGoalsDescription =>
+      'यहाँ अपने सभी लक्ष्य और दैनिक प्रगति देखें।';
+
+  @override
+  String get onboardingAddTitle => 'अपने भोजन लॉग करें';
+
+  @override
+  String get onboardingAddDescription =>
+      'आप यहाँ बारकोड, खोज, एआई इमेज और एआई भोजन विवरण का उपयोग करके भोजन लॉग कर सकते हैं। आपको 10 मुफ्त एआई क्रेडिट मिलते हैं, फिर आप और अधिक के लिए विज्ञापन देख सकते हैं।';
+
+  @override
+  String get onboardingListTitle => 'भोजन सूची';
+
+  @override
+  String get onboardingListDescription => 'यहाँ सभी लॉग किए गए भोजन देखें।';
+
+  @override
+  String get onboardingSettingsTitle => 'सेटिंग्स';
+
+  @override
+  String get onboardingSettingsDescription =>
+      'एआई क्रेडिट प्राप्त करें, होमपेज को कस्टमाइज़ करें, और यहाँ अपना खाता प्रबंधित करें।';
+
+  @override
+  String get skipOnboarding => 'छोड़ें';
+
+  @override
+  String get resetOnboarding => 'ट्यूटोरियल दोबारा देखें';
 }

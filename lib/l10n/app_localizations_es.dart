@@ -608,4 +608,63 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get languageChangedSuccessfully => '¡Idioma cambiado exitosamente!';
+
+  @override
+  String get onboardingWelcome => '¡Bienvenido a Calories Tracker Pro Max!';
+
+  @override
+  String get onboardingCalorieCircle =>
+      'Esto muestra tu progreso diario de calorías. Sigue tu progreso de calorías durante el día.';
+
+  @override
+  String get onboardingNutrientBars =>
+      'Estas barras de progreso muestran tu ingesta de ciertos macronutrientes. Puedes personalizar qué barras aparecen en la configuración.';
+
+  @override
+  String get onboardingNutrientTitle => 'Progreso de Nutrientes';
+
+  @override
+  String get onboardingNutrientDescription =>
+      'Estas barras de progreso muestran tu ingesta de macronutrientes de proteínas, carbohidratos y grasas durante el día.';
+
+  @override
+  String get onboardingHomeTitle => 'Inicio';
+
+  @override
+  String get onboardingHomeDescription =>
+      'Ve tu progreso diario de calorías y nutrición aquí.';
+
+  @override
+  String get onboardingGoalsTitle => 'Página de Objetivos';
+
+  @override
+  String get onboardingGoalsDescription =>
+      'Ve todos tus objetivos y progreso diario aquí.';
+
+  @override
+  String get onboardingAddTitle => 'Registra tus Comidas';
+
+  @override
+  String get onboardingAddDescription =>
+      'Puedes registrar comidas aquí usando códigos de barras, búsqueda, imágenes con IA y descripciones de comidas con IA. Obtienes 10 créditos de IA gratis, luego puedes ver anuncios para obtener más.';
+
+  @override
+  String get onboardingListTitle => 'Lista de Comidas';
+
+  @override
+  String get onboardingListDescription =>
+      'Ve todas las comidas registradas aquí.';
+
+  @override
+  String get onboardingSettingsTitle => 'Configuración';
+
+  @override
+  String get onboardingSettingsDescription =>
+      'Obtén créditos de IA, personaliza la página de inicio y gestiona tu cuenta aquí.';
+
+  @override
+  String get skipOnboarding => 'Omitir';
+
+  @override
+  String get resetOnboarding => 'Ver Tutorial de Nuevo';
 }

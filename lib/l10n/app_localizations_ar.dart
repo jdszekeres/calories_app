@@ -411,7 +411,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aiNutritionAnalysisTitle => 'تحليل التغذية بالذكاء الاصطناعي';
 
   @override
-  String get aiDescriptionAnalysisTitle => 'Describe Meal With AI';
+  String get aiDescriptionAnalysisTitle => 'وصف الوجبة بالذكاء الاصطناعي';
 
   @override
   String get noImageSelected => 'لم يتم اختيار صورة';
@@ -599,4 +599,63 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get languageChangedSuccessfully => 'تم تغيير اللغة بنجاح!';
+
+  @override
+  String get onboardingWelcome =>
+      'مرحباً بك في تطبيق متتبع السعرات الحرارية المتقدم!';
+
+  @override
+  String get onboardingCalorieCircle =>
+      'هذا يُظهر تقدمك اليومي في السعرات الحرارية. تابع تقدم السعرات الحرارية طوال اليوم.';
+
+  @override
+  String get onboardingNutrientBars =>
+      'تُظهر هذه الأشرطة التقدمية تناولك لمغذيات كبرى معينة. يمكنك تخصيص الأشرطة التي تظهر في الإعدادات.';
+
+  @override
+  String get onboardingNutrientTitle => 'تقدم المغذيات';
+
+  @override
+  String get onboardingNutrientDescription =>
+      'تُظهر هذه الأشرطة التقدمية تناولك للمغذيات الكبرى من البروتين والكربوهيدرات والدهون طوال اليوم.';
+
+  @override
+  String get onboardingHomeTitle => 'الصفحة الرئيسية';
+
+  @override
+  String get onboardingHomeDescription =>
+      'شاهد تقدمك اليومي في السعرات الحرارية والتغذية هنا.';
+
+  @override
+  String get onboardingGoalsTitle => 'صفحة الأهداف';
+
+  @override
+  String get onboardingGoalsDescription =>
+      'شاهد جميع أهدافك والتقدم اليومي هنا.';
+
+  @override
+  String get onboardingAddTitle => 'تسجيل وجباتك';
+
+  @override
+  String get onboardingAddDescription =>
+      'يمكنك تسجيل الوجبات هنا باستخدام الباركود والبحث وصور الذكاء الاصطناعي ووصف الوجبات بالذكاء الاصطناعي. تحصل على 10 أرصدة ذكاء اصطناعي مجانية، ثم يمكنك مشاهدة الإعلانات للحصول على المزيد.';
+
+  @override
+  String get onboardingListTitle => 'قائمة الوجبات';
+
+  @override
+  String get onboardingListDescription => 'شاهد جميع الوجبات المسجلة هنا.';
+
+  @override
+  String get onboardingSettingsTitle => 'الإعدادات';
+
+  @override
+  String get onboardingSettingsDescription =>
+      'احصل على أرصدة الذكاء الاصطناعي، خصص الصفحة الرئيسية، وأدر حسابك هنا.';
+
+  @override
+  String get skipOnboarding => 'تخطي';
+
+  @override
+  String get resetOnboarding => 'إعادة مشاهدة البرنامج التعليمي';
 }

@@ -599,4 +599,62 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageChangedSuccessfully => 'Language changed successfully!';
+
+  @override
+  String get onboardingWelcome => 'Welcome to Calories Tracker Pro Max!';
+
+  @override
+  String get onboardingCalorieCircle =>
+      'This shows your daily calorie progress. Track your calorie progress throughout the day.';
+
+  @override
+  String get onboardingNutrientBars =>
+      'These progress bars show your intake for certain macronutrients. You can customize which bars appear in settings.';
+
+  @override
+  String get onboardingNutrientTitle => 'Nutrient Progress';
+
+  @override
+  String get onboardingNutrientDescription =>
+      'These progress bars show your macronutrient intake for protein, carbohydrates, and fat throughout the day.';
+
+  @override
+  String get onboardingHomeTitle => 'Home';
+
+  @override
+  String get onboardingHomeDescription =>
+      'View your daily calorie and nutrition progress here.';
+
+  @override
+  String get onboardingGoalsTitle => 'Goals Page';
+
+  @override
+  String get onboardingGoalsDescription =>
+      'See all your goals and daily progress here.';
+
+  @override
+  String get onboardingAddTitle => 'Log Your Meals';
+
+  @override
+  String get onboardingAddDescription =>
+      'You can log meals here using barcodes, search, AI Images, and AI meal descriptions. You get 10 free AI credits, then you can watch ads for more.';
+
+  @override
+  String get onboardingListTitle => 'Meal List';
+
+  @override
+  String get onboardingListDescription => 'See all logged meals here.';
+
+  @override
+  String get onboardingSettingsTitle => 'Settings';
+
+  @override
+  String get onboardingSettingsDescription =>
+      'Get AI credits, customize the homepage, and manage your account here.';
+
+  @override
+  String get skipOnboarding => 'Skip';
+
+  @override
+  String get resetOnboarding => 'Rewatch Tutorial';
 }

@@ -189,5 +189,23 @@
     "chinese": "中文",
     "arabic": "العربية",
     "hindi": "हिंदी",
-    "languageChangedSuccessfully": "¡Idioma cambiado exitosamente!"
+    "languageChangedSuccessfully": "¡Idioma cambiado exitosamente!",
+
+    "onboardingWelcome": "¡Bienvenido a Calories Tracker Pro Max!",
+    "onboardingCalorieCircle": "Esto muestra tu progreso diario de calorías. Sigue tu progreso de calorías durante el día.",
+    "onboardingNutrientBars": "Estas barras de progreso muestran tu ingesta de ciertos macronutrientes. Puedes personalizar qué barras aparecen en la configuración.",
+    "onboardingNutrientTitle": "Progreso de Nutrientes",
+    "onboardingNutrientDescription": "Estas barras de progreso muestran tu ingesta de macronutrientes de proteínas, carbohidratos y grasas durante el día.",
+    "onboardingHomeTitle": "Inicio",
+    "onboardingHomeDescription": "Ve tu progreso diario de calorías y nutrición aquí.",
+    "onboardingGoalsTitle": "Página de Objetivos",
+    "onboardingGoalsDescription": "Ve todos tus objetivos y progreso diario aquí.",
+    "onboardingAddTitle": "Registra tus Comidas",
+    "onboardingAddDescription": "Puedes registrar comidas aquí usando códigos de barras, búsqueda, imágenes con IA y descripciones de comidas con IA. Obtienes 10 créditos de IA gratis, luego puedes ver anuncios para obtener más.",
+    "onboardingListTitle": "Lista de Comidas",
+    "onboardingListDescription": "Ve todas las comidas registradas aquí.",
+    "onboardingSettingsTitle": "Configuración",
+    "onboardingSettingsDescription": "Obtén créditos de IA, personaliza la página de inicio y gestiona tu cuenta aquí.",
+    "skipOnboarding": "Omitir",
+    "resetOnboarding": "Ver Tutorial de Nuevo"
 }

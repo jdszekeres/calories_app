@@ -66,4 +66,5 @@ class SettingsDatabase {
 
 const defaults = {
   'homePageWidgets': ['calories', 'protein', 'carbohydrates', 'fat'],
+  'hasSeenOnboarding': false,
 };

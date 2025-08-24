@@ -1207,6 +1207,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language changed successfully!'**
   String get languageChangedSuccessfully;
+
+  /// No description provided for @onboardingWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Calories Tracker Pro Max!'**
+  String get onboardingWelcome;
+
+  /// No description provided for @onboardingCalorieCircle.
+  ///
+  /// In en, this message translates to:
+  /// **'This shows your daily calorie progress. Track your calorie progress throughout the day.'**
+  String get onboardingCalorieCircle;
+
+  /// No description provided for @onboardingNutrientBars.
+  ///
+  /// In en, this message translates to:
+  /// **'These progress bars show your intake for certain macronutrients. You can customize which bars appear in settings.'**
+  String get onboardingNutrientBars;
+
+  /// No description provided for @onboardingNutrientTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrient Progress'**
+  String get onboardingNutrientTitle;
+
+  /// No description provided for @onboardingNutrientDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'These progress bars show your macronutrient intake for protein, carbohydrates, and fat throughout the day.'**
+  String get onboardingNutrientDescription;
+
+  /// No description provided for @onboardingHomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get onboardingHomeTitle;
+
+  /// No description provided for @onboardingHomeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'View your daily calorie and nutrition progress here.'**
+  String get onboardingHomeDescription;
+
+  /// No description provided for @onboardingGoalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals Page'**
+  String get onboardingGoalsTitle;
+
+  /// No description provided for @onboardingGoalsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'See all your goals and daily progress here.'**
+  String get onboardingGoalsDescription;
+
+  /// No description provided for @onboardingAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Your Meals'**
+  String get onboardingAddTitle;
+
+  /// No description provided for @onboardingAddDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You can log meals here using barcodes, search, AI Images, and AI meal descriptions. You get 10 free AI credits, then you can watch ads for more.'**
+  String get onboardingAddDescription;
+
+  /// No description provided for @onboardingListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal List'**
+  String get onboardingListTitle;
+
+  /// No description provided for @onboardingListDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'See all logged meals here.'**
+  String get onboardingListDescription;
+
+  /// No description provided for @onboardingSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get onboardingSettingsTitle;
+
+  /// No description provided for @onboardingSettingsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Get AI credits, customize the homepage, and manage your account here.'**
+  String get onboardingSettingsDescription;
+
+  /// No description provided for @skipOnboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skipOnboarding;
+
+  /// No description provided for @resetOnboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Rewatch Tutorial'**
+  String get resetOnboarding;
 }
 
 class _AppLocalizationsDelegate

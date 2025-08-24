@@ -819,6 +819,24 @@ class _SettingsPageState extends State<SettingsPage> {
                             );
                           },
                         ),
+
+                      SettingsTile(
+                        title: Text(
+                          AppLocalizations.of(context)!.resetOnboarding,
+                        ),
+                        leading: Icon(Icons.help_outline),
+                        onPressed: (context) async {
+                          await widget.settingsDatabase.updateSetting(
+                            Auth().currentUserId!,
+                            'hasSeenOnboarding',
+                            false,
+                          );
+                          if (context.mounted) {
+                            context.go("/");
+                          }
+                        },
+                      ),
+
                       SettingsTile(
                         title: Text(AppLocalizations.of(context)!.signOut),
                         leading: Icon(Icons.logout),
