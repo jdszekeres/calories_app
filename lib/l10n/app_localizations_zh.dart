@@ -620,7 +620,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get onboardingAddDescription =>
-      '您可以在这里使用条形码、搜索、AI图像和AI餐食描述来记录餐食。您可获得10个免费AI积分，然后可以观看广告获得更多。';
+      '您可以在这里使用条形码、搜索以及AI文本和图像分析来记录餐食。您可以免费使用我们的AI营养分析10次，之后必须观看广告来获得更多积分。';
 
   @override
   String get onboardingListTitle => '餐食列表';

@@ -637,7 +637,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingAddDescription =>
-      'You can log meals here using barcodes, search, AI Images, and AI meal descriptions. You get 10 free AI credits, then you can watch ads for more.';
+      'You can log meals here using barcodes, search, and AI text and image analysis. You can use our AI nutrition analysis 10 times for free, before you must watch ads to get more credits.';
 
   @override
   String get onboardingListTitle => 'Meal List';
