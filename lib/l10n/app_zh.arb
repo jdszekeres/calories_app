@@ -322,7 +322,7 @@
     "onboardingGoalsTitle": "目标页面",
     "onboardingGoalsDescription": "在这里查看您的所有目标和每日进度。",
     "onboardingAddTitle": "记录您的餐食",
-    "onboardingAddDescription": "您可以在这里使用条形码、搜索、AI图像和AI餐食描述来记录餐食。您可获得10个免费AI积分，然后可以观看广告获得更多。",
+    "onboardingAddDescription": "您可以在这里使用条形码、搜索以及AI文本和图像分析来记录餐食。您可以免费使用我们的AI营养分析10次，之后必须观看广告来获得更多积分。",
     "onboardingListTitle": "餐食列表",
     "onboardingListDescription": "在这里查看所有记录的餐食。",
     "onboardingSettingsTitle": "设置",

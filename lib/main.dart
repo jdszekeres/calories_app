@@ -22,8 +22,6 @@ import 'tools/ads.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-//TODO: Add https://pub.dev/packages/onboarding_overlay
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "env");
