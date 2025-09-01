@@ -83,6 +83,6 @@ scripts:
   deploy_web_windows: |
     flutter build web --release --no-tree-shake-icons
     rm public/*
-    robocopy "build/web/" "public" /E
+    robocopy "build/web/" "public" /E /Y /copyall 
     echo "Web build deployed to public directory"
     firebase deploy

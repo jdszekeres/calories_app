@@ -646,7 +646,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get onboardingAddDescription =>
-      'Puedes registrar comidas aquí usando códigos de barras, búsqueda, imágenes con IA y descripciones de comidas con IA. Obtienes 10 créditos de IA gratis, luego puedes ver anuncios para obtener más.';
+      'Puedes registrar comidas aquí usando códigos de barras, búsqueda y análisis de texto e imágenes con IA. Puedes usar nuestro análisis nutricional con IA 10 veces gratis, antes de que debas ver anuncios para obtener más créditos.';
 
   @override
   String get onboardingListTitle => 'Lista de Comidas';
